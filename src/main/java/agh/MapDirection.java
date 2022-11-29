@@ -2,51 +2,42 @@ package agh;
 
 public enum MapDirection
 {
-    NORTH, EAST, SOUTH, WEST ;
+    N, NE, E, SE, S, SW, W, NW;
 
     public String toString()
     {
-        switch(this)
-        {
-            case NORTH: return "Północ";
-            case SOUTH: return "Południe";
-            case WEST: return "Zachód";
-            case EAST: return "Wschód";
-        }
-        return "";
-    }
-    public String toShortString() // do wypisania krotkiego
-    {
-        switch(this)
-        {
-            case NORTH: return "^";
-            case SOUTH: return "v";
-            case WEST: return "<";
-            case EAST: return ">";
-        }
-        return "";
+        return String.valueOf(this);
     }
     public MapDirection next()
     {
         MapDirection[] tab = values();
-        return tab[(this.ordinal() + 1)  % 4];
+        return tab[(this.ordinal() + 1)  % 8];
     }
     public MapDirection prev()
     {
         MapDirection[] tab = values();
-        return tab[(this.ordinal() + 3)  % 4];
+        return tab[(this.ordinal() + 7)  % 8];
     }
     public Vector2d toUnitVector()
     {
-        switch(this) {
-            case NORTH:
+        switch(this)
+        {
+            case N:
                 return new Vector2d(0, 1);
-            case SOUTH:
+            case S:
                 return new Vector2d(0, -1);
-            case WEST:
+            case W:
                 return new Vector2d(-1, 0);
-            case EAST:
+            case E:
                 return new Vector2d(1, 0);
+            case NE:
+                return new Vector2d(1, 1);
+            case SE:
+                return new Vector2d(1, -1);
+            case NW:
+                return new Vector2d(-1, 1);
+            case SW:
+                return new Vector2d(-1, -1);
         }
         return new Vector2d(7, 7);
     }
