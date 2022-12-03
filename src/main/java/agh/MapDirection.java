@@ -8,15 +8,10 @@ public enum MapDirection
     {
         return String.valueOf(this);
     }
-    public MapDirection next()
+    public MapDirection turnBy(int ile)
     {
         MapDirection[] tab = values();
-        return tab[(this.ordinal() + 1)  % 8];
-    }
-    public MapDirection prev()
-    {
-        MapDirection[] tab = values();
-        return tab[(this.ordinal() + 7)  % 8];
+        return tab[(this.ordinal() + ile)  % 8];
     }
     public Vector2d toUnitVector()
     {

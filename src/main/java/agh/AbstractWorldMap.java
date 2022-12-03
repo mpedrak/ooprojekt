@@ -3,7 +3,6 @@ package agh;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import static java.lang.Math.sqrt;
 
 public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver
 {
@@ -13,42 +12,12 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     protected Vector2d kraniecMapy;
     protected Vector2d poczatekDzungli;
     protected Vector2d kraniecDzungli;
-
-    public String toString()
-    {
-        MapVisualizer rysownik = new MapVisualizer(this);
-        return rysownik.draw(poczatekMapy, kraniecMapy);
-    }
     public boolean place(Animal animal)
     {
-        if (canMoveTo(animal.getPosition()) != -1)
-        {
-            zwierzeta.put(animal.getPosition(), animal);
-            animal.addObserver(this);
-            return true;
-        }
-        throw new IllegalArgumentException("Cant place animal on position: " + animal.getPosition());
-    }
-    public int canMoveTo(Vector2d position)
-    {
-        if(objectAt(position) == null)
-            return 0;
-        if ((objectAt(position) instanceof Grass))
-        {
-            trawnik.remove(position);
-            // stworzenie trawy
-            return 1;
-        }
-        if ((objectAt(position) instanceof Animal))
-        {
-            return 2;
-            // urodzenie dziecka
-        }
-        return -1;
-    }
-    public boolean isOccupied(Vector2d position)
-    {
-        return objectAt(position) != null;
+
+        zwierzeta.put(animal.getPosition(), animal);
+        animal.addObserver(this);
+        return true;
     }
     public Object objectAt(Vector2d position)
     {

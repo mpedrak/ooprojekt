@@ -1,34 +1,28 @@
 package agh;
 
-import com.jogamp.common.os.Platform;
-import javafx.application.Application;
-import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-
-import javax.swing.plaf.TableHeaderUI;
-import java.util.ArrayList;
-import java.util.LinkedList;
-
+import javafx.application.Platform;
 public class SimulationEngine implements  Runnable
 {
     IWorldMap mapa;
-    private ArrayList<Animal> zwierzeta = new ArrayList<Animal>();
+    private App app;
     private int moveDelay;
-    public SimulationEngine(IWorldMap mapa, int moveDelay)
+
+    public SimulationEngine(IWorldMap mapa, App app, int moveDelay)
     {
         this.mapa = mapa;
+        this.app = app;
         this.moveDelay = moveDelay;
-        // umieszczanie zwierząt
+        // placowanie
     }
-    public void setMoveDelay(int md)
+    public void setMoveDelay(int moveDelay)
     {
-        this.moveDelay = md;
+        this.moveDelay = moveDelay;
     }
     public void run()
     {
+
         while (true)
         {
-            // ruszanie zwierzęcia
             try
             {
                 Thread.sleep(moveDelay);
@@ -37,15 +31,14 @@ public class SimulationEngine implements  Runnable
             {
                 System.out.println(ex + " przerwanie symulacji");
             }
-            /*
             Platform.runLater(new Runnable()
             {
+                @Override
                 public void run()
                 {
-                    // rysowanie
+                   // app.renderuj(mapa);
                 }
             });
-            */
         }
     }
 

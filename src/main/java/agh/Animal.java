@@ -1,6 +1,7 @@
 package agh;
 
 import java.io.FileInputStream;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Objects;
 import java.util.Random;
@@ -11,8 +12,8 @@ public class Animal extends AbstractWorldMapElement
     private LinkedList<IPositionChangeObserver> obserwatorzy = new LinkedList<>();
     private IWorldMap map;
     private int energia; // ile zostało dni życia
-    private int[] geny; // 32 geny, liczby 0 - 7
-    private int przyrostEnergi = 7;
+    private int[] geny; // N genów, liczby 0 - 7
+    private int aktualnyGen = 0;
 
     public String toString()
     {
@@ -23,20 +24,14 @@ public class Animal extends AbstractWorldMapElement
         this.map = map;
         this.position = initialPosition;
     }
-    public void move(int direction)
+    public void move()
     {
-        Vector2d new_pos = new Vector2d(0, 0);
-        int status = map.canMoveTo(new_pos);
-        if (status != -1)
-        {
-            positionChanged(position, new_pos);
-            if (status == 1)
-                dodajEnergie();
-            if (status == 2)
-                ; // urodzenie dziecka
-        }
+        this.orientation = this.orientation.turnBy(geny[aktualnyGen]);
+        aktualnyGen = (aktualnyGen + 1) % geny.length;
+        Vector2d newPos = map.newPosition(this.position.add(this.orientation.toUnitVector()));
+        positionChanged(this.position, newPos);
+        this.position = newPos;
     }
-
     public boolean equals(Object other)
     {
         if (this == other)
@@ -64,14 +59,17 @@ public class Animal extends AbstractWorldMapElement
     {
         return "src/main/resources/animal.png";
     }
-    public int randomMove()
+    public void changeEnergy(int delta)
     {
-        Random generator = new Random();
-        int gen = generator.nextInt(32);
-        return geny[gen];
+        energia += delta;
     }
-    private void dodajEnergie()
+    public int getEnergy()
     {
-        energia += przyrostEnergi;
+        return energia;
     }
+    public int[] getGenes(int start, int end)
+    {
+        return Arrays.copyOfRange(geny, start, end);
+    }
+
 }
