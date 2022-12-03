@@ -12,6 +12,8 @@ public class Animal extends AbstractWorldMapElement
     private IWorldMap map;
     private int energia; // ile zostało dni życia
     private int[] geny; // 32 geny, liczby 0 - 7
+    private int przyrostEnergi = 7;
+
     public String toString()
     {
         return orientation.toString();
@@ -21,16 +23,17 @@ public class Animal extends AbstractWorldMapElement
         this.map = map;
         this.position = initialPosition;
     }
-    public boolean isAt(Vector2d position)
-    {
-        return this.position.equals(position);
-    }
     public void move(int direction)
     {
         Vector2d new_pos = new Vector2d(0, 0);
-        if (map.canMoveTo(new_pos))
+        int status = map.canMoveTo(new_pos);
+        if (status != -1)
         {
             positionChanged(position, new_pos);
+            if (status == 1)
+                dodajEnergie();
+            if (status == 2)
+                ; // urodzenie dziecka
         }
     }
 
@@ -52,10 +55,6 @@ public class Animal extends AbstractWorldMapElement
         if (!obserwatorzy.contains(observer))
             obserwatorzy.add(observer);
     }
-    public void removeObserver(IPositionChangeObserver observer)
-    {
-        obserwatorzy.remove(observer);
-    }
     private void positionChanged(Vector2d old_p, Vector2d new_p)
     {
         for (IPositionChangeObserver x: obserwatorzy)
@@ -70,5 +69,9 @@ public class Animal extends AbstractWorldMapElement
         Random generator = new Random();
         int gen = generator.nextInt(32);
         return geny[gen];
+    }
+    private void dodajEnergie()
+    {
+        energia += przyrostEnergi;
     }
 }

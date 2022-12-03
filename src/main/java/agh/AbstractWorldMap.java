@@ -21,7 +21,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     }
     public boolean place(Animal animal)
     {
-        if (canMoveTo(animal.getPosition()))
+        if (canMoveTo(animal.getPosition()) != -1)
         {
             zwierzeta.put(animal.getPosition(), animal);
             animal.addObserver(this);
@@ -29,17 +29,22 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         }
         throw new IllegalArgumentException("Cant place animal on position: " + animal.getPosition());
     }
-    public boolean canMoveTo(Vector2d position)
+    public int canMoveTo(Vector2d position)
     {
         if(objectAt(position) == null)
-            return true;
+            return 0;
         if ((objectAt(position) instanceof Grass))
         {
             trawnik.remove(position);
             // stworzenie trawy
-            return true;
+            return 1;
         }
-        return false;
+        if ((objectAt(position) instanceof Animal))
+        {
+            return 2;
+            // urodzenie dziecka
+        }
+        return -1;
     }
     public boolean isOccupied(Vector2d position)
     {
