@@ -29,11 +29,7 @@ public class App  extends Application
     {
         grid = new GridPane();
         grid.setGridLinesVisible(true);
-        grid.getStyleClass().add("grid");
-        grid.setHgap(1);
-        grid.setVgap(1);
-        Scene scene = new Scene(grid, 1000, 1000);
-        scene.getStylesheets().add(App.class.getResource("styles.css").toExternalForm());
+        Scene scene = new Scene(grid, 1000, 700);
         primaryStage.setScene(scene);
         primaryStage.show();
 
@@ -110,46 +106,29 @@ public class App  extends Application
         }
 
     }
+    */
+
     private void renderujStart(IWorldMap map, Runnable engine)
     {
-
         grid.getChildren().clear();
         int width = 40;
         int height = 40;
-        for (int i = 0; i <= 17 ; i++)
+        for (int i = 0; i <= 4 ; i++)
             grid.getColumnConstraints().add(new ColumnConstraints(width));
         for (int i = 0; i <= 3; i++)
             grid.getRowConstraints().add(new RowConstraints(height));
 
         Button button = new Button("Start symulacji");
-        grid.add(button, 12, 0, 3, 2);
-
-        Label label = new Label("       Wprowadz directions");
-        grid.add(label, 1, 0, 4, 1);
-
-
-        TextField textField = new TextField();
-        grid.add(textField, 1, 1, 4, 1);
-
-        Label label2 = new Label("       Wprowadz moveDelay w [ms]");
-        grid.add(label2, 6, 0, 5, 1);
-
-
-        TextField textField2 = new TextField();
-        grid.add(textField2, 6, 1, 5, 1);
+        grid.add(button, 0, 0, 3, 2);
 
         button.setOnAction(actionEvent ->
         {
-            if (!textField2.getText().equals(""))
-                ((SimulationEngine)engine).setMoveDelay(Integer.parseInt( textField2.getText()));
-            if (!textField.getText().equals(""))
-                ((SimulationEngine)engine).setDirections(new OptionsParser().parse(textField.getText()));
             Thread engineThread = new Thread(engine);
             engineThread.start();
         });
 
     }
 
-    */
+
 
 }

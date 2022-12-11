@@ -1,6 +1,7 @@
 package agh;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Random;
 
@@ -10,8 +11,10 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     protected Map<Vector2d, Grass> trawnik = new HashMap<>();
     protected Vector2d poczatekMapy = new Vector2d(0, 0);
     protected Vector2d kraniecMapy;
-    protected Vector2d poczatekDzungli;
-    protected Vector2d kraniecDzungli;
+
+    protected Vector2d poczatekRownika = null;
+    protected Vector2d kraniecRownika = null;
+    protected LinkedList<Vector2d> miejscaDlaRoslin = null;
     public boolean place(Animal animal)
     {
 
@@ -33,29 +36,20 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         zwierzeta.remove(oldPosition);
         zwierzeta.put(newPosition, z);
     }
-    public Grass stworzTraweNaStepie(Vector2d old_p)
+    public Grass stworzTrawe(Vector2d old_p)
     {
         Random generator = new Random();
         while (true)
         {
             Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x), generator.nextInt(kraniecMapy.y));
-            if (objectAt(pp) == null && !pp.equals(old_p) && !czyNaTerenieDzungli(pp))
+            if (objectAt(pp) == null && !pp.equals(old_p))
                 return new Grass(pp);
         }
     }
-    public Grass stworzTraweWDzungli(Vector2d old_p)
+    public Vector2d losujVectorNaMapie()
     {
         Random generator = new Random();
-        while (true)
-        {
-            Vector2d pp = new Vector2d(generator.nextInt(kraniecDzungli.x - poczatekDzungli.x) + poczatekDzungli.x,
-                    generator.nextInt(kraniecDzungli.y - poczatekDzungli.y) + poczatekDzungli.y);
-            if(objectAt(pp) == null && !pp.equals(old_p) )
-                return new Grass(pp);
-        }
-    }
-    private boolean czyNaTerenieDzungli(Vector2d pos)
-    {
-        return pos.follows(poczatekDzungli) && pos.precedes(kraniecDzungli);
+        Vector2d pp2 = new Vector2d(generator.nextInt(kraniecMapy.x), generator.nextInt(kraniecMapy.y));
+        return pp2;
     }
 }

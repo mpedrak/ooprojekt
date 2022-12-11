@@ -11,7 +11,7 @@ public class Animal extends AbstractWorldMapElement
     private MapDirection orientation ;
     private LinkedList<IPositionChangeObserver> obserwatorzy = new LinkedList<>();
     private IWorldMap map;
-    private int energia; // ile zostało dni życia
+    private int energia = 0; // ile zostało dni życia
     private int[] geny; // N genów, liczby 0 - 7
     private int aktualnyGen = 0;
 
@@ -19,18 +19,24 @@ public class Animal extends AbstractWorldMapElement
     {
         return orientation.toString();
     }
-    public Animal(IWorldMap map, Vector2d initialPosition)
+    public Animal(Vector2d initialPosition)
     {
-        this.map = map;
         this.position = initialPosition;
     }
     public void move()
     {
         this.orientation = this.orientation.turnBy(geny[aktualnyGen]);
         aktualnyGen = (aktualnyGen + 1) % geny.length;
-        Vector2d newPos = map.newPosition(this.position.add(this.orientation.toUnitVector()));
-        positionChanged(this.position, newPos);
-        this.position = newPos;
+        Vector2d newPos = map.newPosition(this.position, this.orientation.toUnitVector(), this);
+        if (newPos.equals(this.position))
+        {
+            this.orientation = this.orientation.turnBy(4);
+        }
+        else
+        {
+            positionChanged(this.position, newPos);
+            this.position = newPos;
+        }
     }
     public boolean equals(Object other)
     {
