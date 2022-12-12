@@ -11,9 +11,6 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     protected Map<Vector2d, Grass> trawnik = new HashMap<>();
     protected Vector2d poczatekMapy = new Vector2d(0, 0);
     protected Vector2d kraniecMapy;
-    protected Vector2d poczatekRownika;
-    protected Vector2d kraniecRownika;
-    protected boolean trawaNaRowniku = false;
     public boolean place(Animal animal)
     {
         zwierzeta.put(animal.getPosition(), animal);

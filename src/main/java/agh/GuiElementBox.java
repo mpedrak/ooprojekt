@@ -12,7 +12,6 @@ import java.io.FileNotFoundException;
 public class GuiElementBox
 {
     public VBox vbox = new VBox();
-
     public GuiElementBox(IMapElement element) throws FileNotFoundException
     {
         Image image = new Image(new FileInputStream(element.getPath()));
