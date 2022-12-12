@@ -9,14 +9,13 @@ import java.util.Random;
 
 public class SimulationEngine implements  Runnable
 {
-    IWorldMap mapa;
+    AbstractWorldMap mapa;
     private App app;
     private int moveDelay;
 
     private LinkedList<Animal> zwierzeta = new LinkedList<>();
 
-    public SimulationEngine(IWorldMap mapa, App app, int moveDelay, int liczbaRoslinKazdegoDnia, int iloscZwierzaat,
-                            int poczatkowaEnergia)
+    public SimulationEngine(AbstractWorldMap mapa, App app, int moveDelay, int iloscZwierzaat, int poczatkowaEnergia)
     {
         this.mapa = mapa;
         this.app = app;
@@ -25,26 +24,19 @@ public class SimulationEngine implements  Runnable
         while (i < iloscZwierzaat)
         {
             Vector2d p = mapa.losujVectorNaMapie();
-            while (mapa.objectAt(p) != null)
-                p = mapa.losujVectorNaMapie();
-            Animal z = new Animal(p);
+            Animal z = new Animal(p, mapa);
             z.changeEnergy(poczatkowaEnergia);
             zwierzeta.add(z);
             mapa.place(z);
+            i++;
         }
     }
-    public void setMoveDelay(int moveDelay)
-    {
-        this.moveDelay = moveDelay;
-    }
+
     public void run()
     {
         while (true)
         {
-            for (Animal x: zwierzeta)
-            {
-                x.move();
-            }
+            for (Animal x: zwierzeta) x.move();
             try
             {
                 Thread.sleep(moveDelay);
@@ -55,10 +47,9 @@ public class SimulationEngine implements  Runnable
             }
             Platform.runLater(new Runnable()
             {
-                @Override
                 public void run()
                 {
-                   // app.renderuj(mapa);
+                   app.renderuj(mapa);
                 }
             });
         }

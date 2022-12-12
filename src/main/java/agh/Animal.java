@@ -8,20 +8,21 @@ import java.util.Random;
 
 public class Animal extends AbstractWorldMapElement
 {
-    private MapDirection orientation ;
+    private MapDirection orientation = MapDirection.N;
     private LinkedList<IPositionChangeObserver> obserwatorzy = new LinkedList<>();
-    private IWorldMap map;
+    private AbstractWorldMap map;
     private int energia = 0; // ile zostało dni życia
-    private int[] geny; // N genów, liczby 0 - 7
+    private int[] geny = {0, 1, 2, 3, 4}; // N genów, liczby 0 - 7
     private int aktualnyGen = 0;
 
     public String toString()
     {
         return orientation.toString();
     }
-    public Animal(Vector2d initialPosition)
+    public Animal(Vector2d initialPosition, AbstractWorldMap map)
     {
         this.position = initialPosition;
+        this.map = map;
     }
     public void move()
     {
@@ -40,10 +41,8 @@ public class Animal extends AbstractWorldMapElement
     }
     public boolean equals(Object other)
     {
-        if (this == other)
-            return true;
-        if (!(other instanceof Animal))
-            return false;
+        if (this == other) return true;
+        if (!(other instanceof Animal)) return false;
         Animal that = (Animal) other;
         return this.position.equals(that.position) && this.orientation == that.orientation;
     }
@@ -53,17 +52,15 @@ public class Animal extends AbstractWorldMapElement
     }
     public void addObserver(IPositionChangeObserver observer)
     {
-        if (!obserwatorzy.contains(observer))
-            obserwatorzy.add(observer);
+        if (!obserwatorzy.contains(observer)) obserwatorzy.add(observer);
     }
     private void positionChanged(Vector2d old_p, Vector2d new_p)
     {
-        for (IPositionChangeObserver x: obserwatorzy)
-            x.positionChanged(old_p, new_p);
+        for (IPositionChangeObserver x: obserwatorzy) x.positionChanged(old_p, new_p);
     }
     public String getPath()
     {
-        return "src/main/resources/animal.png";
+        return "src/main/resources/" + orientation.toString() + ".png";
     }
     public void changeEnergy(int delta)
     {

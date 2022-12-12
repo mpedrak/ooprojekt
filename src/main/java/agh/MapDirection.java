@@ -6,7 +6,18 @@ public enum MapDirection
 
     public String toString()
     {
-        return String.valueOf(this);
+        switch(this)
+        {
+            case N: return "N";
+            case S: return "S";
+            case W: return "W";
+            case E: return "E";
+            case NW: return "NW";
+            case SW: return "SW";
+            case SE: return "SE";
+            case NE: return "NE";
+        }
+        return "";
     }
     public MapDirection turnBy(int ile)
     {

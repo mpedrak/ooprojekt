@@ -11,24 +11,19 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     protected Map<Vector2d, Grass> trawnik = new HashMap<>();
     protected Vector2d poczatekMapy = new Vector2d(0, 0);
     protected Vector2d kraniecMapy;
-
-    protected Vector2d poczatekRownika = null;
-    protected Vector2d kraniecRownika = null;
-    protected LinkedList<Vector2d> miejscaDlaRoslin = null;
+    protected Vector2d poczatekRownika;
+    protected Vector2d kraniecRownika;
+    protected boolean trawaNaRowniku = false;
     public boolean place(Animal animal)
     {
-
         zwierzeta.put(animal.getPosition(), animal);
         animal.addObserver(this);
         return true;
     }
     public Object objectAt(Vector2d position)
     {
-        if(zwierzeta.get(position) != null)
-            return zwierzeta.get(position);
-        if(trawnik.get(position) != null)
-            return trawnik.get(position);
-        return null;
+        if(zwierzeta.get(position) != null) return zwierzeta.get(position);
+        return trawnik.get(position);
     }
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition)
     {
@@ -36,20 +31,33 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         zwierzeta.remove(oldPosition);
         zwierzeta.put(newPosition, z);
     }
-    public Grass stworzTrawe(Vector2d old_p)
+    public void stworzTrawe(int ile)
     {
-        Random generator = new Random();
-        while (true)
+        int i = 0;
+        while (i < ile)
         {
-            Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x), generator.nextInt(kraniecMapy.y));
-            if (objectAt(pp) == null && !pp.equals(old_p))
-                return new Grass(pp);
+            Vector2d pp = losujVectorNaMapie();
+            Grass g = new Grass(pp);
+            trawnik.put(pp, g);
+            i++;
         }
     }
     public Vector2d losujVectorNaMapie()
     {
         Random generator = new Random();
-        Vector2d pp2 = new Vector2d(generator.nextInt(kraniecMapy.x), generator.nextInt(kraniecMapy.y));
-        return pp2;
+        while (true)
+        {
+            Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x), generator.nextInt(kraniecMapy.y));
+            if (objectAt(pp) == null)
+                return pp;
+        }
+    }
+    public Vector2d getPoczatekMapy()
+    {
+        return poczatekMapy;
+    }
+    public Vector2d getKraniecMapy()
+    {
+        return kraniecMapy;
     }
 }
