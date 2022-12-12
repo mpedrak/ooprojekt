@@ -12,17 +12,20 @@ public class Animal extends AbstractWorldMapElement
     private LinkedList<IPositionChangeObserver> obserwatorzy = new LinkedList<>();
     private AbstractWorldMap map;
     private int energia = 0; // ile zostało dni życia
-    private int[] geny = {0, 1, 2, 3, 4}; // N genów, liczby 0 - 7
+    private int[] geny; // N genów, liczby 0 - 7
     private int aktualnyGen = 0;
+    private int wiek = 0;
+    private int iloscPotomstwa = 0;
 
     public String toString()
     {
         return orientation.toString();
     }
-    public Animal(Vector2d initialPosition, AbstractWorldMap map)
+    public Animal(Vector2d initialPosition, AbstractWorldMap map, int[] geny)
     {
         this.position = initialPosition;
         this.map = map;
+        this.geny = geny;
     }
     public void move()
     {
@@ -56,7 +59,7 @@ public class Animal extends AbstractWorldMapElement
     }
     private void positionChanged(Vector2d old_p, Vector2d new_p)
     {
-        for (IPositionChangeObserver x: obserwatorzy) x.positionChanged(old_p, new_p);
+        for (IPositionChangeObserver x: obserwatorzy) x.positionChanged(old_p, new_p, this);
     }
     public String getPath()
     {
@@ -73,6 +76,22 @@ public class Animal extends AbstractWorldMapElement
     public int[] getGenes(int start, int end)
     {
         return Arrays.copyOfRange(geny, start, end);
+    }
+    public void postarzej()
+    {
+        wiek++;
+    }
+    public int getWiek()
+    {
+        return wiek;
+    }
+    public void dodajDziecko()
+    {
+        iloscPotomstwa++;
+    }
+    public int getIloscPotomstwa()
+    {
+        return iloscPotomstwa;
     }
 
 }

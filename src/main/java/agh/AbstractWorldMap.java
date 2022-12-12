@@ -7,13 +7,17 @@ import java.util.Random;
 
 public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver
 {
-    protected Map<Vector2d, Animal> zwierzeta = new HashMap<>();
+    protected Map<Vector2d, LinkedList<Animal>> zwierzeta = new HashMap<>();
     protected Map<Vector2d, Grass> trawnik = new HashMap<>();
     protected Vector2d poczatekMapy = new Vector2d(0, 0);
     protected Vector2d kraniecMapy;
+    protected int energiaRoslin;
     public boolean place(Animal animal)
     {
-        zwierzeta.put(animal.getPosition(), animal);
+        LinkedList<Animal> t = zwierzeta.get(animal.getPosition());
+        zwierzeta.remove(animal.getPosition());
+        t.add(animal);
+        zwierzeta.put(animal.getPosition(), t);
         animal.addObserver(this);
         return true;
     }
@@ -22,11 +26,15 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         if(zwierzeta.get(position) != null) return zwierzeta.get(position);
         return trawnik.get(position);
     }
-    public void positionChanged(Vector2d oldPosition, Vector2d newPosition)
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition, Animal z)
     {
-        Animal z = zwierzeta.get(oldPosition);
+        LinkedList<Animal> t = zwierzeta.get(oldPosition);
         zwierzeta.remove(oldPosition);
-        zwierzeta.put(newPosition, z);
+        t.remove(z);
+        zwierzeta.put(oldPosition, t);
+        t = zwierzeta.get(newPosition);
+        t.add(z);
+        zwierzeta.put(newPosition, t);
     }
     public void stworzTrawe(int ile)
     {
@@ -56,5 +64,9 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     public Vector2d getKraniecMapy()
     {
         return kraniecMapy;
+    }
+    public void smiercZwierzecia(Animal z)
+    {
+        zwierzeta.remove(z.getPosition());
     }
 }

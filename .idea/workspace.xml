@@ -5,13 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5e347108-e1ca-4a12-8129-0cf525fb670d" name="Changes" comment="First commit">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_05_12_2022_13_08__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_05_12_2022_13_08__Changes_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/agh/AbstractWorldMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agh/AbstractWorldMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/agh/Animal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agh/Animal.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/agh/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agh/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/agh/GuiElementBox.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agh/GuiElementBox.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/agh/IPositionChangeObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agh/IPositionChangeObserver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/agh/KulaZiemska.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agh/KulaZiemska.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/agh/PiekielnyPortal.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/agh/SimulationEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agh/SimulationEngine.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +50,20 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Main">
+    <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="agh.App" />
+      <module name="ooprojekt.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="agh.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="agh.Main" />
       <module name="ooprojekt.main" />
@@ -66,6 +79,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.App" />
         <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
@@ -107,7 +121,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670062416608</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="First commit">
+      <created>1670870657739</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1670870657739</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -124,5 +145,10 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First commit" />
     <option name="LAST_COMMIT_MESSAGE" value="First commit" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/ooprojekt$App.ic" NAME="App Coverage Results" MODIFIED="1670877051405" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>agh.*</FILTER>
+    </SUITE>
   </component>
 </project>
