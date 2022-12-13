@@ -6,12 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5e347108-e1ca-4a12-8129-0cf525fb670d" name="Changes" comment="First commit">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/agh/AbstractWorldMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agh/AbstractWorldMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/agh/Animal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agh/Animal.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/agh/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agh/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/agh/IPositionChangeObserver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agh/IPositionChangeObserver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/agh/KulaZiemska.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agh/KulaZiemska.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/agh/SimulationEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agh/SimulationEngine.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +123,14 @@
       <option name="project" value="LOCAL" />
       <updated>1670870657739</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="First commit">
+      <created>1670877173154</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1670877173154</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
