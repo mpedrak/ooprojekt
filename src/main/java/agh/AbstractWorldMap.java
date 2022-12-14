@@ -1,9 +1,6 @@
 package agh;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver
 {
@@ -14,27 +11,22 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     protected int energiaRoslin;
     public boolean place(Animal animal)
     {
-        LinkedList<Animal> t = zwierzeta.get(animal.getPosition());
-        zwierzeta.remove(animal.getPosition());
-        t.add(animal);
-        zwierzeta.put(animal.getPosition(), t);
         animal.addObserver(this);
+        dodajDoHaszMapy(animal);
         return true;
     }
     public Object objectAt(Vector2d position)
     {
-        if(zwierzeta.get(position) != null) return zwierzeta.get(position);
+        if(zwierzeta.get(position) != null ) return zwierzeta.get(position).get(0);
         return trawnik.get(position);
     }
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition, Animal z)
     {
-        LinkedList<Animal> t = zwierzeta.get(oldPosition);
-        zwierzeta.remove(oldPosition);
+        LinkedList<Animal> t = zwierzeta.remove(oldPosition);
         t.remove(z);
-        zwierzeta.put(oldPosition, t);
-        t = zwierzeta.get(newPosition);
-        t.add(z);
-        zwierzeta.put(newPosition, t);
+        z.setPosition(newPosition);
+        if (t.size() > 0) zwierzeta.put(oldPosition, t);
+        dodajDoHaszMapy(z);
     }
     public void stworzTrawe(int ile)
     {
@@ -53,8 +45,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         while (true)
         {
             Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x), generator.nextInt(kraniecMapy.y));
-            if (objectAt(pp) == null)
-                return pp;
+            if (objectAt(pp) == null) return pp;
         }
     }
     public Vector2d getPoczatekMapy()
@@ -67,6 +58,32 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     }
     public void smiercZwierzecia(Animal z)
     {
-        zwierzeta.remove(z.getPosition());
+        usunZHaszMapy(z);
+    }
+    private void dodajDoHaszMapy(Animal z)
+    {
+        Vector2d p = z.getPosition();
+        LinkedList<Animal> t = zwierzeta.remove(p);
+        if (t == null) t = new LinkedList<>();
+        t.add(z);
+        zwierzeta.put(p, t);
+    }
+    private void usunZHaszMapy(Animal z)
+    {
+        Vector2d p = z.getPosition();
+        LinkedList<Animal> t = zwierzeta.remove(p);
+        t.remove(z);
+        if (t.size() > 0) zwierzeta.put(p, t);
+    }
+    public void wypiuszDoDebugu()
+    {
+        System.out.println("Mapa");
+        for (Vector2d name: zwierzeta.keySet())
+        {
+            String key = name.toString();
+            String value = Arrays.toString(zwierzeta.get(name).toArray());
+            System.out.println(key + " " + value);
+        }
+        System.out.println("Kkoiec mapy");
     }
 }

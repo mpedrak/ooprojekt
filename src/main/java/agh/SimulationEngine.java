@@ -13,9 +13,8 @@ public class SimulationEngine implements  Runnable
     private int energiaNaRozmnazanie;
     private int minimalnaEnergiaDoRozmnazania;
     private int iloscGenow;
-
-    private TreeSet<Animal> zwierzeta = new TreeSet<>(new Comparator<Animal>()
-    {
+    private HashMap<Vector2d, LinkedList<Animal>> zwierzeta = new HashMap<>();
+    private TreeSet<Animal> zwierzetaPosortowane = new TreeSet<>(new Comparator<Animal>() {
         public int compare (Animal a, Animal b)
         {
             if(a.getEnergy() == b.getEnergy())
@@ -29,11 +28,7 @@ public class SimulationEngine implements  Runnable
             }
             else return b.getEnergy() - a.getEnergy();
         }
-    }
-    );
-    private HashMap<Vector2d, LinkedList<Animal>> zwierzeta2 = new HashMap<>();
-
-
+    });
     public SimulationEngine(AbstractWorldMap mapa, App app, int moveDelay, int iloscZwierzaat, int poczatkowaEnergia,
                             int energiaNaRozmnazanie, int minimalnaEnergiaDoRozmnazania,
                             int iloscGenow)
@@ -48,12 +43,11 @@ public class SimulationEngine implements  Runnable
         while (i < iloscZwierzaat)
         {
             Vector2d p = mapa.losujVectorNaMapie();
-            Animal z = new Animal(p, mapa, new int[]{0, 1, 2, 3, 4});
+            p = new Vector2d(2,2);
+            Animal z = new Animal(p, mapa, new int[]{0, 4, 0, 4, 0});
             z.changeEnergy(poczatkowaEnergia);
-            zwierzeta.add(z);
-            LinkedList<Animal> t = zwierzeta2.remove(p);
-            t.add(z);
-            zwierzeta2.put(p, t);
+            dodajDoHaszMapy(z);
+            zwierzetaPosortowane.add(z);
             mapa.place(z);
             i++;
         }
@@ -63,45 +57,76 @@ public class SimulationEngine implements  Runnable
     {
         while (true)
         {
-            for (Animal x: zwierzeta)
+            System.out.println("Początek iteracji -----------------------------------------");
+            wypiuszDoDebugu();
+            mapa.wypiuszDoDebugu();
+            for (Animal x: zwierzetaPosortowane)
             {
-                x.changeEnergy(-1);
-                if (x.getEnergy() == 0)
-                {
-                    mapa.smiercZwierzecia(x);
-                    zwierzeta2.remove(x.getPosition());
-                }
-                else
-                {
-                    x.move();
-                    x.postarzej();
-                }
+               if(x.getEnergy() <= 1)
+               {
+                   usunZHaszMapy(x);
+                   mapa.smiercZwierzecia(x);
+               }
+               else
+               {
+                   usunZHaszMapy(x);
+                   x.postarzej();
+                   x.move();
+                   dodajDoHaszMapy(x);
+               }
             }
-            zwierzeta.clear();
-            for (LinkedList<Animal> x: zwierzeta2.values())
-                for (Animal y: x)
-                    zwierzeta.add(y);
-            for (Vector2d x: zwierzeta2.keySet())
+
+            zwierzetaPosortowane.clear();
+            for (LinkedList<Animal> x: zwierzeta.values())
+                for (Animal y: x) zwierzetaPosortowane.add(y);
+
+
+            System.out.println("Po ruszeniu");
+            wypiuszDoDebugu();
+            mapa.wypiuszDoDebugu();
+
+
+            LinkedList<Animal> dzieci = new LinkedList<>();
+            for (Vector2d p: zwierzeta.keySet())
             {
-                LinkedList<Animal> t = zwierzeta2.get(x);
-                t.removeIf(an -> an.getEnergy() < minimalnaEnergiaDoRozmnazania);
+                LinkedList<Animal> t = new LinkedList<>();
+                for (Animal x: zwierzetaPosortowane)
+                    if (x.getPosition().equals(p) && x.getEnergy() >= minimalnaEnergiaDoRozmnazania) t.add(x);
+
                 if (t.size() >= 2)
                 {
+                    System.out.println("diecko jest robione na " + p.toString());
                     Animal z1 = t.get(0);
                     Animal z2 = t.get(1);
+                    /*
+                    zwierzetaPosortowane.remove(z1);
+                    zwierzetaPosortowane.remove(z2);
                     z1.changeEnergy(energiaNaRozmnazanie);
+                    z1.dodajDziecko();
                     z2.changeEnergy(energiaNaRozmnazanie);
-                    Animal dziecko = new Animal(x, mapa, zrobGenyDlaDziecka(z1, z2));
+                    z2.dodajDziecko();
+                    zwierzetaPosortowane.add(z1);
+                    zwierzetaPosortowane.add(z2);
+
+                     */
+                    Animal dziecko = new Animal(p, mapa, zrobGenyDlaDziecka(z1, z2));
                     dziecko.changeEnergy(-2 * energiaNaRozmnazanie);
-                    t = zwierzeta2.remove(x);
                     mapa.place(dziecko);
-                    t.add(dziecko);
-                    zwierzeta2.put(x, t);
+                    dzieci.add(dziecko);
                 }
             }
-            for (LinkedList<Animal> x: zwierzeta2.values())
-                for (Animal y: x)
-                    zwierzeta.add(y);
+
+            for (Animal x: dzieci)
+            {
+                dodajDoHaszMapy(x);
+                zwierzetaPosortowane.add(x);
+            }
+            System.out.println("Po dzieciach");
+            wypiuszDoDebugu();
+            mapa.wypiuszDoDebugu();
+
+
+            System.out.println("Koniec iteracji -------------------------------------------");
             try
             {
                 Thread.sleep(moveDelay);
@@ -121,15 +146,17 @@ public class SimulationEngine implements  Runnable
     }
     public int[] zrobGenyDlaDziecka(Animal matka, Animal ojciec)
     {
+        return new int[]{0, 4, 0, 4, 0};
+        /*
         int N = iloscGenow;
         int[] genyDziecka= new int[N];
-        int[] genyMatki= matka.getGenes(0, N - 1);
-        int[] genyOjca= ojciec.getGenes(0, N - 1);
+        int[] genyMatki= matka.getGenes(0, N);
+        int[] genyOjca= ojciec.getGenes(0, N);
 
         int sumaEnergiiRodzicow= matka.getEnergy() + ojciec.getEnergy();
         int udzialMatki, udzialOjca;
 
-        double temp= matka.getEnergy() / sumaEnergiiRodzicow * N;
+        double temp= (double)matka.getEnergy() / (double)sumaEnergiiRodzicow * (double)N;
 
         if (matka.getEnergy() < ojciec.getEnergy())
             temp= Math.floor(temp);
@@ -147,6 +174,7 @@ public class SimulationEngine implements  Runnable
                 genyDziecka[i]= genyOjca[i];
         }
         else {
+
             // matka z prawej, ojciec z lewej
             for (int i=0; i < udzialOjca; i++)
                 genyDziecka[i]= genyOjca[i];
@@ -154,6 +182,33 @@ public class SimulationEngine implements  Runnable
                 genyDziecka[i]= genyMatki[i];
         }
         return genyDziecka;
+        */
     }
-
+    private void dodajDoHaszMapy(Animal z)
+    {
+        Vector2d p = z.getPosition();
+        LinkedList<Animal> t = zwierzeta.remove(p);
+        if (t == null) t = new LinkedList<>();
+        t.add(z);
+        zwierzeta.put(p, t);
+    }
+    private void usunZHaszMapy(Animal z)
+    {
+        Vector2d p = z.getPosition();
+        LinkedList<Animal> t = zwierzeta.remove(p);
+        t.remove(z);
+        if(t.size() > 0) zwierzeta.put(p, t);
+    }
+    public void wypiuszDoDebugu()
+    {
+        System.out.println("Engin");
+        System.out.println(Arrays.toString(zwierzetaPosortowane.toArray()));
+        for (Vector2d name: zwierzeta.keySet())
+        {
+            String key = name.toString();
+            String value = Arrays.toString(zwierzeta.get(name).toArray());
+            System.out.println(key + " " + value);
+        }
+        System.out.println("Koniec enginu");
+    }
 }

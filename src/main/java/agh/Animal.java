@@ -19,7 +19,7 @@ public class Animal extends AbstractWorldMapElement
 
     public String toString()
     {
-        return orientation.toString();
+        return orientation.toString() + " " + position.toString();
     }
     public Animal(Vector2d initialPosition, AbstractWorldMap map, int[] geny)
     {
@@ -39,7 +39,6 @@ public class Animal extends AbstractWorldMapElement
         else
         {
             positionChanged(this.position, newPos);
-            this.position = newPos;
         }
     }
     public boolean equals(Object other)
@@ -80,6 +79,7 @@ public class Animal extends AbstractWorldMapElement
     public void postarzej()
     {
         wiek++;
+        energia--;
     }
     public int getWiek()
     {
@@ -92,6 +92,10 @@ public class Animal extends AbstractWorldMapElement
     public int getIloscPotomstwa()
     {
         return iloscPotomstwa;
+    }
+    public void setPosition (Vector2d p)
+    {
+        this.position = p;
     }
 
 }

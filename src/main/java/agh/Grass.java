@@ -10,7 +10,7 @@ public class Grass extends AbstractWorldMapElement
     }
     public String toString()
     {
-        return "*";
+        return "* " + position.toString();
     }
     public boolean equals(Object other)
     {

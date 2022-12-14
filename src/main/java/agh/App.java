@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
+import java.util.LinkedList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
@@ -31,10 +32,10 @@ public class App  extends Application
 
     public void start(Stage primaryStage)
     {
-        AbstractWorldMap map = new KulaZiemska(10, 10,  7, 7);
+        AbstractWorldMap map = new KulaZiemska(10, 10,  10, 0);
         int moveDelay = 1000;
-        Runnable engine = new SimulationEngine(map, this, moveDelay, 3, 77,
-                -7, 10, 5);
+        Runnable engine = new SimulationEngine(map, this, moveDelay, 2, 10,
+                -2, 0, 5);
 
         grid = new GridPane();
         grid.setGridLinesVisible(false);
@@ -96,7 +97,7 @@ public class App  extends Application
                     GuiElementBox element = null;
                     try
                     {
-                        element = new GuiElementBox((IMapElement) z);
+                        element = new GuiElementBox((IMapElement)z);
                     }
                     catch (FileNotFoundException ex)
                     {
