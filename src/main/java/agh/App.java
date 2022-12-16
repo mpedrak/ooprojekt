@@ -32,10 +32,10 @@ public class App  extends Application
 
     public void start(Stage primaryStage)
     {
-        AbstractWorldMap map = new KulaZiemska(10, 10,  10, 0);
-        int moveDelay = 1000;
-        Runnable engine = new SimulationEngine(map, this, moveDelay, 2, 10,
-                -2, 0, 5);
+        AbstractWorldMap map = new KulaZiemska(20, 20,  70, 0);
+        int moveDelay = 250;
+        Runnable engine = new SimulationEngine(map, this, moveDelay, 2, 690,
+                -50, 0, 5);
 
         grid = new GridPane();
         grid.setGridLinesVisible(false);

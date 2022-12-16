@@ -44,7 +44,7 @@ public class SimulationEngine implements  Runnable
         {
             Vector2d p = mapa.losujVectorNaMapie();
             p = new Vector2d(2,2);
-            Animal z = new Animal(p, mapa, new int[]{0, 4, 0, 4, 0});
+            Animal z = new Animal(p, mapa, new int[]{0, 1, 2, 3, 4});
             z.changeEnergy(poczatkowaEnergia);
             dodajDoHaszMapy(z);
             zwierzetaPosortowane.add(z);
@@ -62,23 +62,43 @@ public class SimulationEngine implements  Runnable
             mapa.wypiuszDoDebugu();
             for (Animal x: zwierzetaPosortowane)
             {
-               if(x.getEnergy() <= 1)
-               {
-                   usunZHaszMapy(x);
-                   mapa.smiercZwierzecia(x);
-               }
-               else
-               {
-                   usunZHaszMapy(x);
-                   x.postarzej();
-                   x.move();
-                   dodajDoHaszMapy(x);
-               }
+                boolean debugTrashyVal= x.getEnergy() == 4 && x.getPosition().equals(new Vector2d(2, 3));
+                System.out.print(">> Robię se ruszanie dla: " + x.toString() + " (" + debugTrashyVal + ")");
+
+                if(x.getEnergy() <= 1)
+                {
+                    usunZHaszMapy(x);
+                    mapa.smiercZwierzecia(x);
+                }
+                else
+                {
+                    usunZHaszMapy(x);
+                    x.postarzej();
+                    x.move();
+                    dodajDoHaszMapy(x);
+                }
+
+                System.out.print("-> Po ruchu: " + x.toString() + " (" + debugTrashyVal + ")\n");
             }
 
+            /// do usuniecia
+            for (Vector2d name: zwierzeta.keySet())
+            {
+                String key = name.toString();
+                String value = Arrays.toString(zwierzeta.get(name).toArray());
+                System.out.println(key + " " + value);
+            }
+            /// do usuniecia
+
+            System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
             zwierzetaPosortowane.clear();
-            for (LinkedList<Animal> x: zwierzeta.values())
+            System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
+            for (LinkedList<Animal> x: zwierzeta.values()) {
+                System.out.println("> ");
+
                 for (Animal y: x) zwierzetaPosortowane.add(y);
+            }
+            System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
 
 
             System.out.println("Po ruszeniu");
@@ -146,8 +166,8 @@ public class SimulationEngine implements  Runnable
     }
     public int[] zrobGenyDlaDziecka(Animal matka, Animal ojciec)
     {
-        return new int[]{0, 4, 0, 4, 0};
-        /*
+//        return new int[]{4, 0, 4, 0, 4};
+
         int N = iloscGenow;
         int[] genyDziecka= new int[N];
         int[] genyMatki= matka.getGenes(0, N);
@@ -182,7 +202,7 @@ public class SimulationEngine implements  Runnable
                 genyDziecka[i]= genyMatki[i];
         }
         return genyDziecka;
-        */
+
     }
     private void dodajDoHaszMapy(Animal z)
     {

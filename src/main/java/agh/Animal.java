@@ -16,7 +16,7 @@ public class Animal extends AbstractWorldMapElement
 
     public String toString()
     {
-        return orientation.toString() + " " + position.toString();
+        return orientation.toString() + " " + position.toString() + " kcal: " + energia;
     }
     public Animal(Vector2d initialPosition, AbstractWorldMap map, int[] geny)
     {
@@ -31,10 +31,8 @@ public class Animal extends AbstractWorldMapElement
     }
     public boolean equals(Object other)
     {
-        if (this == other) return true;
-        if (!(other instanceof Animal)) return false;
-        Animal that = (Animal) other;
-        return this.position.equals(that.position) && this.orientation == that.orientation;
+        return this == other;
+
     }
     public int hashCode()
     {
