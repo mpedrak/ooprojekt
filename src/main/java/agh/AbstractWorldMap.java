@@ -24,7 +24,14 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     {
         LinkedList<Animal> t = zwierzeta.remove(oldPosition);
         t.remove(z);
-        z.setPosition(newPosition);
+        z.changeOrientation(false);
+        newPosition = this.newPosition(oldPosition, z.getOrientation().toUnitVector(), z);
+
+        if (oldPosition.equals(newPosition))
+            z.changeOrientation(true);
+        else
+            z.setPosition(newPosition);
+
         if (t.size() > 0) zwierzeta.put(oldPosition, t);
         dodajDoHaszMapy(z);
     }

@@ -1,10 +1,7 @@
 package agh;
 
 import java.io.FileInputStream;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
 
 public class Animal extends AbstractWorldMapElement
 {
@@ -29,17 +26,8 @@ public class Animal extends AbstractWorldMapElement
     }
     public void move()
     {
-        this.orientation = this.orientation.turnBy(geny[aktualnyGen]);
-        aktualnyGen = (aktualnyGen + 1) % geny.length;
-        Vector2d newPos = map.newPosition(this.position, this.orientation.toUnitVector(), this);
-        if (newPos.equals(this.position))
-        {
-            this.orientation = this.orientation.turnBy(4);
-        }
-        else
-        {
-            positionChanged(this.position, newPos);
-        }
+        Vector2d newPos= new Vector2d (7, -7);
+        positionChanged(this.position, newPos);
     }
     public boolean equals(Object other)
     {
@@ -59,6 +47,18 @@ public class Animal extends AbstractWorldMapElement
     private void positionChanged(Vector2d old_p, Vector2d new_p)
     {
         for (IPositionChangeObserver x: obserwatorzy) x.positionChanged(old_p, new_p, this);
+    }
+    public void changeOrientation (boolean reverseOrientation) {
+        if (reverseOrientation) {
+            orientation= orientation.turnBy(4);
+        }
+        else {
+            orientation = orientation.turnBy(geny[aktualnyGen]);
+            aktualnyGen = (aktualnyGen + 1) % geny.length;
+        }
+    }
+    public MapDirection getOrientation () {
+        return this.orientation;
     }
     public String getPath()
     {
