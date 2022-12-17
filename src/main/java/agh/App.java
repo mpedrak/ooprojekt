@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -29,18 +30,18 @@ public class App  extends Application
 {
 
     public GridPane grid = null;
-    final int width = 40;
-    final int height = 40;
+    final int width = 25;
+    final int height = 25;
     Vector2d bottomLeft;
     Vector2d upperRight;
 
 
     public void start(Stage primaryStage)
     {
-        AbstractWorldMap map = new KulaZiemska(5, 5,  12, 15);
+        AbstractWorldMap map = new KulaZiemska(30, 30,  100, 0, true);
         int moveDelay = 250;
-        Runnable engine = new SimulationEngine(map, this, moveDelay, 4, 100,
-                -2, 5, 10);
+        Runnable engine = new SimulationEngine(map, this, moveDelay, 100, 100,
+                -50, 100, 5);
 
         grid = new GridPane();
         grid.setGridLinesVisible(false);
@@ -49,6 +50,10 @@ public class App  extends Application
         int w = (upperRight.x - bottomLeft.x  + 2) * width;
         int h = (upperRight.y - bottomLeft.y  + 2) * height;
         Scene scene = new Scene(grid, w, h);
+        for (int i = 0; i <= upperRight.x - bottomLeft.x + 1; i++)
+            grid.getColumnConstraints().add(new ColumnConstraints(width));
+        for (int i = 0; i <= upperRight.y - bottomLeft.y + 1; i++)
+            grid.getRowConstraints().add(new RowConstraints(height));
         primaryStage.setScene(scene);
         primaryStage.setX(10);
         primaryStage.setY(100);
@@ -72,21 +77,21 @@ public class App  extends Application
 
 
         VBox vbox = new VBox();
-        Label s = new Label( "\n" + "   " + "y\\x");
+        Label s = new Label( "y\\x");
         vbox.getChildren().addAll(s);
+        vbox.setAlignment(Pos.CENTER);
         grid.add(vbox, 0, 0, 1, 1);
         GridPane.setHalignment(vbox, HPos.CENTER);
 
-        for (int i = 0; i <= upperRight.x - bottomLeft.x + 1; i++)
-            grid.getColumnConstraints().add(new ColumnConstraints(width));
-        for (int i = 0; i <= upperRight.y - bottomLeft.y + 1; i++)
-            grid.getRowConstraints().add(new RowConstraints(height));
+
+
 
         for (int i = bottomLeft.x ; i <= upperRight.x; ++i)
         {
             vbox = new VBox();
-            s = new Label("\n" + "     " + Integer.toString(i));
+            s = new Label(Integer.toString(i));
             vbox.getChildren().addAll(s);
+            vbox.setAlignment(Pos.CENTER);
             grid.add(vbox, i - bottomLeft.x + 1, 0, 1, 1);
         }
 
@@ -94,8 +99,9 @@ public class App  extends Application
         for (int i = upperRight.y; i >= bottomLeft.y; --i)
         {
             vbox = new VBox();
-            s = new Label("\n" + "     " + Integer.toString(i));
+            s = new Label(Integer.toString(i));
             vbox.getChildren().addAll(s);
+            vbox.setAlignment(Pos.CENTER);
             grid.add(vbox, 0, j, 1, 1);
             ++j;
         }

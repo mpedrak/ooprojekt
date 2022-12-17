@@ -9,6 +9,22 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     protected Vector2d poczatekMapy = new Vector2d(0, 0);
     protected Vector2d kraniecMapy;
     protected int energiaRoslin;
+    protected Vector2d pocztekRownika = null;
+    protected Vector2d kraniecRownika = null;
+    protected int trawyNaRowniku = 0;
+    protected class doTreeSeta
+    {
+        public Vector2d v;
+        public int i;
+        public doTreeSeta(Vector2d v, int i)
+        {
+            this.v = v;
+            this.i = i;
+        }
+        public String toString(){return this.v + " " + this.i;}
+    }
+    protected TreeSet<doTreeSeta> toksyczneTrupy = null;
+
     public boolean place(Animal animal)
     {
         animal.addObserver(this);
@@ -36,14 +52,27 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     }
     public void stworzTrawe(int ile)
     {
-        int i = 0;
-        while (i < ile)
-        {
-            Vector2d pp = losujVectorNaMapie();
-            Grass g = new Grass(pp);
-            trawnik.put(pp, g);
-            i++;
-        }
+       if(toksyczneTrupy == null)
+       {
+           int i = 0;
+           int naRowniku = (int)Math.floor(ile * 0.8);
+           while (i < naRowniku)
+           {
+               if(trawyNaRowniku == (kraniecRownika.x + 1) * (kraniecRownika.y - pocztekRownika.y + 1)) break; // przepelnienie rownika
+               Vector2d pp = losujVectorNaRowniku();
+               Grass g = new Grass(pp);
+               trawnik.put(pp, g);
+               i++;
+               trawyNaRowniku++;
+           }
+           while (i < ile)
+           {
+               Vector2d pp = losujVectorNaMappieAleNieNaRowniku();
+               Grass g = new Grass(pp);
+               trawnik.put(pp, g);
+               i++;
+           }
+       }
     }
     public Vector2d losujVectorNaMapie()
     {
@@ -52,6 +81,25 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         {
             Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x + 1), generator.nextInt(kraniecMapy.y + 1));
             if (objectAt(pp) == null) return pp;
+        }
+    }
+    public Vector2d losujVectorNaRowniku()
+    {
+        Random generator = new Random();
+        while (true)
+        {
+            Vector2d pp = new Vector2d(generator.nextInt(kraniecRownika.x + 1),
+                    generator.nextInt(kraniecRownika.y - pocztekRownika.y + 1) + pocztekRownika.y);
+            if (objectAt(pp) == null) return pp;
+        }
+    }
+    public Vector2d losujVectorNaMappieAleNieNaRowniku()
+    {
+        Random generator = new Random();
+        while (true)
+        {
+            Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x + 1), generator.nextInt(kraniecMapy.y + 1));
+            if (!(pp.follows( pocztekRownika) && pp.precedes(kraniecRownika)) && objectAt(pp) == null) return pp;
         }
     }
     public Vector2d getPoczatekMapy()
@@ -65,6 +113,27 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     public void smiercZwierzecia(Animal z)
     {
         usunZHaszMapy(z);
+        if(toksyczneTrupy != null)
+        {
+            doTreeSeta t = null;
+            for(doTreeSeta x: toksyczneTrupy)
+            {
+                if(x.v.equals(z.getPosition()))
+                {
+                    t = x;
+                    toksyczneTrupy.remove(x);
+                    break;
+                }
+            }
+            if (t == null)
+            {
+                t = new doTreeSeta(z.getPosition(), 0);
+            }
+            t.i++;
+            toksyczneTrupy.add(t);
+            System.out.println(Arrays.toString(toksyczneTrupy.toArray()));
+        }
+
     }
     private void dodajDoHaszMapy(Animal z)
     {
