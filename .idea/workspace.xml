@@ -4,9 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5e347108-e1ca-4a12-8129-0cf525fb670d" name="Changes" comment="3rd commit by Andrew">
+    <list default="true" id="5e347108-e1ca-4a12-8129-0cf525fb670d" name="Changes" comment="4th commit by Andrew">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/agh/AbstractWorldMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agh/AbstractWorldMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/agh/Animal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agh/Animal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/agh/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agh/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/agh/SimulationEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/agh/SimulationEngine.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +33,11 @@
         <option name="argument" value="--tags" />
         <option name="title" value="All" />
       </GitPushTagMode>
+    </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -151,7 +158,14 @@
       <option name="project" value="LOCAL" />
       <updated>1671288346732</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="4th commit by Andrew">
+      <created>1671296480010</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1671296480010</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -170,7 +184,8 @@
     <MESSAGE value="First commit by Michał" />
     <MESSAGE value="First commit by Andrew" />
     <MESSAGE value="3rd commit by Andrew" />
-    <option name="LAST_COMMIT_MESSAGE" value="3rd commit by Andrew" />
+    <MESSAGE value="4th commit by Andrew" />
+    <option name="LAST_COMMIT_MESSAGE" value="4th commit by Andrew" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/ooprojekt$App.ic" NAME="App Coverage Results" MODIFIED="1670877051405" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">

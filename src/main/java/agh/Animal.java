@@ -13,17 +13,19 @@ public class Animal extends AbstractWorldMapElement
     private int aktualnyGen = 0;
     private int wiek = 0;
     private int iloscPotomstwa = 0;
+    private boolean szalenstwo;
 
     public String toString()
     {
         return orientation.toString() + " " + position.toString() + " kcal: " + energia + " wiek: " + wiek + " geny: " + Arrays.toString(geny) + " it=[" + aktualnyGen + "] " + "dzieci: " + iloscPotomstwa;
     }
-    public Animal(Vector2d initialPosition, AbstractWorldMap map, int[] geny)
+    public Animal(Vector2d initialPosition, AbstractWorldMap map, int[] geny, boolean szalenstwo)
     {
         this.position = initialPosition;
         this.map = map;
         this.geny = geny;
         this.orientation= getRandomOrientation();
+        this.szalenstwo= szalenstwo;
     }
     public void move()
     {
@@ -52,8 +54,15 @@ public class Animal extends AbstractWorldMapElement
             orientation= orientation.turnBy(4);
         }
         else {
-            orientation = orientation.turnBy(geny[aktualnyGen]);
-            aktualnyGen = (aktualnyGen + 1) % geny.length;
+            int N= geny.length;
+            int step= 1;
+            orientation= orientation.turnBy(geny[aktualnyGen]);
+
+            Random generator = new Random();
+            if (this.szalenstwo && generator.nextInt(5) == 0)   // jeśli jest szalony i akurat mu odwaliło
+                step= 1 + generator.nextInt(N - 1);
+
+            aktualnyGen= (aktualnyGen + step) % N;
         }
     }
     public MapDirection getOrientation () {
