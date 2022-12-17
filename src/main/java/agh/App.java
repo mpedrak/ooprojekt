@@ -40,11 +40,11 @@ public class App  extends Application
     {
 
 
-        AbstractWorldMap map = new KulaZiemska(3, 3,  0, 15);
+        AbstractWorldMap map = new KulaZiemska(15, 15,  70, 50, true);
         int moveDelay = 250;
-        Runnable engine = new SimulationEngine(map, this, moveDelay, 2, 100,
-                -2, 5, 10, new int[]{3, 3},
-                true, true);
+        Runnable engine = new SimulationEngine(map, this, moveDelay, 15, 100,
+                -10, 20, 10, new int[]{3, 3},
+                true, true, 7);
 
 
         grid = new GridPane();

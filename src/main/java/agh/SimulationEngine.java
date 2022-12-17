@@ -17,6 +17,7 @@ public class SimulationEngine implements  Runnable
     private int[] zakresIlosciMutacji;  // tab[0] -> dolne ograniczenie, tab[1] -> górne ograniczenie (włącznie!)
     private boolean pelnaLosowosc;
     private boolean szalenstwo;
+    private int ileTrawyDziennie;
     private HashMap<Vector2d, LinkedList<Animal>> zwierzeta = new HashMap<>();
     private TreeSet<Animal> zwierzetaPosortowane = new TreeSet<>(new Comparator<Animal>() {
         public int compare (Animal a, Animal b)
@@ -35,7 +36,9 @@ public class SimulationEngine implements  Runnable
     });
     public SimulationEngine(AbstractWorldMap mapa, App app, int moveDelay, int iloscZwierzaat, int poczatkowaEnergia,
                             int energiaNaRozmnazanie, int minimalnaEnergiaDoRozmnazania,
-                            int iloscGenow, int[] zakresIlosciMutacji, boolean pelnaLosowosc, boolean szalenstwo)
+                            int iloscGenow, int[] zakresIlosciMutacji, boolean pelnaLosowosc, boolean szalenstwo,
+                            int ileTrawyDziennie)
+
     {
         this.mapa = mapa;
         this.app = app;
@@ -46,6 +49,7 @@ public class SimulationEngine implements  Runnable
         this.zakresIlosciMutacji= zakresIlosciMutacji;
         this.pelnaLosowosc = pelnaLosowosc;
         this.szalenstwo= szalenstwo;
+        this.ileTrawyDziennie = ileTrawyDziennie;
         int i = 0;
         while (i < iloscZwierzaat)
         {
@@ -65,8 +69,8 @@ public class SimulationEngine implements  Runnable
         while (true)
         {
 
-            Scanner scan = new Scanner(System.in);
-            scan.nextLine();
+            //Scanner scan = new Scanner(System.in);
+           // scan.nextLine();
 
 
             // System.out.println("Początek iteracji -----------------------------------------");
@@ -150,6 +154,7 @@ public class SimulationEngine implements  Runnable
                 dodajDoHaszMapy(x);
                 zwierzetaPosortowane.add(x);
             }
+            mapa.stworzTrawe(ileTrawyDziennie);
             // System.out.println("Po dzieciach");
             // wypiuszDoDebugu();
             // mapa.wypiuszDoDebugu();
@@ -157,7 +162,7 @@ public class SimulationEngine implements  Runnable
 
             // System.out.println("Koniec iteracji -------------------------------------------");
 
-            /*
+
             try
             {
                 Thread.sleep(moveDelay);
@@ -166,7 +171,7 @@ public class SimulationEngine implements  Runnable
             {
                 System.out.println(ex + " przerwanie symulacji");
             }
-             */
+
 
 
 

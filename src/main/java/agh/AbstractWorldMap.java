@@ -12,6 +12,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     protected Vector2d pocztekRownika = null;
     protected Vector2d kraniecRownika = null;
     protected int trawyNaRowniku = 0;
+    protected int trawyWogole = 0;
     protected class doTreeSeta
     {
         public Vector2d v;
@@ -58,19 +59,23 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
            int naRowniku = (int)Math.floor(ile * 0.8);
            while (i < naRowniku)
            {
+               if(trawyWogole >= (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1)) return;
                if(trawyNaRowniku == (kraniecRownika.x + 1) * (kraniecRownika.y - pocztekRownika.y + 1)) break; // przepelnienie rownika
                Vector2d pp = losujVectorNaRowniku();
                Grass g = new Grass(pp);
                trawnik.put(pp, g);
                i++;
                trawyNaRowniku++;
+               trawyWogole++;
            }
            while (i < ile)
            {
+               if(trawyWogole >= (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1)) return;
                Vector2d pp = losujVectorNaMappieAleNieNaRowniku();
                Grass g = new Grass(pp);
                trawnik.put(pp, g);
                i++;
+               trawyWogole++;
            }
        }
     }
@@ -90,7 +95,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         {
             Vector2d pp = new Vector2d(generator.nextInt(kraniecRownika.x + 1),
                     generator.nextInt(kraniecRownika.y - pocztekRownika.y + 1) + pocztekRownika.y);
-            if (objectAt(pp) == null) return pp;
+            if (!(objectAt(pp) instanceof Grass)) return pp;
         }
     }
     public Vector2d losujVectorNaMappieAleNieNaRowniku()
@@ -99,7 +104,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         while (true)
         {
             Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x + 1), generator.nextInt(kraniecMapy.y + 1));
-            if (!(pp.follows( pocztekRownika) && pp.precedes(kraniecRownika)) && objectAt(pp) == null) return pp;
+            if (!(pp.follows( pocztekRownika) && pp.precedes(kraniecRownika)) && !(objectAt(pp) instanceof Grass)) return pp;
         }
     }
     public Vector2d getPoczatekMapy()

@@ -38,6 +38,8 @@ public class KulaZiemska extends AbstractWorldMap
         else if (pp.x < 0) pp = new Vector2d(kraniecMapy.x, pp.y);
         if (trawnik.get(pp) != null)
         {
+            if(pp.follows( pocztekRownika) && pp.precedes(kraniecRownika)) trawyNaRowniku--;
+            trawyWogole--;
             trawnik.remove(pp);
             zwierz.changeEnergy(energiaRoslin);
         }
