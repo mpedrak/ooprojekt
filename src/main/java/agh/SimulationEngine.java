@@ -2,6 +2,7 @@ package agh;
 
 import javafx.application.Platform;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -118,6 +119,10 @@ public class SimulationEngine implements  Runnable
                     System.out.println("diecko jest robione na " + p.toString());
                     Animal z1 = t.get(0);
                     Animal z2 = t.get(1);
+                    Animal dziecko = new Animal(p, mapa, zrobGenyDlaDziecka(z1, z2));
+                    dziecko.changeEnergy(-2 * energiaNaRozmnazanie);
+                    mapa.place(dziecko);
+                    dzieci.add(dziecko);
                     /*
                     zwierzetaPosortowane.remove(z1);
                     zwierzetaPosortowane.remove(z2);
@@ -127,12 +132,8 @@ public class SimulationEngine implements  Runnable
                     z2.dodajDziecko();
                     zwierzetaPosortowane.add(z1);
                     zwierzetaPosortowane.add(z2);
+                            */
 
-                     */
-                    Animal dziecko = new Animal(p, mapa, zrobGenyDlaDziecka(z1, z2));
-                    dziecko.changeEnergy(-2 * energiaNaRozmnazanie);
-                    mapa.place(dziecko);
-                    dzieci.add(dziecko);
                 }
             }
 
@@ -147,6 +148,7 @@ public class SimulationEngine implements  Runnable
 
 
             System.out.println("Koniec iteracji -------------------------------------------");
+
             try
             {
                 Thread.sleep(moveDelay);
@@ -155,6 +157,11 @@ public class SimulationEngine implements  Runnable
             {
                 System.out.println(ex + " przerwanie symulacji");
             }
+
+             /*
+            Scanner scan = new Scanner(System.in);
+            scan.nextLine();
+            */
             Platform.runLater(new Runnable()
             {
                 public void run()

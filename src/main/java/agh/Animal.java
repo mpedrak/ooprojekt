@@ -32,11 +32,6 @@ public class Animal extends AbstractWorldMapElement
     public boolean equals(Object other)
     {
         return this == other;
-
-    }
-    public int hashCode()
-    {
-        return Objects.hash(orientation, position);
     }
     public void addObserver(IPositionChangeObserver observer)
     {

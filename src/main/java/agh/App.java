@@ -2,6 +2,8 @@ package agh;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
@@ -14,7 +16,9 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
@@ -29,6 +33,7 @@ public class App  extends Application
     final int height = 40;
     Vector2d bottomLeft;
     Vector2d upperRight;
+
 
     public void start(Stage primaryStage)
     {
@@ -47,7 +52,14 @@ public class App  extends Application
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        renderujStart(engine);
+        //do deleta
+        Thread engineThread = new Thread(engine);
+        engineThread.start();
+        renderuj(map);
+        //to tond
+
+
+        //renderujStart(engine);
     }
 
     public void renderuj(AbstractWorldMap map)
@@ -55,6 +67,7 @@ public class App  extends Application
         grid.setGridLinesVisible(false);
         grid.getChildren().clear();
         grid.setGridLinesVisible(true);
+
 
         VBox vbox = new VBox();
         Label s = new Label( "\n" + "   " + "y\\x");
@@ -103,6 +116,12 @@ public class App  extends Application
                     {
                         System.out.println(ex);
                     }
+                    element.vbox.setOnMouseClicked(new EventHandler<Event>() {
+                        @Override
+                        public void handle(Event event) {
+                           System.out.println(">>>>>> " + z.toString());
+                        }
+                    });
                     grid.add(element.vbox, x - bottomLeft.x + 1, j, 1, 1);
                     GridPane.setHalignment(element.vbox, HPos.CENTER);
                 }

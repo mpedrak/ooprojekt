@@ -24,6 +24,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     {
         LinkedList<Animal> t = zwierzeta.remove(oldPosition);
         t.remove(z);
+        if (t.size() > 0) zwierzeta.put(oldPosition, t);
         z.changeOrientation(false);
         newPosition = this.newPosition(oldPosition, z.getOrientation().toUnitVector(), z);
 
@@ -31,9 +32,8 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
             z.changeOrientation(true);
         else
             z.setPosition(newPosition);
-
-        if (t.size() > 0) zwierzeta.put(oldPosition, t);
         dodajDoHaszMapy(z);
+
     }
     public void stworzTrawe(int ile)
     {
