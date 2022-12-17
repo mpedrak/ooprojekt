@@ -5,7 +5,7 @@ import java.util.*;
 
 public class Animal extends AbstractWorldMapElement
 {
-    private MapDirection orientation = MapDirection.N;
+    private MapDirection orientation;
     private LinkedList<IPositionChangeObserver> obserwatorzy = new LinkedList<>();
     private AbstractWorldMap map;
     private int energia = 0; // ile zostało dni życia
@@ -16,13 +16,14 @@ public class Animal extends AbstractWorldMapElement
 
     public String toString()
     {
-        return orientation.toString() + " " + position.toString() + " kcal: " + energia;
+        return orientation.toString() + " " + position.toString() + " kcal: " + energia + " wiek: " + wiek + " geny: " + Arrays.toString(geny) + " it=[" + aktualnyGen + "] " + "dzieci: " + iloscPotomstwa;
     }
     public Animal(Vector2d initialPosition, AbstractWorldMap map, int[] geny)
     {
         this.position = initialPosition;
         this.map = map;
         this.geny = geny;
+        this.orientation= getRandomOrientation();
     }
     public void move()
     {
@@ -40,6 +41,11 @@ public class Animal extends AbstractWorldMapElement
     private void positionChanged(Vector2d old_p, Vector2d new_p)
     {
         for (IPositionChangeObserver x: obserwatorzy) x.positionChanged(old_p, new_p, this);
+    }
+    private MapDirection getRandomOrientation () {
+        Random rand = new Random();
+        int randNum= rand.nextInt(8);
+        return MapDirection.N.turnBy(randNum);
     }
     public void changeOrientation (boolean reverseOrientation) {
         if (reverseOrientation) {

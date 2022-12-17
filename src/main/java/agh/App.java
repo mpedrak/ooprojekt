@@ -37,10 +37,10 @@ public class App  extends Application
 
     public void start(Stage primaryStage)
     {
-        AbstractWorldMap map = new KulaZiemska(20, 20,  70, 0);
+        AbstractWorldMap map = new KulaZiemska(5, 5,  12, 15);
         int moveDelay = 250;
-        Runnable engine = new SimulationEngine(map, this, moveDelay, 2, 690,
-                -50, 0, 5);
+        Runnable engine = new SimulationEngine(map, this, moveDelay, 4, 100,
+                -2, 5, 10);
 
         grid = new GridPane();
         grid.setGridLinesVisible(false);
@@ -50,6 +50,8 @@ public class App  extends Application
         int h = (upperRight.y - bottomLeft.y  + 2) * height;
         Scene scene = new Scene(grid, w, h);
         primaryStage.setScene(scene);
+        primaryStage.setX(10);
+        primaryStage.setY(100);
         primaryStage.show();
 
         //do deleta

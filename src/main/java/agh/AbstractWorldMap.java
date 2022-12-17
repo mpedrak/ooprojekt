@@ -51,7 +51,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         Random generator = new Random();
         while (true)
         {
-            Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x), generator.nextInt(kraniecMapy.y));
+            Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x + 1), generator.nextInt(kraniecMapy.y + 1));
             if (objectAt(pp) == null) return pp;
         }
     }

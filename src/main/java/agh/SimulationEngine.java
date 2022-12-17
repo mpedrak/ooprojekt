@@ -44,8 +44,8 @@ public class SimulationEngine implements  Runnable
         while (i < iloscZwierzaat)
         {
             Vector2d p = mapa.losujVectorNaMapie();
-            p = new Vector2d(2,2);
-            Animal z = new Animal(p, mapa, new int[]{0, 1, 2, 3, 4});
+            // p = new Vector2d(2,2);
+            Animal z = new Animal(p, mapa, zrobLosoweGeny());
             z.changeEnergy(poczatkowaEnergia);
             dodajDoHaszMapy(z);
             zwierzetaPosortowane.add(z);
@@ -58,13 +58,17 @@ public class SimulationEngine implements  Runnable
     {
         while (true)
         {
-            System.out.println("Początek iteracji -----------------------------------------");
-            wypiuszDoDebugu();
-            mapa.wypiuszDoDebugu();
+            /*
+            Scanner scan = new Scanner(System.in);
+            scan.nextLine();
+            */
+
+            // System.out.println("Początek iteracji -----------------------------------------");
+            // wypiuszDoDebugu();
+            // mapa.wypiuszDoDebugu();
             for (Animal x: zwierzetaPosortowane)
             {
-                boolean debugTrashyVal= x.getEnergy() == 4 && x.getPosition().equals(new Vector2d(2, 3));
-                System.out.print(">> Robię se ruszanie dla: " + x.toString() + " (" + debugTrashyVal + ")");
+                // System.out.print(">> Robię se ruszanie dla: " + x.toString());
 
                 if(x.getEnergy() <= 1)
                 {
@@ -79,7 +83,7 @@ public class SimulationEngine implements  Runnable
                     dodajDoHaszMapy(x);
                 }
 
-                System.out.print("-> Po ruchu: " + x.toString() + " (" + debugTrashyVal + ")\n");
+                // System.out.println("-> Po ruchu: " + x.toString());
             }
 
             /// do usuniecia
@@ -87,24 +91,22 @@ public class SimulationEngine implements  Runnable
             {
                 String key = name.toString();
                 String value = Arrays.toString(zwierzeta.get(name).toArray());
-                System.out.println(key + " " + value);
+                // System.out.println(key + " " + value);
             }
             /// do usuniecia
 
-            System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
+            // System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
             zwierzetaPosortowane.clear();
-            System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
-            for (LinkedList<Animal> x: zwierzeta.values()) {
-                System.out.println("> ");
-
-                for (Animal y: x) zwierzetaPosortowane.add(y);
-            }
-            System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
+            // System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
+            for (LinkedList<Animal> x: zwierzeta.values())
+                for (Animal y: x)
+                    zwierzetaPosortowane.add(y);
+            // System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
 
 
-            System.out.println("Po ruszeniu");
-            wypiuszDoDebugu();
-            mapa.wypiuszDoDebugu();
+            // System.out.println("Po ruszeniu");
+            // wypiuszDoDebugu();
+            // mapa.wypiuszDoDebugu();
 
 
             LinkedList<Animal> dzieci = new LinkedList<>();
@@ -116,14 +118,14 @@ public class SimulationEngine implements  Runnable
 
                 if (t.size() >= 2)
                 {
-                    System.out.println("diecko jest robione na " + p.toString());
+                    // System.out.println("diecko jest robione na " + p.toString());
                     Animal z1 = t.get(0);
                     Animal z2 = t.get(1);
                     Animal dziecko = new Animal(p, mapa, zrobGenyDlaDziecka(z1, z2));
                     dziecko.changeEnergy(-2 * energiaNaRozmnazanie);
                     mapa.place(dziecko);
                     dzieci.add(dziecko);
-                    /*
+
                     zwierzetaPosortowane.remove(z1);
                     zwierzetaPosortowane.remove(z2);
                     z1.changeEnergy(energiaNaRozmnazanie);
@@ -132,7 +134,7 @@ public class SimulationEngine implements  Runnable
                     z2.dodajDziecko();
                     zwierzetaPosortowane.add(z1);
                     zwierzetaPosortowane.add(z2);
-                            */
+
 
                 }
             }
@@ -142,12 +144,12 @@ public class SimulationEngine implements  Runnable
                 dodajDoHaszMapy(x);
                 zwierzetaPosortowane.add(x);
             }
-            System.out.println("Po dzieciach");
-            wypiuszDoDebugu();
-            mapa.wypiuszDoDebugu();
+            // System.out.println("Po dzieciach");
+            // wypiuszDoDebugu();
+            // mapa.wypiuszDoDebugu();
 
 
-            System.out.println("Koniec iteracji -------------------------------------------");
+            // System.out.println("Koniec iteracji -------------------------------------------");
 
             try
             {
@@ -158,10 +160,9 @@ public class SimulationEngine implements  Runnable
                 System.out.println(ex + " przerwanie symulacji");
             }
 
-             /*
-            Scanner scan = new Scanner(System.in);
-            scan.nextLine();
-            */
+
+
+
             Platform.runLater(new Runnable()
             {
                 public void run()
@@ -171,9 +172,19 @@ public class SimulationEngine implements  Runnable
             });
         }
     }
+    public int[] zrobLosoweGeny () {
+        int[] geny= new int[iloscGenow];
+        Random generator = new Random();
+        for (int i=0; i<iloscGenow; i++) {
+            int randNum= generator.nextInt(8);
+            geny[i]= randNum;
+        }
+
+        return geny;
+    }
     public int[] zrobGenyDlaDziecka(Animal matka, Animal ojciec)
     {
-//        return new int[]{4, 0, 4, 0, 4};
+        // return new int[]{4, 0, 4, 0, 4};
 
         int N = iloscGenow;
         int[] genyDziecka= new int[N];
@@ -186,9 +197,9 @@ public class SimulationEngine implements  Runnable
         double temp= (double)matka.getEnergy() / (double)sumaEnergiiRodzicow * (double)N;
 
         if (matka.getEnergy() < ojciec.getEnergy())
-            temp= Math.floor(temp);
+            temp= Math.max(1.0, Math.floor(temp));
         else
-            temp= Math.ceil(temp);
+            temp= Math.min(Math.ceil(temp), N - 1) ;
 
         udzialMatki= (int)temp;
         udzialOjca= N - udzialMatki;
