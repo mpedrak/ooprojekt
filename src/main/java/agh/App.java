@@ -38,10 +38,14 @@ public class App  extends Application
 
     public void start(Stage primaryStage)
     {
-        AbstractWorldMap map = new KulaZiemska(30, 30,  100, 0, true);
+
+
+        AbstractWorldMap map = new KulaZiemska(3, 3,  0, 15);
         int moveDelay = 250;
-        Runnable engine = new SimulationEngine(map, this, moveDelay, 100, 100,
-                -50, 100, 5);
+        Runnable engine = new SimulationEngine(map, this, moveDelay, 2, 100,
+                -2, 5, 10, new int[]{3, 3},
+                true, true);
+
 
         grid = new GridPane();
         grid.setGridLinesVisible(false);
@@ -64,6 +68,7 @@ public class App  extends Application
         engineThread.start();
         renderuj(map);
         //to tond
+
 
 
         //renderujStart(engine);

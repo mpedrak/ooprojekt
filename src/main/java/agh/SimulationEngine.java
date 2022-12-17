@@ -14,6 +14,9 @@ public class SimulationEngine implements  Runnable
     private int energiaNaRozmnazanie;
     private int minimalnaEnergiaDoRozmnazania;
     private int iloscGenow;
+    private int[] zakresIlosciMutacji;  // tab[0] -> dolne ograniczenie, tab[1] -> górne ograniczenie (włącznie!)
+    private boolean pelnaLosowosc;
+    private boolean szalenstwo;
     private HashMap<Vector2d, LinkedList<Animal>> zwierzeta = new HashMap<>();
     private TreeSet<Animal> zwierzetaPosortowane = new TreeSet<>(new Comparator<Animal>() {
         public int compare (Animal a, Animal b)
@@ -32,7 +35,7 @@ public class SimulationEngine implements  Runnable
     });
     public SimulationEngine(AbstractWorldMap mapa, App app, int moveDelay, int iloscZwierzaat, int poczatkowaEnergia,
                             int energiaNaRozmnazanie, int minimalnaEnergiaDoRozmnazania,
-                            int iloscGenow)
+                            int iloscGenow, int[] zakresIlosciMutacji, boolean pelnaLosowosc, boolean szalenstwo)
     {
         this.mapa = mapa;
         this.app = app;
@@ -40,12 +43,15 @@ public class SimulationEngine implements  Runnable
         this.energiaNaRozmnazanie = energiaNaRozmnazanie;
         this.minimalnaEnergiaDoRozmnazania = minimalnaEnergiaDoRozmnazania;
         this.iloscGenow = iloscGenow;
+        this.zakresIlosciMutacji= zakresIlosciMutacji;
+        this.pelnaLosowosc = pelnaLosowosc;
+        this.szalenstwo= szalenstwo;
         int i = 0;
         while (i < iloscZwierzaat)
         {
             Vector2d p = mapa.losujVectorNaMapie();
             // p = new Vector2d(2,2);
-            Animal z = new Animal(p, mapa, zrobLosoweGeny());
+            Animal z = new Animal(p, mapa, zrobLosoweGeny(), szalenstwo);
             z.changeEnergy(poczatkowaEnergia);
             dodajDoHaszMapy(z);
             zwierzetaPosortowane.add(z);
@@ -58,10 +64,10 @@ public class SimulationEngine implements  Runnable
     {
         while (true)
         {
-            /*
+
             Scanner scan = new Scanner(System.in);
             scan.nextLine();
-            */
+
 
             // System.out.println("Początek iteracji -----------------------------------------");
             // wypiuszDoDebugu();
@@ -86,14 +92,14 @@ public class SimulationEngine implements  Runnable
                 // System.out.println("-> Po ruchu: " + x.toString());
             }
 
-            /// do usuniecia
+            /// debug do usuniecia
             for (Vector2d name: zwierzeta.keySet())
             {
                 String key = name.toString();
                 String value = Arrays.toString(zwierzeta.get(name).toArray());
                 // System.out.println(key + " " + value);
             }
-            /// do usuniecia
+            /// debug do usuniecia
 
             // System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
             zwierzetaPosortowane.clear();
@@ -121,7 +127,7 @@ public class SimulationEngine implements  Runnable
                     // System.out.println("diecko jest robione na " + p.toString());
                     Animal z1 = t.get(0);
                     Animal z2 = t.get(1);
-                    Animal dziecko = new Animal(p, mapa, zrobGenyDlaDziecka(z1, z2));
+                    Animal dziecko = new Animal(p, mapa, zrobGenyDlaDziecka(z1, z2), szalenstwo);
                     dziecko.changeEnergy(-2 * energiaNaRozmnazanie);
                     mapa.place(dziecko);
                     dzieci.add(dziecko);
@@ -151,6 +157,7 @@ public class SimulationEngine implements  Runnable
 
             // System.out.println("Koniec iteracji -------------------------------------------");
 
+            /*
             try
             {
                 Thread.sleep(moveDelay);
@@ -159,7 +166,7 @@ public class SimulationEngine implements  Runnable
             {
                 System.out.println(ex + " przerwanie symulacji");
             }
-
+             */
 
 
 
@@ -184,12 +191,13 @@ public class SimulationEngine implements  Runnable
     }
     public int[] zrobGenyDlaDziecka(Animal matka, Animal ojciec)
     {
-        // return new int[]{4, 0, 4, 0, 4};
+        // budowanie podstawowego genotypu //
 
         int N = iloscGenow;
         int[] genyDziecka= new int[N];
         int[] genyMatki= matka.getGenes(0, N);
         int[] genyOjca= ojciec.getGenes(0, N);
+        Random generator = new Random();
 
         int sumaEnergiiRodzicow= matka.getEnergy() + ojciec.getEnergy();
         int udzialMatki, udzialOjca;
@@ -204,7 +212,7 @@ public class SimulationEngine implements  Runnable
         udzialMatki= (int)temp;
         udzialOjca= N - udzialMatki;
 
-        if (ThreadLocalRandom.current().nextInt(0, 2) == 0) {
+        if (generator.nextInt(2) == 0) {
             // matka z lewej, ojciec z prawej
             for (int i=0; i < udzialMatki; i++)
                 genyDziecka[i]= genyMatki[i];
@@ -212,13 +220,44 @@ public class SimulationEngine implements  Runnable
                 genyDziecka[i]= genyOjca[i];
         }
         else {
-
             // matka z prawej, ojciec z lewej
             for (int i=0; i < udzialOjca; i++)
                 genyDziecka[i]= genyOjca[i];
             for (int i=udzialOjca; i < N; i++)
                 genyDziecka[i]= genyMatki[i];
         }
+
+        // mutacje //
+
+        int liczbaMutacji= zakresIlosciMutacji[0] + generator.nextInt(zakresIlosciMutacji[1] - zakresIlosciMutacji[0] + 1);
+        boolean[] mutowalneGeny= new boolean[N];
+        for (int i=0; i<N; i++)
+            mutowalneGeny[i]= false;
+
+        for (int i=0; i<liczbaMutacji;) {
+            int it= generator.nextInt(N);
+            if (!mutowalneGeny[it]) {
+                mutowalneGeny[it]= true;
+                i++;
+            }
+        }
+
+        for (int i=0; i<N; i++) {
+            if (!mutowalneGeny[i])
+                continue;
+
+            int zmiana= 1;
+            if (pelnaLosowosc)
+                zmiana= 1 + generator.nextInt(7);
+            else {
+                int dodatniosc= generator.nextInt(2);
+                if (dodatniosc == 0)
+                    zmiana*= -1;
+            }
+
+            genyDziecka[i]= (genyDziecka[i] + 8 + zmiana) % 8;
+        }
+
         return genyDziecka;
 
     }
