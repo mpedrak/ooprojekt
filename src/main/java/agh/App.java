@@ -38,11 +38,14 @@ public class App  extends Application
 
     public void start(Stage primaryStage)
     {
+
+
         AbstractWorldMap map = new KulaZiemska(3, 3,  0, 15);
         int moveDelay = 250;
         Runnable engine = new SimulationEngine(map, this, moveDelay, 2, 100,
                 -2, 5, 10, new int[]{3, 3},
                 true, true);
+
 
         grid = new GridPane();
         grid.setGridLinesVisible(false);
@@ -51,6 +54,10 @@ public class App  extends Application
         int w = (upperRight.x - bottomLeft.x  + 2) * width;
         int h = (upperRight.y - bottomLeft.y  + 2) * height;
         Scene scene = new Scene(grid, w, h);
+        for (int i = 0; i <= upperRight.x - bottomLeft.x + 1; i++)
+            grid.getColumnConstraints().add(new ColumnConstraints(width));
+        for (int i = 0; i <= upperRight.y - bottomLeft.y + 1; i++)
+            grid.getRowConstraints().add(new RowConstraints(height));
         primaryStage.setScene(scene);
         primaryStage.setX(10);
         primaryStage.setY(100);
@@ -76,15 +83,13 @@ public class App  extends Application
 
         VBox vbox = new VBox();
         Label s = new Label( "y\\x");
-        vbox.setAlignment(Pos.CENTER);
         vbox.getChildren().addAll(s);
+        vbox.setAlignment(Pos.CENTER);
         grid.add(vbox, 0, 0, 1, 1);
         GridPane.setHalignment(vbox, HPos.CENTER);
 
-        for (int i = 0; i <= upperRight.x - bottomLeft.x + 1; i++)
-            grid.getColumnConstraints().add(new ColumnConstraints(width));
-        for (int i = 0; i <= upperRight.y - bottomLeft.y + 1; i++)
-            grid.getRowConstraints().add(new RowConstraints(height));
+
+
 
         for (int i = bottomLeft.x ; i <= upperRight.x; ++i)
         {
