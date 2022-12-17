@@ -33,7 +33,6 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         else
             z.setPosition(newPosition);
         dodajDoHaszMapy(z);
-
     }
     public void stworzTrawe(int ile)
     {
