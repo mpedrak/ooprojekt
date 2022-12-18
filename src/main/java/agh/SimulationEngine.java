@@ -144,8 +144,6 @@ public class SimulationEngine implements  Runnable
                     z2.dodajDziecko();
                     zwierzetaPosortowane.add(z1);
                     zwierzetaPosortowane.add(z2);
-
-
                 }
             }
 

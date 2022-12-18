@@ -10,7 +10,7 @@ public class Animal extends AbstractWorldMapElement
     private AbstractWorldMap map;
     private int energia = 0; // ile zostało dni życia
     private int[] geny; // N genów, liczby 0 - 7
-    private int aktualnyGen = 0;
+    private int aktualnyGen;
     private int wiek = 0;
     private int iloscPotomstwa = 0;
     private boolean szalenstwo;
@@ -26,6 +26,7 @@ public class Animal extends AbstractWorldMapElement
         this.geny = geny;
         this.orientation= getRandomOrientation();
         this.szalenstwo= szalenstwo;
+        this.aktualnyGen = losujLiczbe(geny.length);
     }
     public void move()
     {
@@ -43,6 +44,11 @@ public class Animal extends AbstractWorldMapElement
     private void positionChanged(Vector2d old_p, Vector2d new_p)
     {
         for (IPositionChangeObserver x: obserwatorzy) x.positionChanged(old_p, new_p, this);
+    }
+    private int losujLiczbe(int n)
+    {
+        Random rand = new Random();
+        return rand.nextInt(n);
     }
     private MapDirection getRandomOrientation () {
         Random rand = new Random();

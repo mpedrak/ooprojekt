@@ -1,12 +1,14 @@
 package agh;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.TreeSet;
 
-public class KulaZiemska extends AbstractWorldMap
+public class PiekielnyPortal extends AbstractWorldMap
 {
-    public KulaZiemska(int width, int height, int iloscTrawy , int energiaRoslin, boolean czyRownik)
+    public PiekielnyPortal(int width, int height, int iloscTrawy , int energiaRoslin, boolean czyRownik, int energiaTraconaPrzyTeleportacji)
     {
         this.energiaRoslin = energiaRoslin;
+        this.energiaTraconaPrzyTeleportacji = energiaTraconaPrzyTeleportacji;
         kraniecMapy = new Vector2d(width - 1, height - 1);
         if (czyRownik)
         {
@@ -31,9 +33,11 @@ public class KulaZiemska extends AbstractWorldMap
     public Vector2d newPosition(Vector2d oldPosition, Vector2d delta, Animal zwierz)
     {
         Vector2d pp = oldPosition.add(delta);
-        if (pp.y > kraniecMapy.y || pp.y < 0) return oldPosition;
-        if (pp.x > kraniecMapy.x) pp = new Vector2d(0, pp.y);
-        else if (pp.x < 0) pp = new Vector2d(kraniecMapy.x, pp.y);
+        if (pp.y > kraniecMapy.y || pp.y < 0 || pp.x < 0 || pp.x > kraniecMapy.x)
+        {
+            pp = losujVectorNaMapie();
+            zwierz.changeEnergy(energiaTraconaPrzyTeleportacji);
+        }
         if (trawnik.get(pp) != null)
         {
             if(czyBylaWpreferowanych(pp)) trawyNaPolachPreferowanych--;
@@ -43,4 +47,5 @@ public class KulaZiemska extends AbstractWorldMap
         }
         return pp;
     }
+
 }

@@ -11,8 +11,9 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     protected int energiaRoslin;
     protected Vector2d pocztekRownika = null;
     protected Vector2d kraniecRownika = null;
-    protected int trawyNaRowniku = 0;
+    protected int trawyNaPolachPreferowanych = 0;
     protected int trawyWogole = 0;
+    protected int energiaTraconaPrzyTeleportacji;
     protected class doTreeSeta
     {
         public Vector2d v;
@@ -60,12 +61,12 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
            while (i < naRowniku)
            {
                if(trawyWogole >= (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1)) return;
-               if(trawyNaRowniku == (kraniecRownika.x + 1) * (kraniecRownika.y - pocztekRownika.y + 1)) break; // przepelnienie rownika
+               if(trawyNaPolachPreferowanych == (kraniecRownika.x + 1) * (kraniecRownika.y - pocztekRownika.y + 1)) break; // przepelnienie rownika
                Vector2d pp = losujVectorNaRowniku();
                Grass g = new Grass(pp);
                trawnik.put(pp, g);
                i++;
-               trawyNaRowniku++;
+               trawyNaPolachPreferowanych++;
                trawyWogole++;
            }
            while (i < ile)
@@ -78,6 +79,39 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
                trawyWogole++;
            }
        }
+
+       else
+       {
+           int i = 0;
+           int naToksycznychTrupach = Math.min((int)Math.ceil(ile * 0.2), toksyczneTrupy.size());
+           int naPreferowanych = ile - naToksycznychTrupach;
+           //System.out.println("Start preferowanych");
+           while (i < naPreferowanych)
+           {
+               if(trawyWogole >= (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1)) return;
+               if(trawyNaPolachPreferowanych >= (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1) - toksyczneTrupy.size()) break;
+               Vector2d pp = losujVectorNaMappieAleNieWTokszycznychTrupach();
+               Grass g = new Grass(pp);
+               trawnik.put(pp, g);
+               i++;
+               trawyNaPolachPreferowanych++;
+               trawyWogole++;
+           }
+         // System.out.println("Start NIE preferowanych");
+           while (i < ile)
+           {
+               //System.out.println(toksyczneTrupy.size() + " " + trawyNaPolachPreferowanych + " " + trawyWogole);
+               if(trawyWogole >= (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1)
+                    || trawyWogole - trawyNaPolachPreferowanych >= naToksycznychTrupach ) return;
+               Vector2d pp = losujVectorZtoksycznychTrupow();
+               Grass g = new Grass(pp);
+               trawnik.put(pp, g);
+               i++;
+               trawyWogole++;
+           }
+       }
+
+
     }
     public Vector2d losujVectorNaMapie()
     {
@@ -88,7 +122,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
             if (objectAt(pp) == null) return pp;
         }
     }
-    public Vector2d losujVectorNaRowniku()
+    protected Vector2d losujVectorNaRowniku()
     {
         Random generator = new Random();
         while (true)
@@ -98,13 +132,40 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
             if (!(objectAt(pp) instanceof Grass)) return pp;
         }
     }
-    public Vector2d losujVectorNaMappieAleNieNaRowniku()
+    protected Vector2d losujVectorNaMappieAleNieNaRowniku()
     {
         Random generator = new Random();
         while (true)
         {
             Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x + 1), generator.nextInt(kraniecMapy.y + 1));
             if (!(pp.follows( pocztekRownika) && pp.precedes(kraniecRownika)) && !(objectAt(pp) instanceof Grass)) return pp;
+        }
+    }
+    protected Vector2d losujVectorNaMappieAleNieWTokszycznychTrupach()
+    {
+        Random generator = new Random();
+        while (true)
+        {
+            boolean f = true;
+            Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x + 1), generator.nextInt(kraniecMapy.y + 1));
+            for (doTreeSeta x: toksyczneTrupy)
+                if (x.v.equals(pp))
+                {
+                    f = false;
+                    break;
+                }
+            if(f) return pp;
+        }
+    }
+    protected Vector2d losujVectorZtoksycznychTrupow()
+    {
+        Random generator = new Random();
+        while (true)
+        {
+            int i = generator.nextInt(toksyczneTrupy.size());
+            Object[] t = toksyczneTrupy.toArray();
+            Vector2d pp = ((doTreeSeta)t[i]).v;
+            if(!(objectAt(pp) instanceof Grass)) return pp;
         }
     }
     public Vector2d getPoczatekMapy()
@@ -130,15 +191,15 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
                     break;
                 }
             }
-            if (t == null)
+            if(t == null)
             {
                 t = new doTreeSeta(z.getPosition(), 0);
+                if (trawnik.get(z.getPosition()) != null) trawyNaPolachPreferowanych--;
             }
             t.i++;
             toksyczneTrupy.add(t);
-            System.out.println(Arrays.toString(toksyczneTrupy.toArray()));
+            //System.out.println(Arrays.toString(toksyczneTrupy.toArray()));
         }
-
     }
     private void dodajDoHaszMapy(Animal z)
     {
@@ -166,4 +227,19 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         }
         System.out.println("Kkoiec mapy");
     }
+    protected boolean czyBylaWpreferowanych(Vector2d p)
+    {
+        if(pocztekRownika == null)
+        {
+            for (doTreeSeta x : toksyczneTrupy)
+                if (x.v.equals(p))
+                    return false;
+            return true;
+        }
+        else
+        {
+            return  p.follows( pocztekRownika) && p.precedes(kraniecRownika);
+        }
+    }
+
 }
