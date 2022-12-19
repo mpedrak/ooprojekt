@@ -24,6 +24,14 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
             this.i = i;
         }
         public String toString(){return this.v + " " + this.i;}
+        public boolean equals(Object obj)
+        {
+            if (this == obj) return true;
+            if (!(obj instanceof doTreeSeta)) return false;
+            return ((doTreeSeta) obj).v == this.v && ((doTreeSeta) obj).i == this.i;
+        }
+
+
     }
     protected TreeSet<doTreeSeta> toksyczneTrupy = null;
 
@@ -82,33 +90,58 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
 
        else
        {
+           TreeSet<doTreeSeta> tokszczynePom = new TreeSet<>(new Comparator<doTreeSeta>() {
+               public int compare (doTreeSeta a, doTreeSeta b)
+               {
+                   if(a.i == b.i)
+                   {
+                       if(a.v.equals(b.v)) return 0;
+                       Random g = new Random();
+                       int l = g.nextInt(2);
+                       if (l == 0) l = -1;
+                       return l;
+                   }
+                   return a.i - b.i;
+               }
+           });
+           for (doTreeSeta x: toksyczneTrupy) tokszczynePom.add(x);
+           Object[] t = tokszczynePom.toArray();
+           int naPreferowanych = (int)Math.floor(ile * 0.8);
+           int wpp = ile - naPreferowanych;
            int i = 0;
-           int naToksycznychTrupach = Math.min((int)Math.ceil(ile * 0.2), toksyczneTrupy.size());
-           int naPreferowanych = ile - naToksycznychTrupach;
-           //System.out.println("Start preferowanych");
-           while (i < naPreferowanych)
+           int juzTrawy = 0;
+           while (juzTrawy < naPreferowanych)
            {
+               if (i >= t.length - 1) return;
                if(trawyWogole >= (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1)) return;
-               if(trawyNaPolachPreferowanych >= (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1) - toksyczneTrupy.size()) break;
-               Vector2d pp = losujVectorNaMappieAleNieWTokszycznychTrupach();
-               Grass g = new Grass(pp);
-               trawnik.put(pp, g);
+               Vector2d p = ((doTreeSeta)t[i]).v;
+               if(trawnik.get(p) == null)
+               {
+                   Grass g = new Grass(p);
+                   trawnik.put(p, g);
+                   trawyWogole++;
+                   juzTrawy++;
+               }
                i++;
-               trawyNaPolachPreferowanych++;
-               trawyWogole++;
            }
-         // System.out.println("Start NIE preferowanych");
-           while (i < ile)
+
+           i = t.length - 1;
+           juzTrawy = 0;
+           while (juzTrawy < wpp)
            {
-               //System.out.println(toksyczneTrupy.size() + " " + trawyNaPolachPreferowanych + " " + trawyWogole);
-               if(trawyWogole >= (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1)
-                    || trawyWogole - trawyNaPolachPreferowanych >= naToksycznychTrupach ) return;
-               Vector2d pp = losujVectorZtoksycznychTrupow();
-               Grass g = new Grass(pp);
-               trawnik.put(pp, g);
-               i++;
-               trawyWogole++;
+               if (i < 0) return;
+               if(trawyWogole >= (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1)) return;
+               Vector2d p = ((doTreeSeta)t[i]).v;
+               if(trawnik.get(p) == null)
+               {
+                   Grass g = new Grass(p);
+                   trawnik.put(p, g);
+                   trawyWogole++;
+                   juzTrawy++;
+               }
+               i--;
            }
+
        }
 
 
@@ -141,33 +174,6 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
             if (!(pp.follows( pocztekRownika) && pp.precedes(kraniecRownika)) && !(objectAt(pp) instanceof Grass)) return pp;
         }
     }
-    protected Vector2d losujVectorNaMappieAleNieWTokszycznychTrupach()
-    {
-        Random generator = new Random();
-        while (true)
-        {
-            boolean f = true;
-            Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x + 1), generator.nextInt(kraniecMapy.y + 1));
-            for (doTreeSeta x: toksyczneTrupy)
-                if (x.v.equals(pp))
-                {
-                    f = false;
-                    break;
-                }
-            if(f) return pp;
-        }
-    }
-    protected Vector2d losujVectorZtoksycznychTrupow()
-    {
-        Random generator = new Random();
-        while (true)
-        {
-            int i = generator.nextInt(toksyczneTrupy.size());
-            Object[] t = toksyczneTrupy.toArray();
-            Vector2d pp = ((doTreeSeta)t[i]).v;
-            if(!(objectAt(pp) instanceof Grass)) return pp;
-        }
-    }
     public Vector2d getPoczatekMapy()
     {
         return poczatekMapy;
@@ -181,23 +187,23 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         usunZHaszMapy(z);
         if(toksyczneTrupy != null)
         {
+            //System.out.println("-------------------------");
+            int iPom = 0;
             doTreeSeta t = null;
             for(doTreeSeta x: toksyczneTrupy)
             {
                 if(x.v.equals(z.getPosition()))
                 {
+                    iPom = x.i;
+                    //System.out.println(x);
                     t = x;
-                    toksyczneTrupy.remove(x);
                     break;
                 }
             }
-            if(t == null)
-            {
-                t = new doTreeSeta(z.getPosition(), 0);
-                if (trawnik.get(z.getPosition()) != null) trawyNaPolachPreferowanych--;
-            }
-            t.i++;
-            toksyczneTrupy.add(t);
+            toksyczneTrupy.remove(t);
+            //System.out.println(Arrays.toString(toksyczneTrupy.toArray()));
+            iPom++;
+            toksyczneTrupy.add(new doTreeSeta(z.getPosition(), iPom));
             //System.out.println(Arrays.toString(toksyczneTrupy.toArray()));
         }
     }
@@ -229,17 +235,11 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     }
     protected boolean czyBylaWpreferowanych(Vector2d p)
     {
-        if(pocztekRownika == null)
-        {
-            for (doTreeSeta x : toksyczneTrupy)
-                if (x.v.equals(p))
-                    return false;
-            return true;
-        }
-        else
+        if(pocztekRownika != null)
         {
             return  p.follows( pocztekRownika) && p.precedes(kraniecRownika);
         }
+        return false;
     }
 
 }

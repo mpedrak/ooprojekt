@@ -21,10 +21,17 @@ public class KulaZiemska extends AbstractWorldMap
             toksyczneTrupy = new TreeSet<>(new Comparator<doTreeSeta>() {
                 public int compare (doTreeSeta a, doTreeSeta b)
                 {
-                    if(a.i == b.i) return 1;
+                    if(a.i == b.i)
+                    {
+                        if(a.v.x == b.v.x) return a.v.y - b.v.y;
+                        else return a.v.x - b.v.x;
+                    }
                     return a.i - b.i;
                 }
             });
+            for(int ix = 0; ix <= kraniecMapy.x; ix++)
+                for(int iy = 0; iy <= kraniecMapy.y; iy++)
+                    toksyczneTrupy.add(new doTreeSeta(new Vector2d(ix, iy), 0));
         }
         stworzTrawe(iloscTrawy);
     }
