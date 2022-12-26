@@ -40,13 +40,13 @@ public class App  extends Application
     {
 
 
-        //AbstractWorldMap map = new KulaZiemska(15, 15,  70, 50, false);
+        AbstractWorldMap map = new KulaZiemska(20, 20,  100, 50, true);
         int e = -10; // energiaTraconaPrzyTeleportacji = naRozmanaznie !
-        AbstractWorldMap map = new PiekielnyPortal(10, 10,  10, 20, false, e);
-        int moveDelay = 200;
-        Runnable engine = new SimulationEngine(map, this, moveDelay, 3, 500,
+       // AbstractWorldMap map = new PiekielnyPortal(10, 10,  10, 20, false, e);
+        int moveDelay = 500;
+        Runnable engine = new SimulationEngine(map, this, moveDelay, 20, 500,
                 e, -2 * e, 10, new int[]{3, 3},
-                true, true, 3);
+                true, true, 50);
 
 
         grid = new GridPane();
