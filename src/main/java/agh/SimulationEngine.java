@@ -66,6 +66,14 @@ public class SimulationEngine implements  Runnable
 
     public void run()
     {
+        Platform.runLater(new Runnable()
+        {
+            public void run()
+            {
+                app.renderuj(mapa);
+            }
+        });
+
         while (true)
         {
 

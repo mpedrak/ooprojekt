@@ -46,7 +46,7 @@ public class App  extends Application
         int moveDelay = 500;
         Runnable engine = new SimulationEngine(map, this, moveDelay, 20, 500,
                 e, -2 * e, 10, new int[]{3, 3},
-                true, true, 50);
+                true, true, 10);
 
 
         grid = new GridPane();
@@ -65,15 +65,7 @@ public class App  extends Application
         primaryStage.setY(100);
         primaryStage.show();
 
-        //do deleta
-        Thread engineThread = new Thread(engine);
-        engineThread.start();
-        renderuj(map);
-        //to tond
-
-
-
-        //renderujStart(engine);
+        renderujStart(engine);
     }
 
     public void renderuj(AbstractWorldMap map)
@@ -149,14 +141,8 @@ public class App  extends Application
 
     private void renderujStart(Runnable engine)
     {
-
-        for (int i = 0; i <= 4 ; i++)
-            grid.getColumnConstraints().add(new ColumnConstraints(width));
-        for (int i = 0; i <= 3; i++)
-            grid.getRowConstraints().add(new RowConstraints(height));
-
         Button button = new Button("Start symulacji");
-        grid.add(button, 1, 1, 3, 1);
+        grid.add(button, 1, 1, 5, 1);
 
         button.setOnAction(actionEvent ->
         {
