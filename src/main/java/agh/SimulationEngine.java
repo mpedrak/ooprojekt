@@ -1,6 +1,7 @@
 package agh;
 
 import javafx.application.Platform;
+import javafx.scene.layout.GridPane;
 
 import java.io.IOException;
 import java.util.*;
@@ -18,6 +19,8 @@ public class SimulationEngine implements  Runnable
     private boolean pelnaLosowosc;
     private boolean szalenstwo;
     private int ileTrawyDziennie;
+    private GridPane grid = null;
+    private volatile boolean czyDziala = true;
     private HashMap<Vector2d, LinkedList<Animal>> zwierzeta = new HashMap<>();
     private TreeSet<Animal> zwierzetaPosortowane = new TreeSet<>(new Comparator<Animal>() {
         public int compare (Animal a, Animal b)
@@ -70,125 +73,120 @@ public class SimulationEngine implements  Runnable
         {
             public void run()
             {
-                app.renderuj(mapa);
+                grid = app.renderujPierwszyRaz(mapa);
+                app.renderuj(mapa, grid, SimulationEngine.this);
             }
         });
 
-        while (true)
-        {
+        while (true) {
+            if (czyDziala) {
+                //Scanner scan = new Scanner(System.in);
+                // scan.nextLine();
 
-            //Scanner scan = new Scanner(System.in);
-           // scan.nextLine();
 
+                // System.out.println("Początek iteracji -----------------------------------------");
+                // wypiuszDoDebugu();
+                // mapa.wypiuszDoDebugu();
+                for (Animal x : zwierzetaPosortowane) {
+                    // System.out.print(">> Robię se ruszanie dla: " + x.toString());
 
-            // System.out.println("Początek iteracji -----------------------------------------");
-            // wypiuszDoDebugu();
-            // mapa.wypiuszDoDebugu();
-            for (Animal x: zwierzetaPosortowane)
-            {
-                // System.out.print(">> Robię se ruszanie dla: " + x.toString());
+                    if (x.getEnergy() <= 1) {
+                        usunZHaszMapy(x);
+                        mapa.smiercZwierzecia(x);
+                    } else {
+                        usunZHaszMapy(x);
+                        x.postarzej();
+                        x.move();
+                        dodajDoHaszMapy(x);
+                    }
 
-                if(x.getEnergy() <= 1)
-                {
-                    usunZHaszMapy(x);
-                    mapa.smiercZwierzecia(x);
+                    // System.out.println("-> Po ruchu: " + x.toString());
                 }
-                else
-                {
-                    usunZHaszMapy(x);
-                    x.postarzej();
-                    x.move();
+
+                /// debug do usuniecia
+                for (Vector2d name : zwierzeta.keySet()) {
+                    String key = name.toString();
+                    String value = Arrays.toString(zwierzeta.get(name).toArray());
+                    // System.out.println(key + " " + value);
+                }
+                /// debug do usuniecia
+
+                // System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
+                zwierzetaPosortowane.clear();
+                // System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
+                for (LinkedList<Animal> x : zwierzeta.values())
+                    for (Animal y : x)
+                        zwierzetaPosortowane.add(y);
+                // System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
+
+
+                // System.out.println("Po ruszeniu");
+                // wypiuszDoDebugu();
+                // mapa.wypiuszDoDebugu();
+
+
+                LinkedList<Animal> dzieci = new LinkedList<>();
+                for (Vector2d p : zwierzeta.keySet()) {
+                    LinkedList<Animal> t = new LinkedList<>();
+                    for (Animal x : zwierzetaPosortowane)
+                        if (x.getPosition().equals(p) && x.getEnergy() >= minimalnaEnergiaDoRozmnazania) t.add(x);
+
+                    if (t.size() >= 2) {
+                        // System.out.println("diecko jest robione na " + p.toString());
+                        Animal z1 = t.get(0);
+                        Animal z2 = t.get(1);
+                        Animal dziecko = new Animal(p, mapa, zrobGenyDlaDziecka(z1, z2), szalenstwo);
+                        dziecko.changeEnergy(-2 * energiaNaRozmnazanie);
+                        mapa.place(dziecko);
+                        dzieci.add(dziecko);
+
+                        zwierzetaPosortowane.remove(z1);
+                        zwierzetaPosortowane.remove(z2);
+                        z1.changeEnergy(energiaNaRozmnazanie);
+                        z1.dodajDziecko();
+                        z2.changeEnergy(energiaNaRozmnazanie);
+                        z2.dodajDziecko();
+                        zwierzetaPosortowane.add(z1);
+                        zwierzetaPosortowane.add(z2);
+                    }
+                }
+
+                for (Animal x : dzieci) {
                     dodajDoHaszMapy(x);
+                    zwierzetaPosortowane.add(x);
+                }
+                mapa.stworzTrawe(ileTrawyDziennie);
+                // System.out.println("Po dzieciach");
+                // wypiuszDoDebugu();
+                // mapa.wypiuszDoDebugu();
+
+
+                // System.out.println("Koniec iteracji -------------------------------------------");
+
+
+                try {
+                    Thread.sleep(moveDelay);
+                } catch (InterruptedException ex) {
+                    System.out.println(ex + " przerwanie symulacji");
                 }
 
-                // System.out.println("-> Po ruchu: " + x.toString());
+
+                Platform.runLater(new Runnable() {
+                    public void run() {
+                        app.renderuj(mapa, grid, SimulationEngine.this);
+                    }
+                });
             }
-
-            /// debug do usuniecia
-            for (Vector2d name: zwierzeta.keySet())
+            else
             {
-                String key = name.toString();
-                String value = Arrays.toString(zwierzeta.get(name).toArray());
-                // System.out.println(key + " " + value);
-            }
-            /// debug do usuniecia
-
-            // System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
-            zwierzetaPosortowane.clear();
-            // System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
-            for (LinkedList<Animal> x: zwierzeta.values())
-                for (Animal y: x)
-                    zwierzetaPosortowane.add(y);
-            // System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
-
-
-            // System.out.println("Po ruszeniu");
-            // wypiuszDoDebugu();
-            // mapa.wypiuszDoDebugu();
-
-
-            LinkedList<Animal> dzieci = new LinkedList<>();
-            for (Vector2d p: zwierzeta.keySet())
-            {
-                LinkedList<Animal> t = new LinkedList<>();
-                for (Animal x: zwierzetaPosortowane)
-                    if (x.getPosition().equals(p) && x.getEnergy() >= minimalnaEnergiaDoRozmnazania) t.add(x);
-
-                if (t.size() >= 2)
-                {
-                    // System.out.println("diecko jest robione na " + p.toString());
-                    Animal z1 = t.get(0);
-                    Animal z2 = t.get(1);
-                    Animal dziecko = new Animal(p, mapa, zrobGenyDlaDziecka(z1, z2), szalenstwo);
-                    dziecko.changeEnergy(-2 * energiaNaRozmnazanie);
-                    mapa.place(dziecko);
-                    dzieci.add(dziecko);
-
-                    zwierzetaPosortowane.remove(z1);
-                    zwierzetaPosortowane.remove(z2);
-                    z1.changeEnergy(energiaNaRozmnazanie);
-                    z1.dodajDziecko();
-                    z2.changeEnergy(energiaNaRozmnazanie);
-                    z2.dodajDziecko();
-                    zwierzetaPosortowane.add(z1);
-                    zwierzetaPosortowane.add(z2);
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException ex) {
+                    System.out.println(ex + " przerwanie symulacji");
                 }
             }
-
-            for (Animal x: dzieci)
-            {
-                dodajDoHaszMapy(x);
-                zwierzetaPosortowane.add(x);
-            }
-            mapa.stworzTrawe(ileTrawyDziennie);
-            // System.out.println("Po dzieciach");
-            // wypiuszDoDebugu();
-            // mapa.wypiuszDoDebugu();
-
-
-            // System.out.println("Koniec iteracji -------------------------------------------");
-
-
-            try
-            {
-                Thread.sleep(moveDelay);
-            }
-            catch (InterruptedException ex)
-            {
-                System.out.println(ex + " przerwanie symulacji");
-            }
-
-
-
-
-            Platform.runLater(new Runnable()
-            {
-                public void run()
-                {
-                   app.renderuj(mapa);
-                }
-            });
         }
+
     }
     public int[] zrobLosoweGeny () {
         int[] geny= new int[iloscGenow];
@@ -299,4 +297,9 @@ public class SimulationEngine implements  Runnable
         }
         System.out.println("Koniec enginu");
     }
+    public void pauza()
+    {
+       czyDziala = !czyDziala;
+    }
+
 }
