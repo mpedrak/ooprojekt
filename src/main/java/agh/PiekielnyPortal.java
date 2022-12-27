@@ -50,6 +50,7 @@ public class PiekielnyPortal extends AbstractWorldMap
         }
         if (trawnik.get(pp) != null)
         {
+            zwierz.zjadlRolsine();
             if(czyBylaWpreferowanych(pp)) trawyNaPolachPreferowanych--;
             //System.out.println(trawyNaPolachPreferowanych);
             trawyWogole--;

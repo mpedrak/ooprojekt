@@ -21,7 +21,9 @@ public class SimulationEngine implements  Runnable
     private int ileTrawyDziennie;
     private GridPane grid = null;
     private volatile boolean czyDziala = true;
+    private Animal zwierzeDoSledzenia = null;
     private HashMap<Vector2d, LinkedList<Animal>> zwierzeta = new HashMap<>();
+    private int dzien = 0;
     private TreeSet<Animal> zwierzetaPosortowane = new TreeSet<>(new Comparator<Animal>() {
         public int compare (Animal a, Animal b)
         {
@@ -74,7 +76,7 @@ public class SimulationEngine implements  Runnable
             public void run()
             {
                 grid = app.renderujPierwszyRaz(mapa);
-                app.renderuj(mapa, grid, SimulationEngine.this);
+                app.renderuj(mapa, grid, SimulationEngine.this, zwierzeDoSledzenia);
             }
         });
 
@@ -83,7 +85,7 @@ public class SimulationEngine implements  Runnable
                 //Scanner scan = new Scanner(System.in);
                 // scan.nextLine();
 
-
+                dzien++;
                 // System.out.println("Początek iteracji -----------------------------------------");
                 // wypiuszDoDebugu();
                 // mapa.wypiuszDoDebugu();
@@ -92,7 +94,7 @@ public class SimulationEngine implements  Runnable
 
                     if (x.getEnergy() <= 1) {
                         usunZHaszMapy(x);
-                        mapa.smiercZwierzecia(x);
+                        mapa.smiercZwierzecia(x, dzien);
                     } else {
                         usunZHaszMapy(x);
                         x.postarzej();
@@ -164,6 +166,7 @@ public class SimulationEngine implements  Runnable
                 // System.out.println("Koniec iteracji -------------------------------------------");
 
 
+
                 try {
                     Thread.sleep(moveDelay);
                 } catch (InterruptedException ex) {
@@ -173,7 +176,7 @@ public class SimulationEngine implements  Runnable
 
                 Platform.runLater(new Runnable() {
                     public void run() {
-                        app.renderuj(mapa, grid, SimulationEngine.this);
+                        app.renderuj(mapa, grid, SimulationEngine.this, zwierzeDoSledzenia);
                     }
                 });
             }
@@ -300,6 +303,10 @@ public class SimulationEngine implements  Runnable
     public void pauza()
     {
        czyDziala = !czyDziala;
+    }
+    public void zmienZwierzeDoSledzenia(Animal z)
+    {
+        zwierzeDoSledzenia = z;
     }
 
 }

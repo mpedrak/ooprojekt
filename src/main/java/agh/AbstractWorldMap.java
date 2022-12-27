@@ -182,8 +182,9 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     {
         return kraniecMapy;
     }
-    public void smiercZwierzecia(Animal z)
+    public void smiercZwierzecia(Animal z, int dzien)
     {
+        z.zabijGo(dzien);
         usunZHaszMapy(z);
         if(toksyczneTrupy != null)
         {

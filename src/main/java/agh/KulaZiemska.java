@@ -43,6 +43,7 @@ public class KulaZiemska extends AbstractWorldMap
         else if (pp.x < 0) pp = new Vector2d(kraniecMapy.x, pp.y);
         if (trawnik.get(pp) != null)
         {
+            zwierz.zjadlRolsine();
             if(czyBylaWpreferowanych(pp)) trawyNaPolachPreferowanych--;
             trawyWogole--;
             trawnik.remove(pp);

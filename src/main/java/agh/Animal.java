@@ -14,10 +14,14 @@ public class Animal extends AbstractWorldMapElement
     private int wiek = 0;
     private int iloscPotomstwa = 0;
     private boolean szalenstwo;
+    private int zjadlRoslin = 0;
+    private boolean zyje = true;
+    private int zmarloDnia;
 
     public String toString()
     {
-        return orientation.toString() + " " + position.toString() + " kcal: " + energia + " wiek: " + wiek + " geny: " + Arrays.toString(geny) + " it=[" + aktualnyGen + "] " + "dzieci: " + iloscPotomstwa;
+        if(zyje) return "Genom: " + Arrays.toString(geny) + ", Aktywny gen: " + geny[aktualnyGen] + ", Energia : " + energia + ", Zjadl roslin: " + zjadlRoslin + ", Ma dzieci: " + iloscPotomstwa + ", Zyje: " + wiek + " dni";
+        else return "Zmarlo dnia: " + zmarloDnia + ", W wieku: " + wiek + ", Mialo genom: " + Arrays.toString(geny) + " Zjadl roslin: " + zjadlRoslin + ", Mial dzieci: " + iloscPotomstwa;
     }
     public Animal(Vector2d initialPosition, AbstractWorldMap map, int[] geny, boolean szalenstwo)
     {
@@ -110,6 +114,12 @@ public class Animal extends AbstractWorldMapElement
     public void setPosition (Vector2d p)
     {
         this.position = p;
+    }
+    public void zjadlRolsine(){zjadlRoslin++;}
+    public void zabijGo(int dzien)
+    {
+        zyje = false;
+        zmarloDnia = dzien;
     }
 
 }

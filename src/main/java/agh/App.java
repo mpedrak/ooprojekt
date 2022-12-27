@@ -11,10 +11,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.ByteArrayInputStream;
@@ -37,25 +36,50 @@ public class App  extends Application
         renderujStart(primaryStage);
     }
 
-    public void renderuj(AbstractWorldMap map, GridPane grid, SimulationEngine engine)
+    public void renderuj(AbstractWorldMap map, GridPane grid, SimulationEngine engine, Animal zwierzeDoSledzenia)
     {
         grid.setGridLinesVisible(false);
         grid.getChildren().clear();
         grid.setGridLinesVisible(true);
 
-        Button button = new Button(" Pauza ");
+        bottomLeft = map.getPoczatekMapy();
+        upperRight = map.getKraniecMapy();
+
+        Rectangle r = new Rectangle(width * Math.max(30, upperRight.x - bottomLeft.x  + 2) + 5, height * 3 + 2);
+        r.setFill(Color.rgb(244, 244, 244,1));
+        grid.add(r, 0, 0, 1, 1);
+
+        Rectangle r2 = new Rectangle(width * (30 - upperRight.x - bottomLeft.x  + 2), height * (upperRight.y - bottomLeft.y + 3));
+        r2.setFill(Color.rgb(244, 244, 244,1));
+        grid.add(r2,  upperRight.x + 2 , (int)((upperRight.y - bottomLeft.y) / 2) + 3, 1, 1);
+
+        Button button = new Button("Pauza ");
         grid.add(button, 0, 0, 5, 1);
+
+        if(zwierzeDoSledzenia != null)
+        {
+            Label label = new Label(zwierzeDoSledzenia.toString());
+            grid.add(label, 0, 1, 29, 1);
+        }
 
         button.setOnAction(actionEvent ->
         {
             engine.pauza();
         });
 
+        Button button2 = new Button("Zatrzymaj sledzenie");
+        grid.add(button2, 3, 0, 5, 1);
+
+        button2.setOnAction(actionEvent ->
+        {
+            engine.zmienZwierzeDoSledzenia(null);
+        });
+
         VBox vbox = new VBox();
         Label s = new Label( "y\\x");
         vbox.getChildren().addAll(s);
         vbox.setAlignment(Pos.CENTER);
-        grid.add(vbox, 0, 1, 1, 1);
+        grid.add(vbox, 0, 2, 1, 1);
         GridPane.setHalignment(vbox, HPos.CENTER);
 
         for (int i = bottomLeft.x ; i <= upperRight.x; ++i)
@@ -64,7 +88,7 @@ public class App  extends Application
             s = new Label(Integer.toString(i));
             vbox.getChildren().addAll(s);
             vbox.setAlignment(Pos.CENTER);
-            grid.add(vbox, i - bottomLeft.x + 1, 1, 1, 1);
+            grid.add(vbox, i - bottomLeft.x + 1, 2, 1, 1);
         }
 
         int j = 1;
@@ -74,7 +98,7 @@ public class App  extends Application
             s = new Label(Integer.toString(i));
             vbox.getChildren().addAll(s);
             vbox.setAlignment(Pos.CENTER);
-            grid.add(vbox, 0, j + 1, 1, 1);
+            grid.add(vbox, 0, j + 2, 1, 1);
             ++j;
         }
 
@@ -95,13 +119,23 @@ public class App  extends Application
                     {
                         System.out.println(ex);
                     }
-                    element.vbox.setOnMouseClicked(new EventHandler<Event>() {
-                        @Override
-                        public void handle(Event event) {
-                           System.out.println(">>>>>> " + z.toString());
-                        }
-                    });
-                    grid.add(element.vbox, x - bottomLeft.x + 1, j + 1, 1, 1);
+                    if (z instanceof Animal)
+                    {
+                        element.vbox.setOnMouseClicked(new EventHandler<Event>() {
+                            @Override
+                            public void handle(Event event)
+                            {
+                                Rectangle r = new Rectangle(width * Math.max(30, upperRight.x - bottomLeft.x  + 2) + 5, height);
+                                r.setFill(Color.rgb(244, 244, 244,1));
+                                grid.add(r, 0, 1, 1, 1);
+
+                                engine.zmienZwierzeDoSledzenia((Animal)z);
+                                Label label = new Label(z.toString());
+                                grid.add(label, 0, 1, 29, 1);
+                            }
+                        });
+                    }
+                    grid.add(element.vbox, x - bottomLeft.x + 1, j + 2, 1, 1);
                     GridPane.setHalignment(element.vbox, HPos.CENTER);
                 }
                 ++j;
@@ -117,13 +151,14 @@ public class App  extends Application
 
         bottomLeft = map.getPoczatekMapy();
         upperRight = map.getKraniecMapy();
-        int w = Math.max((upperRight.x - bottomLeft.x  + 2), 10) * width;
-        int h = Math.max((upperRight.y - bottomLeft.y  + 3), 5) * height;
+        int pom = Math.max((upperRight.x - bottomLeft.x  + 2), 30);
+        int w =  pom * width;
+        int h = (upperRight.y - bottomLeft.y  + 4) * height;
         Scene scene = new Scene(grid, w, h);
 
-        for (int i = 0; i <= upperRight.x - bottomLeft.x + 1; i++)
+        for (int i = 0; i <= pom - 1; i++)
             grid.getColumnConstraints().add(new ColumnConstraints(width));
-        for (int i = 0; i <= upperRight.y - bottomLeft.y + 2; i++)
+        for (int i = 0; i <= upperRight.y - bottomLeft.y + 3; i++)
             grid.getRowConstraints().add(new RowConstraints(height));
 
         Stage stage = new Stage();
@@ -153,11 +188,11 @@ public class App  extends Application
 
         button.setOnAction(actionEvent ->
         {
-            AbstractWorldMap map = new KulaZiemska(15, 15,  20, 10, true);
+            AbstractWorldMap map = new KulaZiemska(13, 13,  10, 1, true);
             int e = -5; // energiaTraconaPrzyTeleportacji = naRozmanaznie !
             // AbstractWorldMap map = new PiekielnyPortal(10, 10,  10, 20, false, e);
             int moveDelay = 500;
-            Runnable engine = new SimulationEngine(map, this, moveDelay, 10, 10,
+            Runnable engine = new SimulationEngine(map, this, moveDelay, 10, 25,
                     e, -2 * e, 10, new int[]{3, 3},
                     true, true, 1);
 
