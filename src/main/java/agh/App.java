@@ -283,8 +283,8 @@ public class App  extends Application
         customTextFields.add(widthInput);
         customTextFields.add(heightInput);
 
-        Label grassText= new Label("Rośliny:");
-        grid.add(grassText, 13, 16, 5, 1);
+        Label grassText= new Label("ROŚLINY");
+        grid.add(grassText, 16, 16, 5, 1);
         customLabels.add(grassText);
 
         Label numOfGrassText= new Label("Początkowa ilość:");
@@ -306,18 +306,18 @@ public class App  extends Application
         customTextFields.add(dailyGrowthInput);
         customTextFields.add(energyValueInput);
 
-        Label animalText= new Label("Zwierzęta:");
-        grid.add(animalText, 2, 16, 5, 1);
+        Label animalText= new Label("ZWIERZĘTA");
+        grid.add(animalText, 6, 16, 5, 1);
         customLabels.add(animalText);
 
         Label numOfAnimalsText= new Label("Początkowa ilość:");
         grid.add(numOfAnimalsText, 3, 17, 6, 1);
         TextField numOfAnimalsInput= new TextField();
-        grid.add(numOfAnimalsInput, 9, 17, 2, 1);
+        grid.add(numOfAnimalsInput, 11, 17, 2, 1);
         Label startEnergyText= new Label("Początkowa energia:");
         grid.add(startEnergyText, 3, 18, 6, 1);
         TextField startEnergyInput= new TextField();
-        grid.add(startEnergyInput, 9, 18, 2, 1);
+        grid.add(startEnergyInput, 11, 18, 2, 1);
         Label reproductionEnergyLossText= new Label("Energia zużyta przy rozmnażaniu:");
         grid.add(reproductionEnergyLossText, 3, 19, 8, 1);
         TextField reproductionEnergyLossInput= new TextField();
@@ -338,15 +338,15 @@ public class App  extends Application
         Label numOfGenesText= new Label("Długość genomu:");
         grid.add(numOfGenesText, 3, 21, 6, 1);
         TextField numOfGenesInput= new TextField();
-        grid.add(numOfGenesInput, 9, 21, 2, 1);
+        grid.add(numOfGenesInput, 11, 21, 2, 1);
         Label scopeMutationsText= new Label("Zakres liczby mutacji:");
         grid.add(scopeMutationsText, 3, 22, 6, 1);
         TextField scopeFromInput= new TextField();
-        grid.add(scopeFromInput, 9, 22, 2, 1);
+        grid.add(scopeFromInput, 11, 22, 2, 1);
         Label dashText= new Label("   -");
-        grid.add(dashText, 11, 22, 1, 1);
+        grid.add(dashText, 13, 22, 1, 1);
         TextField scopeToInput= new TextField();
-        grid.add(scopeToInput, 12, 22, 2, 1);
+        grid.add(scopeToInput, 14, 22, 2, 1);
         scopeFromInput.setPromptText("min");
         scopeToInput.setPromptText("max");
         customLabels.add(numOfGenesText);
@@ -443,11 +443,11 @@ public class App  extends Application
         });
 
 
-        Label lineText= new Label("   " + new String(new char[77]).replace("\0", "_"));
+        Label lineText= new Label("        " + new String(new char[74]).replace("\0", "_"));
         grid.add(lineText, 0, 25, 23, 1);
 
-        Label colorText= new Label(" Kolor zwierzęcia określać będzie posiadaną przez niego energię:");
-        grid.add(colorText, 0, 26, 15, 1);
+        Label colorText= new Label("Kolor zwierzęcia określać będzie posiadaną przez niego energię:");
+        grid.add(colorText, 1, 26, 15, 1);
 
         Image colors;
         try {
@@ -456,8 +456,8 @@ public class App  extends Application
             throw new RuntimeException(e);
         }
         ImageView imgView= new ImageView(colors);
-        imgView.setFitWidth(550);
-        grid.add(imgView, 0, 29, 1, 1);
+        imgView.setFitWidth(500);
+        grid.add(imgView, 1, 29, 1, 1);
 
         primaryStage.show();
     }
