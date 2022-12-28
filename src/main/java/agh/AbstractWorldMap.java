@@ -6,6 +6,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
 {
     protected Map<Vector2d, LinkedList<Animal>> zwierzeta = new HashMap<>();
     protected Map<Vector2d, Grass> trawnik = new HashMap<>();
+    public Map<List<Integer>, Integer> genotypy = new HashMap<>();
     protected Vector2d poczatekMapy = new Vector2d(0, 0);
     protected Vector2d kraniecMapy;
     protected int energiaRoslin;
@@ -38,6 +39,11 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     public boolean place(Animal animal)
     {
         animal.addObserver(this);
+        List<Integer> t = animal.getWholeGenes();
+        Integer pom = genotypy.remove(t);
+        if(pom == null) genotypy.put(t, 1);
+        else genotypy.put(t, pom + 1);
+       // wypiuszDoDebugu();
         dodajDoHaszMapy(animal);
         return true;
     }
@@ -64,33 +70,41 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     {
        if(toksyczneTrupy == null)
        {
-           //System.out.println(trawyNaPolachPreferowanych + ", " +  trawyWogole + ", " + (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1) );
+
            //wypiuszDoDebugu();
            //System.out.println(trawnik.keySet().size() == trawyWogole);
            int i = 0;
-           int naRowniku = (int)Math.floor(ile * 0.8);
+           int naRowniku = ile - (int)Math.floor(ile * 0.2);
+          // System.out.println(trawyNaPolachPreferowanych + ", " +  trawyWogole + ", " + (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1) );
+           //System.out.println("7");
            while (i < naRowniku)
            {
+               //System.out.println(trawyNaPolachPreferowanych + ", " +  trawyWogole + ", " + (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1) );
                if(trawyWogole >= (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1)) return;
                if(trawyNaPolachPreferowanych == (kraniecRownika.x + 1) * (kraniecRownika.y - pocztekRownika.y + 1)) break; // przepelnienie rownika
                Vector2d pp = losujVectorNaRowniku();
-
                Grass g = new Grass(pp);
                trawnik.put(pp, g);
                i++;
                trawyNaPolachPreferowanych++;
                trawyWogole++;
            }
-          // System.out.println("Po rowniku " + trawyNaPolachPreferowanych + ", " +  trawyWogole + ", " + (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1) );
+         // System.out.println(i);
+          // );
            while (i < ile)
            {
+              // System.out.println(trawyWogole - trawyNaPolachPreferowanych >=
+                      // (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1) - (kraniecRownika.x + 1) * (kraniecRownika.y - pocztekRownika.y + 1));
                if(trawyWogole >= (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1)) return;
+               if(trawyWogole - trawyNaPolachPreferowanych >=
+                       (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1) - (kraniecRownika.x + 1) * (kraniecRownika.y - pocztekRownika.y + 1)) return;
                Vector2d pp = losujVectorNaMappieAleNieNaRowniku();
                Grass g = new Grass(pp);
                trawnik.put(pp, g);
                i++;
                trawyWogole++;
            }
+          // System.out.println("Po rowniku " + trawyNaPolachPreferowanych + ", " +  trawyWogole + ", " + (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1));
        }
 
        else
@@ -197,7 +211,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     {
         return kraniecMapy;
     }
-    public void smiercZwierzecia(Animal z, int dzien)
+    public int smiercZwierzecia(Animal z, int dzien)
     {
         z.zabijGo(dzien);
         usunZHaszMapy(z);
@@ -222,6 +236,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
             toksyczneTrupy.add(new doTreeSeta(z.getPosition(), iPom));
             //System.out.println(Arrays.toString(toksyczneTrupy.toArray()));
         }
+        return z.getWiek();
     }
     private void dodajDoHaszMapy(Animal z)
     {
@@ -240,11 +255,11 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     }
     public void wypiuszDoDebugu()
     {
-        System.out.println("Trawnik");
-        for (Vector2d name: trawnik.keySet())
+        System.out.println("genotypy");
+        for (List<Integer> name: genotypy.keySet())
         {
-            String key = name.toString();
-            String value = trawnik.get(name).toString();
+            String key = Arrays.toString(name.toArray());
+            String value = genotypy.get(name).toString();
             System.out.println(key + " " + value);
         }
         System.out.println("Kkoiec mapy");

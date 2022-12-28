@@ -1,7 +1,12 @@
 package agh;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Animal extends AbstractWorldMapElement
 {
@@ -17,20 +22,29 @@ public class Animal extends AbstractWorldMapElement
     private int zjadlRoslin = 0;
     private boolean zyje = true;
     private int zmarloDnia;
+    private HashMap<MapDirection, ImageView> zdjecia = new HashMap<>();
 
     public String toString()
     {
         if(zyje) return "Genom: " + Arrays.toString(geny) + ", Aktywny gen: " + geny[aktualnyGen] + ", Energia : " + energia + ", Zjadl roslin: " + zjadlRoslin + ", Ma dzieci: " + iloscPotomstwa + ", Zyje: " + wiek + " dni";
         else return "Zmarlo dnia: " + zmarloDnia + ", W wieku: " + wiek + ", Mialo genom: " + Arrays.toString(geny) + " Zjadl roslin: " + zjadlRoslin + ", Mial dzieci: " + iloscPotomstwa;
     }
-    public Animal(Vector2d initialPosition, AbstractWorldMap map, int[] geny, boolean szalenstwo)
-    {
+    public Animal(Vector2d initialPosition, AbstractWorldMap map, int[] geny, boolean szalenstwo) throws FileNotFoundException {
         this.position = initialPosition;
         this.map = map;
         this.geny = geny;
         this.orientation= getRandomOrientation();
         this.szalenstwo= szalenstwo;
         this.aktualnyGen = losujLiczbe(geny.length);
+        for(MapDirection x : MapDirection.values())
+        {
+            String s = "src/main/resources/" + x.toString() + ".png";
+            Image image = new Image(new FileInputStream(s));
+            ImageView imageView = new ImageView(image);
+            imageView.setFitHeight(20);
+            imageView.setFitWidth(20);
+            zdjecia.put(x, imageView);
+        }
     }
     public void move()
     {
@@ -80,7 +94,11 @@ public class Animal extends AbstractWorldMapElement
     }
     public String getPath()
     {
-        return "src/main/resources/" + orientation.toString() + ".png";
+        return "src/main/resources/" + this.orientation.toString() + ".png";
+    }
+    public ImageView getImageView()
+    {
+        return zdjecia.get(this.orientation);
     }
     public void changeEnergy(int delta)
     {
@@ -118,8 +136,13 @@ public class Animal extends AbstractWorldMapElement
     public void zjadlRolsine(){zjadlRoslin++;}
     public void zabijGo(int dzien)
     {
+        zdjecia = null;
         zyje = false;
         zmarloDnia = dzien;
+    }
+    public List<Integer> getWholeGenes()
+    {
+        return Arrays.stream( geny ).boxed().collect( Collectors.toList() );
     }
 
 }

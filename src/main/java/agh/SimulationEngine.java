@@ -24,6 +24,9 @@ public class SimulationEngine implements  Runnable
     private Animal zwierzeDoSledzenia = null;
     private HashMap<Vector2d, LinkedList<Animal>> zwierzeta = new HashMap<>();
     private int dzien = 0;
+    private int iloscMartwych = 0;
+    private int sumaWiekuMartwcyh = 0;
+    private int[] najpopularniejszyGenotyp = new int[]{7};
     private TreeSet<Animal> zwierzetaPosortowane = new TreeSet<>(new Comparator<Animal>() {
         public int compare (Animal a, Animal b)
         {
@@ -60,13 +63,26 @@ public class SimulationEngine implements  Runnable
         {
             Vector2d p = mapa.losujVectorNaMapieDlaZwierzecia();
             // p = new Vector2d(2,2);
-            Animal z = new Animal(p, mapa, zrobLosoweGeny(), szalenstwo);
-            z.changeEnergy(poczatkowaEnergia);
-            dodajDoHaszMapy(z);
-            zwierzetaPosortowane.add(z);
-            mapa.place(z);
+            Animal z = null;
+            try {
+                z = new Animal(p, mapa, zrobLosoweGeny(), szalenstwo);
+               // z = new Animal(p, mapa, new int[]{1,1,1,1,1,1,1,1,1,1}, szalenstwo);
+            }
+            catch (Exception ex)
+            {
+                System.out.println(ex);
+            }
+            if(z != null)
+            {
+                z.changeEnergy(poczatkowaEnergia);
+                dodajDoHaszMapy(z);
+                zwierzetaPosortowane.add(z);
+                mapa.place(z);
+            }
             i++;
         }
+        zaktualizujDominujacyGenotyp();
+       // System.out.println(Arrays.toString(najpopularniejszyGenotyp));
     }
 
     public void run()
@@ -81,7 +97,7 @@ public class SimulationEngine implements  Runnable
         });
 
         while (true) {
-            if (czyDziala) {
+            //if (czyDziala) {
                 //Scanner scan = new Scanner(System.in);
                 // scan.nextLine();
 
@@ -94,7 +110,8 @@ public class SimulationEngine implements  Runnable
 
                     if (x.getEnergy() <= 1) {
                         usunZHaszMapy(x);
-                        mapa.smiercZwierzecia(x, dzien);
+                        iloscMartwych++;
+                        sumaWiekuMartwcyh += mapa.smiercZwierzecia(x, dzien);
                     } else {
                         usunZHaszMapy(x);
                         x.postarzej();
@@ -132,19 +149,33 @@ public class SimulationEngine implements  Runnable
                         // System.out.println("diecko jest robione na " + p.toString());
                         Animal z1 = t.get(0);
                         Animal z2 = t.get(1);
-                        Animal dziecko = new Animal(p, mapa, zrobGenyDlaDziecka(z1, z2), szalenstwo);
-                        dziecko.changeEnergy(-2 * energiaNaRozmnazanie);
-                        mapa.place(dziecko);
-                        dzieci.add(dziecko);
+                        Animal dziecko = null;
+                        try
+                        {
+                            dziecko = new Animal(p, mapa, zrobGenyDlaDziecka(z1, z2), szalenstwo);
+                        }
+                        catch (Exception ex)
+                        {
+                            System.out.println(ex);
+                        }
+                        if (dziecko != null)
+                        {
+                            dziecko.changeEnergy(-2 * energiaNaRozmnazanie);
+                            mapa.place(dziecko);
+                            dzieci.add(dziecko);
 
-                        zwierzetaPosortowane.remove(z1);
-                        zwierzetaPosortowane.remove(z2);
-                        z1.changeEnergy(energiaNaRozmnazanie);
-                        z1.dodajDziecko();
-                        z2.changeEnergy(energiaNaRozmnazanie);
-                        z2.dodajDziecko();
-                        zwierzetaPosortowane.add(z1);
-                        zwierzetaPosortowane.add(z2);
+                            zwierzetaPosortowane.remove(z1);
+                            zwierzetaPosortowane.remove(z2);
+                            z1.changeEnergy(energiaNaRozmnazanie);
+                            z1.dodajDziecko();
+                            z2.changeEnergy(energiaNaRozmnazanie);
+                            z2.dodajDziecko();
+                            zwierzetaPosortowane.add(z1);
+                            zwierzetaPosortowane.add(z2);
+                            zaktualizujDominujacyGenotyp();
+                           // System.out.println(Arrays.toString(najpopularniejszyGenotyp));
+                        }
+
                     }
                 }
 
@@ -174,15 +205,15 @@ public class SimulationEngine implements  Runnable
                         app.renderuj(mapa, grid, SimulationEngine.this, zwierzeDoSledzenia);
                     }
                 });
-            }
-            else
-            {
+           // }
+
+                while (!czyDziala)
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(100);
                 } catch (InterruptedException ex) {
                     System.out.println(ex + " przerwanie symulacji");
                 }
-            }
+
         }
 
     }
@@ -303,10 +334,50 @@ public class SimulationEngine implements  Runnable
     {
         zwierzeDoSledzenia = z;
     }
+    public int sredniaEnergia()
+    {
+        if(zwierzetaPosortowane.size() == 0) return -1;
+        int suma = 0;
+        ArrayList<Animal> t = new ArrayList<>(zwierzetaPosortowane);
+        for(int i = 0; i < t.size(); i++) suma += t.get(i).getEnergy();
+        return (int)Math.round((double)(suma / t.size()));
+    }
     public String toString()
     {
 
-        return "Liczba zwierząt: " + zwierzetaPosortowane.size() + ", Liczba roslin: " + mapa.iloscRosllin() + ", Ilosc wolnych pol: " + mapa.iloscWolnychPol();
+        return "Liczba zwierząt: " + zwierzetaPosortowane.size() +
+                ", Liczba roslin: " + mapa.iloscRosllin() +
+                ", Wolnych pol: " + mapa.iloscWolnychPol() +
+                ", Dominujacy genotyp: " + (najpopularniejszyGenotyp != null ? Arrays.toString(najpopularniejszyGenotyp) : "brak") +
+                (sredniaEnergia() != -1 ? ", Srednia energia: " + sredniaEnergia() : "") +
+                (iloscMartwych > 0 ? ", Srednia zycia martwych: " + Math.round((double)(sumaWiekuMartwcyh / iloscMartwych)) : "")
+                ;
+    }
+    public void zaktualizujDominujacyGenotyp()
+    {
+        int maxw = -1;
+        List<Integer> maxl = null;
+        for(List<Integer> x : mapa.genotypy.keySet())
+        {
+            int i = mapa.genotypy.get(x);
+            if (i > maxw)
+            {
+                maxw = i;
+                maxl = x;
+            }
+        }
+        if(maxw > 1)
+        {
+            int[] newArray = new int[maxl.size()];
+            int i = 0;
+            for(Integer x : maxl)
+            {
+                newArray[i] = x;
+                i++;
+            }
+            najpopularniejszyGenotyp = newArray;
+        }
+        else najpopularniejszyGenotyp = null;
     }
 
 }
