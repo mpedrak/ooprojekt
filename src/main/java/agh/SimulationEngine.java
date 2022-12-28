@@ -58,7 +58,7 @@ public class SimulationEngine implements  Runnable
         int i = 0;
         while (i < iloscZwierzaat)
         {
-            Vector2d p = mapa.losujVectorNaMapie();
+            Vector2d p = mapa.losujVectorNaMapieDlaZwierzecia();
             // p = new Vector2d(2,2);
             Animal z = new Animal(p, mapa, zrobLosoweGeny(), szalenstwo);
             z.changeEnergy(poczatkowaEnergia);
@@ -105,12 +105,7 @@ public class SimulationEngine implements  Runnable
                     // System.out.println("-> Po ruchu: " + x.toString());
                 }
 
-                /// debug do usuniecia
-                for (Vector2d name : zwierzeta.keySet()) {
-                    String key = name.toString();
-                    String value = Arrays.toString(zwierzeta.get(name).toArray());
-                    // System.out.println(key + " " + value);
-                }
+
                 /// debug do usuniecia
 
                 // System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
@@ -307,6 +302,11 @@ public class SimulationEngine implements  Runnable
     public void zmienZwierzeDoSledzenia(Animal z)
     {
         zwierzeDoSledzenia = z;
+    }
+    public String toString()
+    {
+
+        return "Liczba zwierząt: " + zwierzetaPosortowane.size() + ", Liczba roslin: " + mapa.iloscRosllin() + ", Ilosc wolnych pol: " + mapa.iloscWolnychPol();
     }
 
 }

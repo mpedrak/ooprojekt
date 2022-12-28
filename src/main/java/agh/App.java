@@ -36,11 +36,11 @@ public class App  extends Application
         bottomLeft = map.getPoczatekMapy();
         upperRight = map.getKraniecMapy();
 
-        Rectangle r = new Rectangle(width * Math.max(30, upperRight.x - bottomLeft.x  + 2) + 5, height * 3 + 2);
+        Rectangle r = new Rectangle(width * Math.max(30, upperRight.x - bottomLeft.x  + 2) + 5, height * 5 + 2);
         r.setFill(Color.rgb(244, 244, 244,1));
         grid.add(r, 0, 0, 1, 1);
 
-        Rectangle r2 = new Rectangle(width * (30 - upperRight.x - bottomLeft.x  + 2), height * (upperRight.y - bottomLeft.y + 3));
+        Rectangle r2 = new Rectangle(width * (30 - upperRight.x - bottomLeft.x  + 2), height * (upperRight.y - bottomLeft.y + 4));
         r2.setFill(Color.rgb(244, 244, 244,1));
         grid.add(r2,  upperRight.x + 2 , (int)((upperRight.y - bottomLeft.y) / 2) + 3, 1, 1);
 
@@ -58,6 +58,9 @@ public class App  extends Application
             engine.pauza();
         });
 
+        Label label7 = new Label(engine.toString());
+        grid.add(label7, 0, 2, 29, 1);
+
         Button button2 = new Button("Zatrzymaj sledzenie");
         grid.add(button2, 3, 0, 5, 1);
 
@@ -70,7 +73,7 @@ public class App  extends Application
         Label s = new Label( "y\\x");
         vbox.getChildren().addAll(s);
         vbox.setAlignment(Pos.CENTER);
-        grid.add(vbox, 0, 2, 1, 1);
+        grid.add(vbox, 0, 3, 1, 1);
         GridPane.setHalignment(vbox, HPos.CENTER);
 
         for (int i = bottomLeft.x ; i <= upperRight.x; ++i)
@@ -79,7 +82,7 @@ public class App  extends Application
             s = new Label(Integer.toString(i));
             vbox.getChildren().addAll(s);
             vbox.setAlignment(Pos.CENTER);
-            grid.add(vbox, i - bottomLeft.x + 1, 2, 1, 1);
+            grid.add(vbox, i - bottomLeft.x + 1, 3, 1, 1);
         }
 
         int j = 1;
@@ -89,7 +92,7 @@ public class App  extends Application
             s = new Label(Integer.toString(i));
             vbox.getChildren().addAll(s);
             vbox.setAlignment(Pos.CENTER);
-            grid.add(vbox, 0, j + 2, 1, 1);
+            grid.add(vbox, 0, j + 3, 1, 1);
             ++j;
         }
 
@@ -126,7 +129,7 @@ public class App  extends Application
                             }
                         });
                     }
-                    grid.add(element.vbox, x - bottomLeft.x + 1, j + 2, 1, 1);
+                    grid.add(element.vbox, x - bottomLeft.x + 1, j + 3, 1, 1);
                     GridPane.setHalignment(element.vbox, HPos.CENTER);
                 }
                 ++j;
@@ -144,12 +147,12 @@ public class App  extends Application
         upperRight = map.getKraniecMapy();
         int pom = Math.max((upperRight.x - bottomLeft.x  + 2), 30);
         int w =  pom * width;
-        int h = (upperRight.y - bottomLeft.y  + 4) * height;
+        int h = (upperRight.y - bottomLeft.y  + 5) * height;
         Scene scene = new Scene(grid, w, h);
 
         for (int i = 0; i <= pom - 1; i++)
             grid.getColumnConstraints().add(new ColumnConstraints(width));
-        for (int i = 0; i <= upperRight.y - bottomLeft.y + 3; i++)
+        for (int i = 0; i <= upperRight.y - bottomLeft.y + 4; i++)
             grid.getRowConstraints().add(new RowConstraints(height));
 
         Stage stage = new Stage();
@@ -170,7 +173,7 @@ public class App  extends Application
         for (int i = 0; i <= 25; i++)
             grid.getRowConstraints().add(new RowConstraints(height));
 
-        Scene scene = new Scene(grid, 16 * width, 16 * height);
+        Scene scene = new Scene(grid, 23 * width, 26 * height);
 
         primaryStage.setScene(scene);
 
@@ -341,8 +344,8 @@ public class App  extends Application
 //            }
 //            else
                 data= new InputConfiguration(13, 13, 10, 10,
-                        25, 1, 5, 10, 10,
-                        1, new int[]{3, 3}, true, true, true, false);
+                        50, 0, 10, 20, 10,
+                        17, new int[]{3, 3}, false, true, true, false);
 
             System.out.println("Czy kula ziemska: " + data.earthGlobe);
             System.out.println("Czy równik: " + data.equatorialForests);
@@ -395,6 +398,8 @@ public class App  extends Application
 
         if (x.earthGlobe)
             map= new KulaZiemska(x.mapWidth, x.mapHeight,  x.numOfGrass, x.grassEnergy, x.equatorialForests);
+
+
         else
             map= new PiekielnyPortal(x.mapWidth, x.mapHeight,  x.numOfGrass, x.grassEnergy, x.equatorialForests, x.reproductionEnergyLoss);
 

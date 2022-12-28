@@ -45,7 +45,7 @@ public class PiekielnyPortal extends AbstractWorldMap
         Vector2d pp = oldPosition.add(delta);
         if (pp.y > kraniecMapy.y || pp.y < 0 || pp.x < 0 || pp.x > kraniecMapy.x)
         {
-            pp = losujVectorNaMapie();
+            pp = losujVectorNaMapieDlaZwierzecia();
             zwierz.changeEnergy(energiaTraconaPrzyTeleportacji);
         }
         if (trawnik.get(pp) != null)

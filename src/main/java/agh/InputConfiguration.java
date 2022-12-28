@@ -46,8 +46,8 @@ public class InputConfiguration {
         if (grassEnergy < 0 || grassEnergy > 2000000000)
             throw new InvalidConfigurationException();
 
-        if (reproductionEnergyLoss < 1)
-            throw new InvalidConfigurationException();
+        //if (reproductionEnergyLoss < 1)
+            //throw new InvalidConfigurationException();
 
         // TODO: Reszta checków
 

@@ -64,6 +64,9 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     {
        if(toksyczneTrupy == null)
        {
+           //System.out.println(trawyNaPolachPreferowanych + ", " +  trawyWogole + ", " + (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1) );
+           //wypiuszDoDebugu();
+           //System.out.println(trawnik.keySet().size() == trawyWogole);
            int i = 0;
            int naRowniku = (int)Math.floor(ile * 0.8);
            while (i < naRowniku)
@@ -71,12 +74,14 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
                if(trawyWogole >= (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1)) return;
                if(trawyNaPolachPreferowanych == (kraniecRownika.x + 1) * (kraniecRownika.y - pocztekRownika.y + 1)) break; // przepelnienie rownika
                Vector2d pp = losujVectorNaRowniku();
+
                Grass g = new Grass(pp);
                trawnik.put(pp, g);
                i++;
                trawyNaPolachPreferowanych++;
                trawyWogole++;
            }
+          // System.out.println("Po rowniku " + trawyNaPolachPreferowanych + ", " +  trawyWogole + ", " + (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1) );
            while (i < ile)
            {
                if(trawyWogole >= (kraniecMapy.x - poczatekMapy.x + 1) * (kraniecMapy.y - poczatekMapy.y + 1)) return;
@@ -90,6 +95,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
 
        else
        {
+          // System.out.println(trawnik.keySet().size() == trawyWogole);
            TreeSet<doTreeSeta> tokszczynePom = new TreeSet<>(new Comparator<doTreeSeta>() {
                public int compare (doTreeSeta a, doTreeSeta b)
                {
@@ -155,6 +161,15 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
             if (objectAt(pp) == null) return pp;
         }
     }
+    public Vector2d losujVectorNaMapieDlaZwierzecia()
+    {
+        Random generator = new Random();
+        while (true)
+        {
+            Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x + 1), generator.nextInt(kraniecMapy.y + 1));
+            if (!(objectAt(pp) instanceof Animal)) return pp;
+        }
+    }
     protected Vector2d losujVectorNaRowniku()
     {
         Random generator = new Random();
@@ -162,7 +177,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         {
             Vector2d pp = new Vector2d(generator.nextInt(kraniecRownika.x + 1),
                     generator.nextInt(kraniecRownika.y - pocztekRownika.y + 1) + pocztekRownika.y);
-            if (!(objectAt(pp) instanceof Grass)) return pp;
+            if (trawnik.get(pp) == null) return pp;
         }
     }
     protected Vector2d losujVectorNaMappieAleNieNaRowniku()
@@ -171,7 +186,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         while (true)
         {
             Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x + 1), generator.nextInt(kraniecMapy.y + 1));
-            if (!(pp.follows( pocztekRownika) && pp.precedes(kraniecRownika)) && !(objectAt(pp) instanceof Grass)) return pp;
+            if (!(pp.follows( pocztekRownika) && pp.precedes(kraniecRownika)) && trawnik.get(pp) == null) return pp;
         }
     }
     public Vector2d getPoczatekMapy()
@@ -225,11 +240,11 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     }
     public void wypiuszDoDebugu()
     {
-        System.out.println("Mapa");
-        for (Vector2d name: zwierzeta.keySet())
+        System.out.println("Trawnik");
+        for (Vector2d name: trawnik.keySet())
         {
             String key = name.toString();
-            String value = Arrays.toString(zwierzeta.get(name).toArray());
+            String value = trawnik.get(name).toString();
             System.out.println(key + " " + value);
         }
         System.out.println("Kkoiec mapy");
@@ -242,5 +257,15 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         }
         return false;
     }
+    public int iloscRosllin(){return trawnik.keySet().size();}
+    public int iloscWolnychPol()
+    {
+        int i = 0;
+        for (int x = 0; x <= kraniecMapy.x; x++)
+            for (int y = 0; y <= kraniecMapy.y; y++)
+                if(objectAt(new Vector2d(x, y)) == null) i++;
+        return i;
+    }
+
 
 }
