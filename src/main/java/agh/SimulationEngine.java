@@ -339,6 +339,7 @@ public class SimulationEngine implements  Runnable
         if(zwierzetaPosortowane.size() == 0) return -1;
         int suma = 0;
         ArrayList<Animal> t = new ArrayList<>(zwierzetaPosortowane);
+        if(t.size() == 0) return -1;
         for(int i = 0; i < t.size(); i++) suma += t.get(i).getEnergy();
         return (int)Math.round((double)(suma / t.size()));
     }
