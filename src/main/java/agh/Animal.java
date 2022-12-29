@@ -27,8 +27,8 @@ public class Animal extends AbstractWorldMapElement
 
     public String toString()
     {
-        if(zyje) return "Genom: " + Arrays.toString(geny) + ", Aktywny gen: " + geny[aktualnyGen] + ", Energia : " + energia + ", Zjadl roslin: " + zjadlRoslin + ", Ma dzieci: " + iloscPotomstwa + ", Zyje: " + wiek + " dni";
-        else return "Zmarlo dnia: " + zmarloDnia + ", W wieku: " + wiek + ", Mialo genom: " + Arrays.toString(geny) + " Zjadl roslin: " + zjadlRoslin + ", Mial dzieci: " + iloscPotomstwa;
+        if(zyje) return "Genom: [" + Utils.arrayToOneString(geny) + "], Aktywny gen: " + geny[aktualnyGen] + ", Energia : " + energia + ", Zjadl roslin: " + zjadlRoslin + ", Ma dzieci: " + iloscPotomstwa + ", Zyje: " + wiek + " dni";
+        else return "Zmarlo dnia: " + zmarloDnia + ", W wieku: " + wiek + ", Mialo genom: [" + Utils.arrayToOneString(geny) + "] Zjadl roslin: " + zjadlRoslin + ", Mial dzieci: " + iloscPotomstwa;
     }
     public Animal(Vector2d initialPosition, AbstractWorldMap map, int[] geny, boolean szalenstwo) throws FileNotFoundException {
         this.position = initialPosition;

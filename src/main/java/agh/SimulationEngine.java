@@ -397,7 +397,7 @@ public class SimulationEngine implements  Runnable
     {
 
         return "Dzien: " + dzien +
-                "Zwierząt: " + zwierzetaPosortowane.size() +
+                ", Zwierząt: " + zwierzetaPosortowane.size() +
                 ", Roslin: " + mapa.iloscRosllin() +
                 ", Wolnych pol: " + mapa.iloscWolnychPol() +
                 ", Dominujacy genotyp: " + (najpopularniejszyGenotyp != null ? ("[" + Utils.arrayToOneString(najpopularniejszyGenotyp) + "]") : "brak") + "\n" +
