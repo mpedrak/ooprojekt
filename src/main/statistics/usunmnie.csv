@@ -1,0 +1,56 @@
+Dzień,Liczba zwierząt,Liczba roślin,Liczba wolnych pól,Najpopularniejszy genotyp,Średni poziom energii żyjących zwierząt,Średnia długość życia zwierząt
+1,2,3,20,brak genomu,14,brak martwych
+2,2,5,18,brak genomu,13,brak martwych
+3,2,7,17,brak genomu,12,brak martwych
+4,2,8,16,brak genomu,12,brak martwych
+5,2,10,13,brak genomu,11,brak martwych
+6,2,11,13,brak genomu,11,brak martwych
+7,2,13,10,brak genomu,10,brak martwych
+8,2,13,11,brak genomu,11,brak martwych
+9,2,14,10,brak genomu,11,brak martwych
+10,2,15,9,brak genomu,11,brak martwych
+11,2,16,7,brak genomu,11,brak martwych
+12,2,17,7,brak genomu,11,brak martwych
+13,2,17,7,brak genomu,12,brak martwych
+14,2,18,6,brak genomu,12,brak martwych
+15,2,18,7,brak genomu,13,brak martwych
+16,2,20,3,brak genomu,12,brak martwych
+17,2,20,4,brak genomu,13,brak martwych
+18,2,21,3,brak genomu,13,brak martwych
+19,2,21,2,brak genomu,14,brak martwych
+20,2,21,3,brak genomu,15,brak martwych
+21,2,22,2,brak genomu,15,brak martwych
+22,2,23,1,brak genomu,15,brak martwych
+23,2,24,0,brak genomu,15,brak martwych
+24,2,24,0,brak genomu,16,brak martwych
+25,2,24,0,brak genomu,17,brak martwych
+26,5,25,0,brak genomu,11,brak martwych
+27,3,23,0,brak genomu,12,brak martwych
+28,3,23,2,brak genomu,12,brak martwych
+29,3,24,0,brak genomu,12,brak martwych
+30,3,24,0,brak genomu,12,brak martwych
+31,3,24,1,brak genomu,13,brak martwych
+32,3,24,1,brak genomu,13,brak martwych
+33,3,23,1,brak genomu,14,brak martwych
+34,3,22,1,brak genomu,15,brak martwych
+35,3,22,2,brak genomu,15,brak martwych
+36,3,22,0,brak genomu,16,brak martwych
+37,3,23,1,brak genomu,15,brak martwych
+38,3,23,1,brak genomu,16,brak martwych
+39,3,23,1,brak genomu,16,brak martwych
+40,6,23,1,brak genomu,12,brak martwych
+41,4,20,4,brak genomu,13,brak martwych
+42,4,21,2,brak genomu,13,brak martwych
+43,4,21,4,brak genomu,13,brak martwych
+44,4,22,3,brak genomu,12,brak martwych
+45,4,22,1,brak genomu,12,brak martwych
+46,4,20,3,brak genomu,13,brak martwych
+47,4,20,3,brak genomu,13,brak martwych
+48,4,19,5,brak genomu,14,brak martwych
+49,4,19,5,brak genomu,14,brak martwych
+50,4,19,4,brak genomu,14,brak martwych
+51,4,18,4,brak genomu,14,brak martwych
+52,4,19,3,brak genomu,14,brak martwych
+53,3,18,5,brak genomu,19,54
+54,3,19,4,brak genomu,19,54
+55,3,20,5,brak genomu,18,54

@@ -4,12 +4,15 @@ import javafx.application.Platform;
 import javafx.scene.layout.GridPane;
 
 import java.io.Console;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class SimulationEngine implements  Runnable
 {
+    private boolean ifClosed;
+    private String exportFilePath;
     AbstractWorldMap mapa;
     private App app;
     private int moveDelay;
@@ -47,9 +50,12 @@ public class SimulationEngine implements  Runnable
     public SimulationEngine(AbstractWorldMap mapa, App app, int moveDelay, int iloscZwierzaat, int poczatkowaEnergia,
                             int energiaNaRozmnazanie, int minimalnaEnergiaDoRozmnazania,
                             int iloscGenow, int[] zakresIlosciMutacji, boolean pelnaLosowosc, boolean szalenstwo,
-                            int ileTrawyDziennie)
+                            int ileTrawyDziennie, String exportFilePath)
 
     {
+        this.ifClosed= false;
+        this.exportFilePath= exportFilePath;
+
         this.mapa = mapa;
         this.app = app;
         this.moveDelay = moveDelay;
@@ -99,7 +105,21 @@ public class SimulationEngine implements  Runnable
             }
         });
 
-        while (zwierzetaPosortowane.size() > 0)  {
+        // TODO: Tworzenie pliku .csv
+        FileWriter myWriter= null;
+        if (!this.exportFilePath.isEmpty()) {
+            try {
+                myWriter= new FileWriter(exportFilePath);
+                myWriter.write("Dzień,Liczba zwierząt,Liczba roślin,Liczba wolnych pól,Najpopularniejszy genotyp,Średni poziom energii żyjących zwierząt,Średnia długość życia zwierząt\n");
+            }
+            catch (IOException ex) {
+                // TODO: co zrobić gdy błąd zapisu
+                System.out.println("Błąd przy tworzeniu FileWriter");
+            }
+        }
+
+        while (zwierzetaPosortowane.size() > 0 && !ifClosed)  {
+
             //if (czyDziala) {
                 //Scanner scan = new Scanner(System.in);
                 // scan.nextLine();
@@ -210,15 +230,43 @@ public class SimulationEngine implements  Runnable
                 });
            // }
 
-                while (!czyDziala)
+            while (!czyDziala) {
+                if (this.ifClosed)
+                    break;
+
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException ex) {
                     System.out.println(ex + " przerwanie symulacji");
                 }
+            }
+
+
+            if (!this.exportFilePath.isEmpty()) {
+                try {
+                    myWriter.write(toCSVline() + "\n");
+                }
+                catch (NullPointerException | IOException ex) {
+                    // TODO: co zrobić gdy błąd zapisu linijki
+                    System.out.println("Błąd przy zapisywaniu linijki");
+                }
+
+            }
 
         }
 
+        tryCloseExportFile(myWriter);
+    }
+    private void tryCloseExportFile (FileWriter myWriter) {
+        if (!this.exportFilePath.isEmpty()) {
+            try {
+                myWriter.close();
+            }
+            catch (IOException ex) {
+                // TODO: co zrobić gdy błąd zapisu linijki
+                System.out.println("Błąd przy zamykaniu myWriter");
+            }
+        }
     }
     public int[] zrobLosoweGeny () {
         int[] geny= new int[iloscGenow];
@@ -230,7 +278,7 @@ public class SimulationEngine implements  Runnable
 
         return geny;
     }
-    public int[] zrobGenyDlaDziecka(Animal matka, Animal ojciec)
+    public int[] zrobGenyDlaDziecka (Animal matka, Animal ojciec)
     {
         // budowanie podstawowego genotypu //
 
@@ -348,13 +396,25 @@ public class SimulationEngine implements  Runnable
     public String toString()
     {
 
-        return "Zwierząt: " + zwierzetaPosortowane.size() +
+        return "Dzien: " + dzien +
+                "Zwierząt: " + zwierzetaPosortowane.size() +
                 ", Roslin: " + mapa.iloscRosllin() +
                 ", Wolnych pol: " + mapa.iloscWolnychPol() +
-                ", Dominujacy genotyp: " + (najpopularniejszyGenotyp != null ? Arrays.toString(najpopularniejszyGenotyp) : "brak") + "\n" +
+                ", Dominujacy genotyp: " + (najpopularniejszyGenotyp != null ? ("[" + Utils.arrayToOneString(najpopularniejszyGenotyp) + "]") : "brak") + "\n" +
                 (sredniaEnergia() != -1 ? "Srednia energia: " + sredniaEnergia() + ", " : "") +
-                (iloscMartwych > 0 ? "Srednia zycia martwych: " + Math.round((double)(sumaWiekuMartwcyh / iloscMartwych)) + ", " : "") +
-                "Dzien: " + dzien
+                (iloscMartwych > 0 ? "Srednia zycia martwych: " + Math.round((double)(sumaWiekuMartwcyh / iloscMartwych)) + ", " : "")
+                ;
+    }
+    public String toCSVline()
+    {
+
+        return dzien +
+                "," + zwierzetaPosortowane.size() +
+                "," + mapa.iloscRosllin() +
+                "," + mapa.iloscWolnychPol() +
+                "," + (najpopularniejszyGenotyp != null ? ("[" + Utils.arrayToOneString(najpopularniejszyGenotyp) + "]") : "brak genomu") +
+                "," + (sredniaEnergia() != -1 ? sredniaEnergia()  : "brak zwierzat") +
+                "," + (iloscMartwych > 0 ? Math.round((double)(sumaWiekuMartwcyh / iloscMartwych))  : "brak martwych")
                 ;
     }
     public void zaktualizujDominujacyGenotyp()
@@ -403,5 +463,7 @@ public class SimulationEngine implements  Runnable
             }
         });
     }
+
+    public void stopSimulation () { this.ifClosed= true; }
 
 }

@@ -35,4 +35,13 @@ public abstract class Utils {
         throw new NumberFormatException();
     }
 
+    static String arrayToOneString (int[] tab) {
+        StringBuilder output= new StringBuilder();
+
+        for (int x: tab)
+            output.append(x);
+
+        return output.toString();
+    }
+
 }
