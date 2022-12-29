@@ -1,5 +1,8 @@
 package agh;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
 import java.util.*;
 
 public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver
@@ -15,6 +18,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     protected int trawyNaPolachPreferowanych = 0;
     protected int trawyWogole = 0;
     protected int energiaTraconaPrzyTeleportacji;
+    public HashMap<MapDirection, Image> zdjecia = new HashMap<>();
     protected class doTreeSeta
     {
         public Vector2d v;
@@ -214,6 +218,11 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     public int smiercZwierzecia(Animal z, int dzien)
     {
         z.zabijGo(dzien);
+
+        List<Integer> ttt = z.getWholeGenes();
+        Integer pom = genotypy.remove(ttt);
+        if(pom > 1) genotypy.put(ttt, pom - 1);
+
         usunZHaszMapy(z);
         if(toksyczneTrupy != null)
         {

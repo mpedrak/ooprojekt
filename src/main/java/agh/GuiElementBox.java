@@ -2,7 +2,10 @@ package agh;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Bloom;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.ColorInput;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -22,8 +25,14 @@ public class GuiElementBox
             ImageView imageView = ((Animal)element).getImageView();
             ColorAdjust c = new ColorAdjust();
             int g = ((Animal)element).getEnergy();
-            g = Math.min(g, 20);
-            if (g != 20 && g > 0)
+            if(((Animal)element).czyDoWyroznienia())
+            {
+                c.setSaturation(-0.5);
+                imageView.setEffect(c);
+                Bloom b = new Bloom(0);
+                vbox.setEffect(b);
+            }
+            else if (g < 20 && g > 0)
             {
                 if(g > 10) c.setHue((double)(20 - g) / 10.0 - 0.3);
                 else c.setHue(-1 * (double)g / 10.0 - 0.4);
@@ -31,6 +40,7 @@ public class GuiElementBox
             }
             vbox.getChildren().addAll(imageView);
             vbox.setAlignment(Pos.CENTER);
+
         }
         else
         {

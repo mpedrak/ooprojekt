@@ -1,5 +1,9 @@
 package agh;
 
+import javafx.scene.image.Image;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
@@ -7,11 +11,16 @@ import java.util.TreeSet;
 
 public class PiekielnyPortal extends AbstractWorldMap
 {
-    public PiekielnyPortal(int width, int height, int iloscTrawy , int energiaRoslin, boolean czyRownik, int energiaTraconaPrzyTeleportacji)
-    {
+    public PiekielnyPortal(int width, int height, int iloscTrawy , int energiaRoslin, boolean czyRownik, int energiaTraconaPrzyTeleportacji) throws FileNotFoundException {
         this.energiaRoslin = energiaRoslin;
         this.energiaTraconaPrzyTeleportacji = energiaTraconaPrzyTeleportacji;
         kraniecMapy = new Vector2d(width - 1, height - 1);
+        for(MapDirection x : MapDirection.values())
+        {
+            String s = "src/main/resources/" + x.toString() + ".png";
+            Image image = new Image(new FileInputStream(s));
+            zdjecia.put(x, image);
+        }
         if (czyRownik)
         {
             int y1 = (int)Math.floor(height * 0.4);

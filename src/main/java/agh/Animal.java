@@ -23,6 +23,7 @@ public class Animal extends AbstractWorldMapElement
     private boolean zyje = true;
     private int zmarloDnia;
     private HashMap<MapDirection, ImageView> zdjecia = new HashMap<>();
+    private boolean doWyroznienia = false;
 
     public String toString()
     {
@@ -38,8 +39,7 @@ public class Animal extends AbstractWorldMapElement
         this.aktualnyGen = losujLiczbe(geny.length);
         for(MapDirection x : MapDirection.values())
         {
-            String s = "src/main/resources/" + x.toString() + ".png";
-            Image image = new Image(new FileInputStream(s));
+            Image image = map.zdjecia.get(x);
             ImageView imageView = new ImageView(image);
             imageView.setFitHeight(20);
             imageView.setFitWidth(20);
@@ -144,5 +144,7 @@ public class Animal extends AbstractWorldMapElement
     {
         return Arrays.stream( geny ).boxed().collect( Collectors.toList() );
     }
+    public boolean czyDoWyroznienia() {return doWyroznienia;}
+    public void zmienWyroznienie(boolean x) {doWyroznienia = x;}
 
 }

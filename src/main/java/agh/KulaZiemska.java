@@ -1,13 +1,23 @@
 package agh;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 public class KulaZiemska extends AbstractWorldMap
 {
-    public KulaZiemska(int width, int height, int iloscTrawy , int energiaRoslin, boolean czyRownik)
-    {
+    public KulaZiemska(int width, int height, int iloscTrawy , int energiaRoslin, boolean czyRownik) throws FileNotFoundException {
         this.energiaRoslin = energiaRoslin;
         kraniecMapy = new Vector2d(width - 1, height - 1);
+        for(MapDirection x : MapDirection.values())
+        {
+            String s = "src/main/resources/" + x.toString() + ".png";
+            Image image = new Image(new FileInputStream(s));
+            zdjecia.put(x, image);
+        }
         if (czyRownik)
         {
             int y1 = (int)Math.floor(height * 0.4);

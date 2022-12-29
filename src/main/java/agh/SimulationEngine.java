@@ -3,6 +3,7 @@ package agh;
 import javafx.application.Platform;
 import javafx.scene.layout.GridPane;
 
+import java.io.Console;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -27,6 +28,7 @@ public class SimulationEngine implements  Runnable
     private int iloscMartwych = 0;
     private int sumaWiekuMartwcyh = 0;
     private int[] najpopularniejszyGenotyp = new int[]{7};
+    private ArrayList<Animal> t;
     private TreeSet<Animal> zwierzetaPosortowane = new TreeSet<>(new Comparator<Animal>() {
         public int compare (Animal a, Animal b)
         {
@@ -83,6 +85,7 @@ public class SimulationEngine implements  Runnable
         }
         zaktualizujDominujacyGenotyp();
        // System.out.println(Arrays.toString(najpopularniejszyGenotyp));
+        t = new ArrayList<>(zwierzetaPosortowane);
     }
 
     public void run()
@@ -91,12 +94,12 @@ public class SimulationEngine implements  Runnable
         {
             public void run()
             {
-                grid = app.renderujPierwszyRaz(mapa);
+                grid = app.renderujPierwszyRaz(mapa, SimulationEngine.this);
                 app.renderuj(mapa, grid, SimulationEngine.this, zwierzeDoSledzenia);
             }
         });
 
-        while (true) {
+        while (zwierzetaPosortowane.size() > 0)  {
             //if (czyDziala) {
                 //Scanner scan = new Scanner(System.in);
                 // scan.nextLine();
@@ -133,7 +136,7 @@ public class SimulationEngine implements  Runnable
                         zwierzetaPosortowane.add(y);
                 // System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
 
-
+                zaktualizujDominujacyGenotyp();
                 // System.out.println("Po ruszeniu");
                 // wypiuszDoDebugu();
                 // mapa.wypiuszDoDebugu();
@@ -192,7 +195,7 @@ public class SimulationEngine implements  Runnable
                 // System.out.println("Koniec iteracji -------------------------------------------");
 
 
-
+                t = new ArrayList<>(zwierzetaPosortowane);
                 try {
                     Thread.sleep(moveDelay);
                 } catch (InterruptedException ex) {
@@ -328,7 +331,8 @@ public class SimulationEngine implements  Runnable
     }
     public void pauza()
     {
-       czyDziala = !czyDziala;
+        if(!czyDziala) for (Animal x : zwierzetaPosortowane) x.zmienWyroznienie(false);
+        czyDziala = !czyDziala;
     }
     public void zmienZwierzeDoSledzenia(Animal z)
     {
@@ -336,22 +340,21 @@ public class SimulationEngine implements  Runnable
     }
     public int sredniaEnergia()
     {
-        if(zwierzetaPosortowane.size() == 0) return -1;
-        int suma = 0;
-        ArrayList<Animal> t = new ArrayList<>(zwierzetaPosortowane);
         if(t.size() == 0) return -1;
+        int suma = 0;
         for(int i = 0; i < t.size(); i++) suma += t.get(i).getEnergy();
         return (int)Math.round((double)(suma / t.size()));
     }
     public String toString()
     {
 
-        return "Liczba zwierząt: " + zwierzetaPosortowane.size() +
-                ", Liczba roslin: " + mapa.iloscRosllin() +
+        return "Zwierząt: " + zwierzetaPosortowane.size() +
+                ", Roslin: " + mapa.iloscRosllin() +
                 ", Wolnych pol: " + mapa.iloscWolnychPol() +
-                ", Dominujacy genotyp: " + (najpopularniejszyGenotyp != null ? Arrays.toString(najpopularniejszyGenotyp) : "brak") +
-                (sredniaEnergia() != -1 ? ", Srednia energia: " + sredniaEnergia() : "") +
-                (iloscMartwych > 0 ? ", Srednia zycia martwych: " + Math.round((double)(sumaWiekuMartwcyh / iloscMartwych)) : "")
+                ", Dominujacy genotyp: " + (najpopularniejszyGenotyp != null ? Arrays.toString(najpopularniejszyGenotyp) : "brak") + "\n" +
+                (sredniaEnergia() != -1 ? "Srednia energia: " + sredniaEnergia() + ", " : "") +
+                (iloscMartwych > 0 ? "Srednia zycia martwych: " + Math.round((double)(sumaWiekuMartwcyh / iloscMartwych)) + ", " : "") +
+                "Dzien: " + dzien
                 ;
     }
     public void zaktualizujDominujacyGenotyp()
@@ -378,7 +381,27 @@ public class SimulationEngine implements  Runnable
             }
             najpopularniejszyGenotyp = newArray;
         }
-        else najpopularniejszyGenotyp = null;
+        else
+        {
+            najpopularniejszyGenotyp = null;
+            for(Animal x : zwierzetaPosortowane) x.zmienWyroznienie(false);
+        }
+    }
+    public boolean isPaused()
+    {
+        return !czyDziala;
+    }
+
+    public void wyroznijZwierzeta()
+    {
+        for(Animal x : zwierzetaPosortowane) x.zmienWyroznienie(false);
+        for(Animal x : zwierzetaPosortowane)
+            if (Arrays.equals(x.getGenes(0, iloscGenow), najpopularniejszyGenotyp)) x.zmienWyroznienie(true);
+        Platform.runLater(new Runnable() {
+            public void run() {
+                app.renderuj(mapa, grid, SimulationEngine.this, zwierzeDoSledzenia);
+            }
+        });
     }
 
 }

@@ -4,10 +4,13 @@ import javafx.application.Application;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -25,6 +28,7 @@ import javafx.stage.Stage;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
+import java.util.function.Predicate;
 
 
 public class App  extends Application
@@ -40,23 +44,13 @@ public class App  extends Application
 
     public void renderuj(AbstractWorldMap map, GridPane grid, SimulationEngine engine, Animal zwierzeDoSledzenia)
     {
-        grid.setGridLinesVisible(false);
-        grid.getChildren().clear();
-        grid.setGridLinesVisible(true);
-
         bottomLeft = map.getPoczatekMapy();
         upperRight = map.getKraniecMapy();
 
-        Rectangle r = new Rectangle(width * Math.max(30, upperRight.x - bottomLeft.x  + 2) + 5, height * 5 + 2);
-        r.setFill(Color.rgb(244, 244, 244,1));
-        grid.add(r, 0, 0, 1, 1);
+        grid.getChildren().removeIf(x -> !(x instanceof Button));
 
-        Rectangle r2 = new Rectangle(width * (30 - upperRight.x - bottomLeft.x  + 2), height * (upperRight.y - bottomLeft.y + 4));
-        r2.setFill(Color.rgb(244, 244, 244,1));
-        grid.add(r2,  upperRight.x + 2 , (int)((upperRight.y - bottomLeft.y) / 2) + 3, 1, 1);
-
-        Button button = new Button("Pauza ");
-        grid.add(button, 0, 0, 5, 1);
+        Label label7 = new Label(engine.toString());
+        grid.add(label7, 0, 2, 29, 2);
 
         if(zwierzeDoSledzenia != null)
         {
@@ -64,27 +58,12 @@ public class App  extends Application
             grid.add(label, 0, 1, 29, 1);
         }
 
-        button.setOnAction(actionEvent ->
-        {
-            engine.pauza();
-        });
-
-        Label label7 = new Label(engine.toString());
-        grid.add(label7, 0, 2, 29, 1);
-
-        Button button2 = new Button("Zatrzymaj sledzenie");
-        grid.add(button2, 3, 0, 5, 1);
-
-        button2.setOnAction(actionEvent ->
-        {
-            engine.zmienZwierzeDoSledzenia(null);
-        });
-
         VBox vbox = new VBox();
         Label s = new Label( "y\\x");
         vbox.getChildren().addAll(s);
         vbox.setAlignment(Pos.CENTER);
-        grid.add(vbox, 0, 3, 1, 1);
+        vbox.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+        grid.add(vbox, 0, 4, 1, 1);
         GridPane.setHalignment(vbox, HPos.CENTER);
 
         for (int i = bottomLeft.x ; i <= upperRight.x; ++i)
@@ -93,7 +72,15 @@ public class App  extends Application
             s = new Label(Integer.toString(i));
             vbox.getChildren().addAll(s);
             vbox.setAlignment(Pos.CENTER);
-            grid.add(vbox, i - bottomLeft.x + 1, 3, 1, 1);
+            vbox.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+            grid.add(vbox, i - bottomLeft.x + 1, 4, 1, 1);
+        }
+
+        for (int i = bottomLeft.x ; i <= upperRight.x + 1; ++i)
+        {
+            vbox = new VBox();
+            vbox.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+            grid.add(vbox, i - bottomLeft.x, upperRight.y + 6, 1, 1);
         }
 
         int j = 1;
@@ -103,8 +90,16 @@ public class App  extends Application
             s = new Label(Integer.toString(i));
             vbox.getChildren().addAll(s);
             vbox.setAlignment(Pos.CENTER);
-            grid.add(vbox, 0, j + 3, 1, 1);
+            vbox.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+            grid.add(vbox, 0, j + 4, 1, 1);
             ++j;
+        }
+
+        for (int i = 0; i <= upperRight.y + 2; i++)
+        {
+            vbox = new VBox();
+            vbox.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
+            grid.add(vbox, upperRight.x + 2, i + 4, 1, 1);
         }
 
         for (int x = bottomLeft.x ; x <= upperRight.x ; ++x)
@@ -130,17 +125,19 @@ public class App  extends Application
                             @Override
                             public void handle(Event event)
                             {
-                                Rectangle r = new Rectangle(width * Math.max(30, upperRight.x - bottomLeft.x  + 2) + 5, height);
-                                r.setFill(Color.rgb(244, 244, 244,1));
-                                grid.add(r, 0, 1, 1, 1);
+                                if(engine.isPaused())
+                                {
+                                    Node n = getNodeByRowColumnIndex(1, 0, grid);
+                                    grid.getChildren().remove(n);
 
-                                engine.zmienZwierzeDoSledzenia((Animal)z);
-                                Label label = new Label(z.toString());
-                                grid.add(label, 0, 1, 29, 1);
+                                    engine.zmienZwierzeDoSledzenia((Animal) z);
+                                    Label label = new Label(z.toString());
+                                    grid.add(label, 0, 1, 29, 1);
+                                }
                             }
                         });
                     }
-                    grid.add(element.vbox, x - bottomLeft.x + 1, j + 3, 1, 1);
+                    grid.add(element.vbox, x - bottomLeft.x + 1, j + 4, 1, 1);
                     GridPane.setHalignment(element.vbox, HPos.CENTER);
                 }
                 ++j;
@@ -149,23 +146,61 @@ public class App  extends Application
 
     }
 
-    public GridPane renderujPierwszyRaz(AbstractWorldMap map)
+    private Node getNodeByRowColumnIndex (int row, int column, GridPane gridPane)
+    {
+        Node n = null;
+        ObservableList<Node> childrens = gridPane.getChildren();
+
+        for (Node x : childrens)
+            if(gridPane.getRowIndex(x) == row && gridPane.getColumnIndex(x) == column)
+            {
+                n = x;
+                break;
+            }
+        return n;
+    }
+
+    public GridPane renderujPierwszyRaz(AbstractWorldMap map, SimulationEngine engine)
     {
         GridPane grid = new GridPane();
-        grid.setGridLinesVisible(false);
 
         bottomLeft = map.getPoczatekMapy();
         upperRight = map.getKraniecMapy();
         int pom = Math.max((upperRight.x - bottomLeft.x  + 2), 30);
-        int w =  pom * width;
-        int h = (upperRight.y - bottomLeft.y  + 5) * height;
-        Scene scene = new Scene(grid, w, h);
+        int w =  (pom + 1) * width;
+        int h = (upperRight.y - bottomLeft.y  + 7) * height;
 
-        for (int i = 0; i <= pom - 1; i++)
+        for (int i = 0; i <= pom; i++)
             grid.getColumnConstraints().add(new ColumnConstraints(width));
-        for (int i = 0; i <= upperRight.y - bottomLeft.y + 4; i++)
+        for (int i = 0; i <= upperRight.y - bottomLeft.y + 6; i++)
             grid.getRowConstraints().add(new RowConstraints(height));
 
+
+        Button button = new Button("Pauza ");
+        grid.add(button, 0, 0, 5, 1);
+
+        button.setOnAction(actionEvent ->
+        {
+            engine.pauza();
+        });
+
+        Button button2 = new Button("Zatrzymaj sledzenie");
+        grid.add(button2, 3, 0, 5, 1);
+
+        button2.setOnAction(actionEvent ->
+        {
+            engine.zmienZwierzeDoSledzenia(null);
+        });
+
+        Button button3 = new Button("Pokaz zwierzeta o dominujacym genie");
+        grid.add(button3, 9, 0, 9, 1);
+
+        button3.setOnAction(actionEvent ->
+        {
+            if(engine.isPaused()) engine.wyroznijZwierzeta();
+        });
+
+        Scene scene = new Scene(grid, w, h);
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
@@ -208,7 +243,7 @@ public class App  extends Application
 
         // # Wybór preseta
         final ComboBox presetsCB = new ComboBox<>(FXCollections.observableArrayList(
-                "Ogród Eden", "13x13 Nether Forest", "Soviet Union"));
+                "Ogród Eden", "13x13 Nether Forest", "Soviet Union", "Balanced"));
         presetsCB.setPromptText("<wybierz wariant>");
         grid.add(presetsCB, 8, 1, 10, 1);
         presetsCB.setEditable(false);
@@ -446,6 +481,7 @@ public class App  extends Application
                     case "Ogród Eden" -> "src/main/templates/eden_garden.simconf";
                     case "13x13 Nether Forest" -> "src/main/templates/13_nether_forest.simconf";
                     case "Soviet Union" -> "src/main/templates/soviet.simconf";
+                    case "Balanced" -> "src/main/templates/balanced.simconf";
                     default -> "";
                 };
 
@@ -483,7 +519,11 @@ public class App  extends Application
             System.out.println("Czy losowa mutacja: " + data.fullRandom);
             System.out.println("Szaleństwo: " + data.craziness);
 
-            startSimulation(data);
+            try {
+                startSimulation(data);
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
+            }
         });
 
 
@@ -506,7 +546,7 @@ public class App  extends Application
         primaryStage.show();
     }
 
-    private void startSimulation (InputConfiguration x) {
+    private void startSimulation (InputConfiguration x) throws FileNotFoundException {
         AbstractWorldMap map;
 
         if (x.earthGlobe)
