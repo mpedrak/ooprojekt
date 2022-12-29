@@ -3,6 +3,7 @@ package agh;
 import javafx.application.Application;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -17,14 +18,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedList;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
 
 
 public class App  extends Application
@@ -202,6 +202,16 @@ public class App  extends Application
         settingsRB1.setToggleGroup(settingsType);
         settingsRB2.setToggleGroup(settingsType);
         settingsRB1.setSelected(true);
+        settingsRB1.setFont(Font.font("SansSerif", FontWeight.BOLD, 15));
+        settingsRB2.setFont(Font.font("SansSerif", FontWeight.BOLD, 15));
+
+
+        // # Wybór preseta
+        final ComboBox presetsCB = new ComboBox<>(FXCollections.observableArrayList(
+                "Ogród Eden", "13x13 Nether Forest", "Soviet Union"));
+        presetsCB.setPromptText("<wybierz wariant>");
+        grid.add(presetsCB, 8, 1, 10, 1);
+        presetsCB.setEditable(false);
 
         // # Wybór customowych ustawień
         Collection<Label> customLabels= new LinkedList<Label>();
@@ -377,34 +387,35 @@ public class App  extends Application
                         energyValueInput.textProperty(), numOfAnimalsInput.textProperty(),
                         startEnergyInput.textProperty(), reproductionEnergyLossInput.textProperty(),
                         reproductionEnergyThresholdInput.textProperty(), numOfGenesInput.textProperty(),
-                        scopeFromInput.textProperty(), scopeToInput.textProperty(), moveDelayInput.textProperty() );
+                        scopeFromInput.textProperty(), scopeToInput.textProperty(), moveDelayInput.textProperty(),
+                        presetsCB.valueProperty());
             }
             @Override
             protected boolean computeValue() {
                 return ( settingsType.getSelectedToggle()==settingsRB2 && ( worldType.getSelectedToggle()==null ||
                         growthType.getSelectedToggle()==null || mutationType.getSelectedToggle()==null ||
-                        behaviorType.getSelectedToggle()==null || !isInputInteger(widthInput.getText()) ||
-                        !isInputInteger(heightInput.getText()) || !isInputInteger(numOfGrassInput.getText()) || !isInputInteger(dailyGrowthInput.getText()) || !isInputInteger(energyValueInput.getText()) ||
-                                !isInputInteger(numOfAnimalsInput.getText()) || !isInputInteger(startEnergyInput.getText()) || !isInputInteger(reproductionEnergyLossInput.getText()) ||
-                                !isInputInteger(reproductionEnergyThresholdInput.getText()) || !isInputInteger(numOfGenesInput.getText()) ||
-                        !isInputInteger(scopeFromInput.getText()) || !isInputInteger(scopeToInput.getText()) ) ) ||
-                        !isInputInteger(moveDelayInput.getText());
+                        behaviorType.getSelectedToggle()==null || !Utils.isInputInteger(widthInput.getText()) ||
+                        !Utils.isInputInteger(heightInput.getText()) || !Utils.isInputInteger(numOfGrassInput.getText()) || !Utils.isInputInteger(dailyGrowthInput.getText()) || !Utils.isInputInteger(energyValueInput.getText()) ||
+                                !Utils.isInputInteger(numOfAnimalsInput.getText()) || !Utils.isInputInteger(startEnergyInput.getText()) || !Utils.isInputInteger(reproductionEnergyLossInput.getText()) ||
+                                !Utils.isInputInteger(reproductionEnergyThresholdInput.getText()) || !Utils.isInputInteger(numOfGenesInput.getText()) ||
+                        !Utils.isInputInteger(scopeFromInput.getText()) || !Utils.isInputInteger(scopeToInput.getText()) ) ) ||
+                        (settingsType.getSelectedToggle()==settingsRB1 && presetsCB.getValue()==null) || !Utils.isInputInteger(moveDelayInput.getText());
             }
         };
 
         // # Przycisk startowy
 
         Button button = new Button("Start symulacji");
-        grid.add(button, 17, 24, 5, 1);
+        grid.add(button, 16, 24, 8, 1);
         button.disableProperty().bind(buttonShouldBeDisabled);
+        button.setFont(Font.font("SansSerif", FontWeight.BOLD, 15));
 
         button.setOnAction(actionEvent ->
         {
             InputConfiguration data;
 
-            // TODO: będzie robione
             if (settingsType.getSelectedToggle() == settingsRB2) {    // jeśli wybrano ustawienia customowe
-                System.out.println("custom!");
+                // System.out.println("custom!");
                 try {
                     data= new InputConfiguration ( Integer.parseInt(widthInput.getText()),
                             Integer.parseInt(heightInput.getText()),
@@ -429,10 +440,43 @@ public class App  extends Application
                     return;
                 }
             }
-            else
-                data= new InputConfiguration(13, 13, 10, 10, 50,
-                        0, 10, 20, 10, 17,
-                        new int[]{3, 3}, false, true, true, false, 500);
+            else {
+
+                String filePath = switch (presetsCB.getValue().toString()) {
+                    case "Ogród Eden" -> "src/main/templates/eden_garden.simconf";
+                    case "13x13 Nether Forest" -> "src/main/templates/13_nether_forest.simconf";
+                    case "Soviet Union" -> "src/main/templates/soviet.simconf";
+                    default -> "";
+                };
+
+                Map<String, String> inp= new HashMap<String, String>();
+
+                try {
+                    String tempString;
+                    BufferedReader reader= new BufferedReader(new FileReader(filePath));
+                    while ((tempString= reader.readLine()) != null) {
+                        String[] inputLine = tempString.split(": ");
+                        inp.put(inputLine[0], inputLine[1]);
+                    }
+                }
+                catch (IOException ex) {
+                    new Alert(Alert.AlertType.ERROR, "Błąd wczytywania pliku", ButtonType.CLOSE).showAndWait();
+                    return;
+                }
+
+                try {
+                    data= InputConfiguration.makeFromMap(inp, Integer.parseInt(moveDelayInput.getText()));
+                }
+                catch (InputConfiguration.InvalidConfigurationException ex) {
+                    new Alert(Alert.AlertType.ERROR, "Błąd w pliku -> " + ex.getMessage(), ButtonType.CLOSE).showAndWait();
+                    return;
+                }
+                catch (IllegalArgumentException ex) {
+                    new Alert(Alert.AlertType.ERROR, "Niepoprawne wartość długości dnia", ButtonType.CLOSE).showAndWait();
+                    return;
+                }
+
+            }
 
             System.out.println("Czy kula ziemska: " + data.earthGlobe);
             System.out.println("Czy równik: " + data.equatorialForests);
@@ -461,22 +505,6 @@ public class App  extends Application
 
         primaryStage.show();
     }
-
-    private final boolean isInputInteger (String input) {
-        if (input.isEmpty())
-            return false;
-
-        int temp;
-        try {
-            temp= Integer.parseInt(input);
-        }
-        catch (Exception ex) {
-            return false;
-        }
-
-        return true;
-    }
-
 
     private void startSimulation (InputConfiguration x) {
         AbstractWorldMap map;

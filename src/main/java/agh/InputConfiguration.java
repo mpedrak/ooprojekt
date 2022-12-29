@@ -1,6 +1,7 @@
 package agh;
 
-import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class InputConfiguration {
     static class InvalidConfigurationException extends IllegalArgumentException {
@@ -78,4 +79,35 @@ public class InputConfiguration {
         this.craziness= craziness;
         this.moveDelay= moveDelay;
     }
+
+    static InputConfiguration makeFromMap (Map<String, String> input, int moveDelay) {
+        try {
+            int mapWidth = Integer.parseInt(Utils.getOrThrow("mapWidth", input));
+            int mapHeight = Integer.parseInt(Utils.getOrThrow("mapHeight", input));
+            int numOfAnimals = Integer.parseInt(Utils.getOrThrow("numOfAnimals", input));
+            int numOfGrass = Integer.parseInt(Utils.getOrThrow("numOfGrass", input));
+            int startEnergy = Integer.parseInt(Utils.getOrThrow("startEnergy", input));
+            int grassEnergy = Integer.parseInt(Utils.getOrThrow("grassEnergy", input));
+            int reproductionEnergyLoss = Integer.parseInt(Utils.getOrThrow("reproductionEnergyLoss", input));
+            int reproductionEnergyThreshold = Integer.parseInt(Utils.getOrThrow("reproductionEnergyThreshold", input));
+            int numOfGenes = Integer.parseInt(Utils.getOrThrow("numOfGenes", input));
+            int dailyGrass = Integer.parseInt(Utils.getOrThrow("dailyGrass", input));
+            int[] scopeOfMutations = new int[]{Integer.parseInt(Utils.getOrThrow("scopeOfMutations[0]", input)),
+                    Integer.parseInt(Utils.getOrThrow("scopeOfMutations[1]", input))};
+
+            boolean earthGlobe = Utils.parseBoolean(Utils.getOrThrow("earthGlobe", input));
+            boolean equatorialForests = Utils.parseBoolean(Utils.getOrThrow("equatorialForests", input));
+            boolean fullRandom = Utils.parseBoolean(Utils.getOrThrow("fullRandom", input));
+            boolean craziness = Utils.parseBoolean(Utils.getOrThrow("craziness", input));
+
+            return new InputConfiguration(mapWidth, mapHeight, numOfAnimals, numOfGrass, startEnergy, grassEnergy,
+                    reproductionEnergyLoss, reproductionEnergyThreshold, numOfGenes, dailyGrass, scopeOfMutations, earthGlobe,
+                    equatorialForests, fullRandom, craziness, moveDelay);
+        } catch (NumberFormatException ex) {
+            throw new InvalidConfigurationException("Nieprawidłowa wartość!");
+        } catch (NoSuchElementException ex) {
+            throw new InvalidConfigurationException("Brak wartości dla " + ex.getMessage() + "!");
+        }
+    }
+
 }
