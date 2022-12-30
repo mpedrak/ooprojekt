@@ -242,8 +242,8 @@ public class App  extends Application
         settingsRB1.setToggleGroup(settingsType);
         settingsRB2.setToggleGroup(settingsType);
         settingsRB1.setSelected(true);
-        settingsRB1.setFont(Font.font("SansSerif", FontWeight.BOLD, 15));
-        settingsRB2.setFont(Font.font("SansSerif", FontWeight.BOLD, 15));
+//        settingsRB1.setFont(Font.font("SansSerif", FontWeight.BOLD, 15));
+//        settingsRB2.setFont(Font.font("SansSerif", FontWeight.BOLD, 15));
 
 
         // # Wybór preseta
@@ -422,18 +422,20 @@ public class App  extends Application
         fileNameInput.setAlignment(Pos.CENTER_RIGHT);
         fileNameInput.setPromptText("file_name");
 
-        Button chooseDirectButton= new Button("<ikonka folderu>");
+        Button chooseDirectButton= new Button("📂");
+        // chooseDirectButton.setFont(Font.font(15));
         grid.add(chooseDirectButton, 11, 24, 4, 1);
 
 
         chooseDirectButton.setOnAction(actionEvent -> {
-            DirectoryChooser directoryChooser= new DirectoryChooser();
-            File selectedDirectory= directoryChooser.showDialog(primaryStage);
-            zmienSciezkeDoFolderu(selectedDirectory.getPath());
-            System.out.println(selectedDirectory.getAbsolutePath());
+            try {
+                DirectoryChooser directoryChooser= new DirectoryChooser();
+                File selectedDirectory= directoryChooser.showDialog(primaryStage);
+                zmienSciezkeDoFolderu(selectedDirectory.getPath());
+                System.out.println(selectedDirectory.getAbsolutePath());
+            }
+            catch (Exception ex) { return; }
         });
-
-
 
 
         for (Label label: customLabels)
@@ -549,7 +551,7 @@ public class App  extends Application
             if (saveToFileCB.isSelected()) {
                 File statsFile;
                 try {
-                    exportFilePath= "src/main/statistics/" + fileNameInput.getText() + ".csv";
+                    exportFilePath= this.directoryPath + "/" + fileNameInput.getText() + ".csv";
                     statsFile= new File(exportFilePath);
 
                     if (statsFile.createNewFile())
@@ -563,16 +565,6 @@ public class App  extends Application
                 }
             }
 
-//            try {
-//                FileWriter myWriter= new FileWriter(statsFile.getName());
-//                myWriter.write("First line");
-//                myWriter.write("Second line!");
-//                myWriter.close();
-//                System.out.println("Successfully wrote to the file.");
-//            }
-//            catch (IOException ex) {
-//                System.out.println("An error occurred.");
-//            }
 
             System.out.println("Czy kula ziemska: " + data.earthGlobe);
             System.out.println("Czy równik: " + data.equatorialForests);
@@ -623,7 +615,7 @@ public class App  extends Application
     }
     private void zmienSciezkeDoFolderu(String s)
     {
-        directoryPath = s;
+        this.directoryPath = s;
     }
 
 
