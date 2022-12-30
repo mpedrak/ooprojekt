@@ -423,7 +423,7 @@ public class App  extends Application
         fileNameInput.setPromptText("file_name");
 
         Button chooseDirectButton= new Button("📂");
-        // chooseDirectButton.setFont(Font.font(15));
+        chooseDirectButton.setFont(Font.font(15));
         grid.add(chooseDirectButton, 11, 24, 4, 1);
 
 
