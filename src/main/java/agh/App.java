@@ -39,6 +39,7 @@ public class App  extends Application
     final int height = 25;
     Vector2d bottomLeft;
     Vector2d upperRight;
+    String directoryPath= "src/main/statistics/";
     public void start(Stage primaryStage)
     {
         renderujStart(primaryStage);
@@ -420,18 +421,20 @@ public class App  extends Application
         fileTypeText.disableProperty().bind(saveToFileCB.selectedProperty().not());
         fileNameInput.setAlignment(Pos.CENTER_RIGHT);
         fileNameInput.setPromptText("file_name");
-        /*
+
         Button chooseDirectButton= new Button("<ikonka folderu>");
         grid.add(chooseDirectButton, 11, 24, 4, 1);
 
-        String directoryPath= "src/main/statistics/";
+
         chooseDirectButton.setOnAction(actionEvent -> {
             DirectoryChooser directoryChooser= new DirectoryChooser();
             File selectedDirectory= directoryChooser.showDialog(primaryStage);
-            // directoryPath= selectedDirectory.getPath();
+            zmienSciezkeDoFolderu(selectedDirectory.getPath());
             System.out.println(selectedDirectory.getAbsolutePath());
         });
-        */
+
+
+
 
         for (Label label: customLabels)
             label.disableProperty().bind(settingsRB2.selectedProperty().not());
@@ -618,7 +621,10 @@ public class App  extends Application
         Thread engineThread = new Thread(engine);
         engineThread.start();
     }
-
+    private void zmienSciezkeDoFolderu(String s)
+    {
+        directoryPath = s;
+    }
 
 
 }
