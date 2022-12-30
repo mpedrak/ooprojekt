@@ -425,6 +425,7 @@ public class App  extends Application
         Button chooseDirectButton= new Button("📂");
         chooseDirectButton.setFont(Font.font(15));
         grid.add(chooseDirectButton, 11, 24, 4, 1);
+        chooseDirectButton.disableProperty().bind(saveToFileCB.selectedProperty().not());
 
 
         chooseDirectButton.setOnAction(actionEvent -> {
