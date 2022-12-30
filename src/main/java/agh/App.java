@@ -242,8 +242,8 @@ public class App  extends Application
         settingsRB1.setToggleGroup(settingsType);
         settingsRB2.setToggleGroup(settingsType);
         settingsRB1.setSelected(true);
-//        settingsRB1.setFont(Font.font("SansSerif", FontWeight.BOLD, 15));
-//        settingsRB2.setFont(Font.font("SansSerif", FontWeight.BOLD, 15));
+        settingsRB1.setFont(Font.font("SansSerif", FontWeight.BOLD, 15));
+        settingsRB2.setFont(Font.font("SansSerif", FontWeight.BOLD, 15));
 
 
         // # Wybór preseta
