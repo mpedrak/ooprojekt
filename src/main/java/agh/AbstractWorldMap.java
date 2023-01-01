@@ -10,6 +10,7 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     protected Map<Vector2d, LinkedList<Animal>> zwierzeta = new HashMap<>();
     protected Map<Vector2d, Grass> trawnik = new HashMap<>();
     public Map<List<Integer>, Integer> genotypy = new HashMap<>();
+    public boolean jestWyrozniony = false;
     protected Vector2d poczatekMapy = new Vector2d(0, 0);
     protected Vector2d kraniecMapy;
     protected int energiaRoslin;
@@ -53,7 +54,13 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     }
     public Object objectAt(Vector2d position)
     {
-        if(zwierzeta.get(position) != null ) return zwierzeta.get(position).get(0);
+        LinkedList<Animal> t = zwierzeta.get(position);
+        if( t != null )
+        {
+            Object tt[] = t.toArray();
+            if(jestWyrozniony) for (int i = 0; i < tt.length; i++) if (tt[i] != null && ((Animal)tt[i]).czyDoWyroznienia()) return tt[i];
+            return t.get(0);
+        }
         return trawnik.get(position);
     }
     public void positionChanged(Vector2d oldPosition, Vector2d newPosition, Animal z)

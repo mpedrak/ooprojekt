@@ -427,6 +427,7 @@ public class SimulationEngine implements  Runnable
         }
         if(maxw > 1)
         {
+            mapa.jestWyrozniony = true;
             int[] newArray = new int[maxl.size()];
             int i = 0;
             for(Integer x : maxl)
@@ -438,6 +439,7 @@ public class SimulationEngine implements  Runnable
         }
         else
         {
+            mapa.jestWyrozniony = false;
             najpopularniejszyGenotyp = null;
             for(Animal x : zwierzetaPosortowane) x.zmienWyroznienie(false);
         }

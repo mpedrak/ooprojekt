@@ -251,7 +251,7 @@ public class App  extends Application
 
         // # Wybór preseta
         final ComboBox presetsCB = new ComboBox<>(FXCollections.observableArrayList(
-                "Ogrod Eden", "Piekielny Las", "ZSRR", "Duza Polana", "Pustelnik"));
+                "Ogrod Eden", "Piekielny Las", "ZSRR", "Duza Polana", "Pustelnik", "Lasy rownikowe"));
         presetsCB.setPromptText("<wybierz wariant>");
         grid.add(presetsCB, 8, 1, 10, 1);
         presetsCB.setEditable(false);
@@ -530,6 +530,7 @@ public class App  extends Application
                     case "ZSRR" -> "src/main/templates/soviet.simconf";
                     case "Duza Polana" -> "src/main/templates/balanced.simconf";
                     case "Pustelnik" -> "src/main/templates/hermit.simconf";
+                    case "Lasy rownikowe" -> "src/main/templates/flat_equator.simconf";
                     default -> "";
                 };
 
