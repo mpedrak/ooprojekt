@@ -52,13 +52,17 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         dodajDoHaszMapy(animal);
         return true;
     }
-    public Object objectAt(Vector2d position)
+    public Object objectAt(Vector2d position) throws ConcurrentModificationException
     {
         LinkedList<Animal> t = zwierzeta.get(position);
         if( t != null )
         {
-            Object tt[] = t.toArray();
-            if(jestWyrozniony) for (int i = 0; i < tt.length; i++) if (tt[i] != null && ((Animal)tt[i]).czyDoWyroznienia()) return tt[i];
+            if(jestWyrozniony)
+            {
+                Object tt[] = t.toArray();
+                for (int i = 0; i < tt.length; i++) if (tt[i] != null && ((Animal)tt[i]).czyDoWyroznienia()) return tt[i];
+                return tt[0];
+            }
             return t.get(0);
         }
         return trawnik.get(position);
@@ -182,8 +186,16 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         Random generator = new Random();
         while (true)
         {
-            Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x + 1), generator.nextInt(kraniecMapy.y + 1));
-            if (objectAt(pp) == null) return pp;
+            try
+            {
+                Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x + 1), generator.nextInt(kraniecMapy.y + 1));
+                if (objectAt(pp) == null) return pp;
+            }
+            catch (Exception ex)
+            {
+                Utils.parseBoolean("false");
+            }
+
         }
     }
     public Vector2d losujVectorNaMapieDlaZwierzecia()
@@ -191,8 +203,15 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
         Random generator = new Random();
         while (true)
         {
-            Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x + 1), generator.nextInt(kraniecMapy.y + 1));
-            if (!(objectAt(pp) instanceof Animal)) return pp;
+            try
+            {
+                Vector2d pp = new Vector2d(generator.nextInt(kraniecMapy.x + 1), generator.nextInt(kraniecMapy.y + 1));
+                if (!(objectAt(pp) instanceof Animal)) return pp;
+            }
+            catch (Exception ex)
+            {
+                Utils.parseBoolean("false");
+            }
         }
     }
     protected Vector2d losujVectorNaRowniku()
@@ -293,8 +312,14 @@ public abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObse
     {
         int i = 0;
         for (int x = 0; x <= kraniecMapy.x; x++)
-            for (int y = 0; y <= kraniecMapy.y; y++)
-                if(objectAt(new Vector2d(x, y)) == null) i++;
+            for (int y = 0; y <= kraniecMapy.y; y++) {
+                try {
+                    if (objectAt(new Vector2d(x, y)) == null) i++;
+                } catch (Exception ex) {
+                    Utils.parseBoolean("true");
+                }
+            }
+
         return i;
     }
 
