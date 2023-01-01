@@ -32,9 +32,11 @@ public class GuiElementBox
                 Bloom b = new Bloom(0);
                 vbox.setEffect(b);
             }
-            else if (g < 20 && g > 0)
+            else if (g > 0)
             {
-                if(g > 10) c.setHue((double)(20 - g) / 10.0 - 0.3);
+                g = Math.min(g, 20);
+                if(g == 20) c.setHue(0);
+                else if(g > 10) c.setHue((double)(20 - g) / 10.0 - 0.3);
                 else c.setHue(-1 * (double)g / 10.0 - 0.4);
                 imageView.setEffect(c);
             }
