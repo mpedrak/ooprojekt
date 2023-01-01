@@ -43,6 +43,8 @@ public class App  extends Application
     private static final Collection <String> outputNames= new HashSet<>();
     public void start(Stage primaryStage)
     {
+        File file = new File("src/main/statistics");
+        if (!file.exists()) file.mkdirs();
         renderujStart(primaryStage);
     }
 
