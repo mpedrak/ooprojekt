@@ -40,6 +40,7 @@ public class App  extends Application
     Vector2d bottomLeft;
     Vector2d upperRight;
     String directoryPath= "src/main/statistics/";
+    private static final Collection <String> outputNames= new HashSet<>();
     public void start(Stage primaryStage)
     {
         renderujStart(primaryStage);
@@ -434,7 +435,7 @@ public class App  extends Application
                 DirectoryChooser directoryChooser= new DirectoryChooser();
                 File selectedDirectory= directoryChooser.showDialog(primaryStage);
                 zmienSciezkeDoFolderu(selectedDirectory.getPath());
-                System.out.println(selectedDirectory.getAbsolutePath());
+                // System.out.println(selectedDirectory.getAbsolutePath());
             }
             catch (Exception ex) { return; }
         });
@@ -554,6 +555,11 @@ public class App  extends Application
             if (saveToFileCB.isSelected()) {
                 File statsFile;
                 try {
+                    if (!outputNames.add(fileNameInput.getText() + ".csv")) {
+                        new Alert(Alert.AlertType.ERROR, "Podany plik jest w tym momencie nadpisywany przez inna symulacje!", ButtonType.CLOSE).showAndWait();
+                        return;
+                    }
+
                     exportFilePath= this.directoryPath + "/" + fileNameInput.getText() + ".csv";
                     statsFile= new File(exportFilePath);
 
@@ -562,6 +568,7 @@ public class App  extends Application
                     //System.out.println("Utworzono plik: " + statsFile.getName());
                     // else
                     //System.out.println("Plik istnieje.");
+                    // System.out.println(Arrays.toString(outputNames.toArray()));
                 }
                 catch (IOException ex) {
                     new Alert(Alert.AlertType.ERROR, "Blad przy tworzeniu pliku!", ButtonType.CLOSE).showAndWait();
@@ -592,7 +599,8 @@ public class App  extends Application
         Image colors;
         try {
             colors= new Image(new FileInputStream("src/main/resources/hue-scale.png"));
-        } catch (FileNotFoundException e) {
+        }
+        catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
         ImageView imgView= new ImageView(colors);
@@ -621,6 +629,11 @@ public class App  extends Application
     private void zmienSciezkeDoFolderu(String s)
     {
         this.directoryPath = s;
+    }
+
+    public static void removeOutputName (String name) {
+        outputNames.remove(name);
+        // System.out.println("- " + name + " -> " + Arrays.toString(outputNames.toArray()));
     }
 
 

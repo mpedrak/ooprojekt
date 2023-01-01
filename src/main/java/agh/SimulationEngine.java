@@ -51,7 +51,6 @@ public class SimulationEngine implements  Runnable
                             int energiaNaRozmnazanie, int minimalnaEnergiaDoRozmnazania,
                             int iloscGenow, int[] zakresIlosciMutacji, boolean pelnaLosowosc, boolean szalenstwo,
                             int ileTrawyDziennie, String exportFilePath)
-
     {
         this.ifClosed= false;
         this.exportFilePath= exportFilePath;
@@ -247,7 +246,6 @@ public class SimulationEngine implements  Runnable
                     myWriter.write(toCSVline() + "\n");
                 }
                 catch (NullPointerException | IOException ex) {
-                    // TODO: co zrobić gdy błąd zapisu linijki
                     System.out.println("Błąd przy zapisywaniu linijki");
                 }
 
@@ -261,6 +259,8 @@ public class SimulationEngine implements  Runnable
         if (!this.exportFilePath.isEmpty()) {
             try {
                 myWriter.close();
+                String[] temp= exportFilePath.split("/");
+                App.removeOutputName(temp[temp.length - 1]);
             }
             catch (IOException ex) {
                 // TODO: co zrobić gdy błąd zapisu linijki

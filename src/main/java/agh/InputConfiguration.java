@@ -21,7 +21,7 @@ public class InputConfiguration {
                                int numOfGenes, int dailyGrass, int[] scopeOfMutations, boolean earthGlobe,
                                boolean equatorialForests, boolean fullRandom, boolean craziness, int moveDelay)
     {
-        if (mapWidth < 3 || mapWidth > 70 || mapHeight < 3 || mapHeight > 33)
+        if (mapWidth < 5 || mapWidth > 70 || mapHeight < 5 || mapHeight > 33)
             throw new InvalidConfigurationException("Bledne wymiary!");
 
         if (numOfAnimals < 0 || numOfAnimals > mapHeight * mapWidth)
