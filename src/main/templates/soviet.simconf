@@ -1,9 +1,9 @@
-mapWidth: 10
-mapHeight: 10
+mapWidth: 20
+mapHeight: 20
 numOfAnimals: 77
-numOfGrass: 0
-startEnergy: 4
-grassEnergy: 1
+numOfGrass: 1
+startEnergy: 77
+grassEnergy: 5
 reproductionEnergyLoss: 2
 reproductionEnergyThreshold: 8
 numOfGenes: 4

@@ -1,0 +1,222 @@
+Dzień,Liczba zwierząt,Liczba roślin,Liczba wolnych pól,Najpopularniejszy genotyp,Średni poziom energii żyjących zwierząt,Średnia długość życia zwierząt
+1,106,115,2092,brak genomu,96,brak martwych
+2,105,131,2072,brak genomu,96,brak martwych
+3,106,145,2057,brak genomu,95,brak martwych
+4,107,159,2044,brak genomu,94,brak martwych
+5,108,176,2028,brak genomu,93,brak martwych
+6,109,189,2014,brak genomu,92,brak martwych
+7,116,203,1999,brak genomu,89,brak martwych
+8,113,212,1987,brak genomu,90,brak martwych
+9,120,221,1978,brak genomu,88,brak martwych
+10,120,229,1970,brak genomu,88,brak martwych
+11,122,235,1960,brak genomu,88,brak martwych
+12,124,241,1950,brak genomu,88,brak martwych
+13,123,254,1936,brak genomu,87,brak martwych
+14,124,258,1933,brak genomu,88,brak martwych
+15,125,266,1923,brak genomu,88,brak martwych
+16,135,276,1916,brak genomu,85,brak martwych
+17,136,283,1904,brak genomu,86,brak martwych
+18,136,288,1892,brak genomu,85,brak martwych
+19,138,294,1881,brak genomu,87,brak martwych
+20,140,296,1883,brak genomu,85,brak martwych
+21,142,299,1875,brak genomu,87,brak martwych
+22,141,302,1871,brak genomu,88,brak martwych
+23,142,303,1864,brak genomu,87,brak martwych
+24,152,306,1873,brak genomu,87,brak martwych
+25,144,314,1852,brak genomu,87,brak martwych
+26,144,313,1853,brak genomu,89,brak martwych
+27,150,316,1851,brak genomu,89,brak martwych
+28,149,313,1850,brak genomu,90,brak martwych
+29,150,316,1850,brak genomu,91,brak martwych
+30,154,322,1843,brak genomu,91,brak martwych
+31,159,329,1838,brak genomu,91,brak martwych
+32,153,328,1830,brak genomu,92,brak martwych
+33,153,330,1829,brak genomu,93,brak martwych
+34,165,338,1827,brak genomu,92,brak martwych
+35,166,337,1824,brak genomu,94,brak martwych
+36,160,335,1821,brak genomu,93,brak martwych
+37,163,337,1819,brak genomu,94,brak martwych
+38,163,331,1824,brak genomu,97,39
+39,167,331,1827,brak genomu,97,39
+40,172,325,1831,brak genomu,98,39
+41,172,323,1824,brak genomu,97,39
+42,177,322,1825,brak genomu,95,39
+43,180,324,1822,brak genomu,98,39
+44,180,316,1827,brak genomu,97,39
+45,179,307,1832,brak genomu,99,39
+46,183,304,1837,brak genomu,100,39
+47,182,304,1834,brak genomu,101,39
+48,201,305,1838,brak genomu,102,39
+49,196,296,1838,brak genomu,97,39
+50,211,297,1841,brak genomu,95,39
+51,200,294,1831,brak genomu,97,39
+52,219,296,1833,brak genomu,97,39
+53,208,287,1830,brak genomu,95,39
+54,209,282,1828,brak genomu,96,39
+55,216,285,1825,brak genomu,96,39
+56,216,278,1827,brak genomu,96,39
+57,233,271,1846,brak genomu,96,39
+58,221,266,1839,brak genomu,95,49
+59,225,263,1846,brak genomu,95,49
+60,230,262,1834,brak genomu,95,49
+61,229,257,1836,brak genomu,100,52
+62,240,250,1846,brak genomu,95,52
+63,254,251,1844,brak genomu,93,52
+64,250,243,1849,brak genomu,92,52
+65,257,242,1846,brak genomu,94,52
+66,253,237,1843,brak genomu,94,52
+67,254,234,1836,brak genomu,91,56
+68,268,234,1838,brak genomu,93,56
+69,253,231,1846,brak genomu,94,64
+70,257,229,1846,brak genomu,94,64
+71,263,221,1854,brak genomu,94,64
+72,273,225,1850,brak genomu,93,64
+73,272,219,1855,brak genomu,93,63
+74,275,217,1853,brak genomu,90,63
+75,275,206,1852,brak genomu,92,63
+76,292,198,1867,brak genomu,92,63
+77,279,190,1853,brak genomu,91,63
+78,289,189,1882,brak genomu,94,66
+79,292,186,1874,brak genomu,93,66
+80,291,189,1860,brak genomu,91,66
+81,300,188,1861,brak genomu,90,66
+82,299,185,1855,brak genomu,89,66
+83,308,186,1858,brak genomu,86,66
+84,318,180,1858,brak genomu,87,66
+85,331,174,1863,brak genomu,85,66
+86,334,169,1862,brak genomu,83,66
+87,331,170,1858,brak genomu,82,65
+88,358,174,1853,brak genomu,79,65
+89,354,162,1862,brak genomu,81,68
+90,349,162,1852,brak genomu,78,68
+91,357,162,1851,brak genomu,78,67
+92,374,161,1858,brak genomu,78,67
+93,363,165,1844,brak genomu,76,67
+94,369,164,1837,brak genomu,75,67
+95,373,160,1833,brak genomu,75,67
+96,392,153,1851,brak genomu,74,67
+97,388,151,1831,brak genomu,72,66
+98,392,149,1836,brak genomu,72,67
+99,403,148,1830,brak genomu,72,67
+100,408,150,1839,brak genomu,70,71
+101,412,154,1829,brak genomu,69,71
+102,422,154,1815,brak genomu,67,71
+103,424,153,1809,brak genomu,67,71
+104,425,150,1810,brak genomu,67,71
+105,423,147,1805,brak genomu,65,71
+106,436,148,1806,brak genomu,66,70
+107,449,153,1799,brak genomu,64,70
+108,448,152,1800,brak genomu,63,71
+109,447,146,1808,brak genomu,62,73
+110,448,139,1800,brak genomu,62,73
+111,460,138,1803,brak genomu,61,73
+112,460,133,1804,brak genomu,60,73
+113,471,131,1812,brak genomu,60,73
+114,480,135,1797,brak genomu,58,73
+115,479,132,1787,brak genomu,58,73
+116,480,130,1784,brak genomu,57,73
+117,478,127,1789,brak genomu,58,73
+118,476,127,1802,brak genomu,57,76
+119,483,126,1803,brak genomu,57,75
+120,483,127,1797,brak genomu,56,76
+121,480,127,1789,brak genomu,56,76
+122,489,125,1795,brak genomu,55,76
+123,485,118,1794,brak genomu,55,76
+124,494,123,1791,brak genomu,55,76
+125,490,125,1782,brak genomu,54,76
+126,503,130,1791,brak genomu,54,76
+127,501,128,1771,brak genomu,52,76
+128,496,129,1770,brak genomu,53,76
+129,494,127,1782,brak genomu,53,78
+130,494,127,1784,brak genomu,53,78
+131,495,125,1780,brak genomu,52,78
+132,508,129,1775,brak genomu,52,77
+133,504,131,1765,brak genomu,51,76
+134,504,127,1762,brak genomu,51,76
+135,512,124,1780,brak genomu,51,76
+136,515,126,1771,brak genomu,50,77
+137,520,122,1778,brak genomu,49,77
+138,516,120,1778,brak genomu,50,77
+139,521,125,1752,brak genomu,49,78
+140,515,126,1754,brak genomu,48,78
+141,512,119,1775,brak genomu,48,78
+142,511,116,1769,brak genomu,48,78
+143,517,114,1784,brak genomu,49,79
+144,506,117,1778,brak genomu,48,78
+145,509,117,1773,brak genomu,49,78
+146,512,118,1777,brak genomu,48,78
+147,517,118,1767,brak genomu,47,78
+148,517,116,1778,brak genomu,47,78
+149,523,112,1786,brak genomu,49,78
+150,522,112,1769,brak genomu,47,78
+151,522,117,1762,brak genomu,46,78
+152,515,116,1762,brak genomu,45,78
+153,519,112,1768,brak genomu,45,78
+154,516,112,1782,brak genomu,45,79
+155,512,112,1767,brak genomu,45,79
+156,517,113,1770,brak genomu,45,79
+157,506,121,1769,brak genomu,45,78
+158,503,118,1777,brak genomu,45,79
+159,502,123,1772,brak genomu,45,80
+160,495,122,1773,brak genomu,45,80
+161,504,124,1776,brak genomu,46,80
+162,501,127,1774,brak genomu,45,79
+163,489,123,1771,brak genomu,45,79
+164,490,121,1772,brak genomu,45,79
+165,487,112,1796,brak genomu,46,80
+166,493,108,1785,brak genomu,46,80
+167,483,107,1802,brak genomu,46,81
+168,488,109,1793,brak genomu,46,81
+169,478,107,1806,brak genomu,46,82
+170,481,104,1797,brak genomu,46,82
+171,482,100,1816,brak genomu,46,82
+172,475,104,1814,brak genomu,46,83
+173,480,106,1814,brak genomu,47,83
+174,473,109,1808,brak genomu,46,83
+175,473,114,1799,brak genomu,46,83
+176,465,117,1792,brak genomu,46,84
+177,486,114,1801,brak genomu,46,84
+178,469,110,1809,brak genomu,45,84
+179,465,112,1818,brak genomu,45,84
+180,459,113,1815,brak genomu,46,85
+181,454,113,1810,brak genomu,46,87
+182,451,117,1809,brak genomu,46,87
+183,454,121,1815,brak genomu,46,87
+184,458,118,1819,brak genomu,46,87
+185,456,115,1835,brak genomu,46,87
+186,459,119,1828,brak genomu,47,88
+187,446,121,1810,brak genomu,46,88
+188,462,120,1818,brak genomu,46,88
+189,445,123,1807,brak genomu,45,88
+190,449,127,1813,brak genomu,46,88
+191,440,124,1814,brak genomu,46,89
+192,436,120,1803,brak genomu,47,88
+193,453,124,1824,brak genomu,46,88
+194,436,132,1805,brak genomu,45,89
+195,446,129,1821,brak genomu,46,88
+196,438,127,1816,brak genomu,46,88
+197,437,126,1816,brak genomu,46,88
+198,440,128,1815,brak genomu,46,89
+199,438,129,1804,brak genomu,46,89
+200,435,126,1817,brak genomu,46,89
+201,439,125,1817,brak genomu,46,89
+202,431,132,1803,brak genomu,45,89
+203,432,132,1810,brak genomu,46,89
+204,438,130,1830,brak genomu,46,89
+205,434,128,1823,brak genomu,46,89
+206,433,130,1820,brak genomu,46,90
+207,426,131,1800,brak genomu,46,91
+208,439,126,1814,brak genomu,46,91
+209,424,122,1832,brak genomu,46,91
+210,427,130,1823,brak genomu,46,92
+211,427,128,1825,brak genomu,47,92
+212,423,129,1809,brak genomu,46,92
+213,424,125,1835,brak genomu,46,92
+214,415,123,1833,brak genomu,47,92
+215,416,126,1831,brak genomu,47,92
+216,414,127,1828,brak genomu,47,93
+217,408,130,1821,brak genomu,47,93
+218,413,125,1835,brak genomu,47,93
+219,416,126,1828,brak genomu,47,93
+220,416,124,1828,brak genomu,47,94
+221,414,122,1831,brak g

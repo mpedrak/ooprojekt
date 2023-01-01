@@ -556,10 +556,11 @@ public class App  extends Application
                     exportFilePath= this.directoryPath + "/" + fileNameInput.getText() + ".csv";
                     statsFile= new File(exportFilePath);
 
-                    if (statsFile.createNewFile())
-                        System.out.println("Utworzono plik: " + statsFile.getName());
-                    else
-                        System.out.println("Plik istnieje.");
+
+                  statsFile.createNewFile();
+                        //System.out.println("Utworzono plik: " + statsFile.getName());
+                   // else
+                        //System.out.println("Plik istnieje.");
                 }
                 catch (IOException ex) {
                     new Alert(Alert.AlertType.ERROR, "Błąd przy tworzeniu pliku!", ButtonType.CLOSE).showAndWait();
@@ -568,10 +569,10 @@ public class App  extends Application
             }
 
 
-            System.out.println("Czy kula ziemska: " + data.earthGlobe);
-            System.out.println("Czy równik: " + data.equatorialForests);
-            System.out.println("Czy losowa mutacja: " + data.fullRandom);
-            System.out.println("Szaleństwo: " + data.craziness);
+            //System.out.println("Czy kula ziemska: " + data.earthGlobe);
+           // System.out.println("Czy równik: " + data.equatorialForests);
+            //System.out.println("Czy losowa mutacja: " + data.fullRandom);
+           // System.out.println("Szaleństwo: " + data.craziness);
 
             try {
                 startSimulation(data, exportFilePath);

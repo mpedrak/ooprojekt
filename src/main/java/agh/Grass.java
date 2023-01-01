@@ -25,6 +25,6 @@ public class Grass extends AbstractWorldMapElement
     }
     public String getPath()
     {
-        return "src/main/resources/grass.png";
+        return "src/main/resources/gras.png";
     }
 }
