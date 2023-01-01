@@ -65,6 +65,7 @@ public class Animal extends AbstractWorldMapElement
     }
     private int losujLiczbe(int n)
     {
+        if (n == 0) return 0;
         Random rand = new Random();
         return rand.nextInt(n);
     }
@@ -83,8 +84,10 @@ public class Animal extends AbstractWorldMapElement
             orientation= orientation.turnBy(geny[aktualnyGen]);
 
             Random generator = new Random();
-            if (this.szalenstwo && generator.nextInt(5) == 0)
-                step= 1 + generator.nextInt(N - 1);
+            if (this.szalenstwo && generator.nextInt(5) == 0)     // jeśli jest szalony i wylosował się szalony ruch
+                if (N != 1)
+                    step= 1 + generator.nextInt(N - 1);
+
 
             aktualnyGen= (aktualnyGen + step) % N;
         }
