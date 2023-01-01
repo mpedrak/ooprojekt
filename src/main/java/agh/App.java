@@ -232,6 +232,7 @@ public class App  extends Application
 
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
+        primaryStage.setTitle("zad7");
 
         // Elementy GUI
 
