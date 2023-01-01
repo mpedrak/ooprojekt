@@ -327,8 +327,8 @@ public class App  extends Application
         grid.add(dimensionsText, 2, 13, 5, 1);
         grid.add(widthInput, 7, 13, 2, 1);
         grid.add(heightInput, 10, 13, 2, 1);
-        widthInput.setPromptText("x");
-        heightInput.setPromptText("y");
+        widthInput.setPromptText("x: 5-70");
+        heightInput.setPromptText("y: 5-33");
         Label letterXText= new Label("   x");
         grid.add(letterXText, 9, 13, 1, 1);
         customLabels.add(dimensionsText);
@@ -352,6 +352,9 @@ public class App  extends Application
         grid.add(energyValueText, 14, 18, 5, 1);
         TextField energyValueInput= new TextField();
         grid.add(energyValueInput, 19, 18, 2, 1);
+        numOfGrassInput.setPromptText("0 - x*y");
+        dailyGrowthInput.setPromptText("0 - x*y");
+        energyValueInput.setPromptText("0 - 1k");
         customLabels.add(numOfGrassText);
         customLabels.add(dailyGrowthText);
         customLabels.add(energyValueText);
@@ -379,6 +382,10 @@ public class App  extends Application
         grid.add(reproductionEnergyThresholdText, 3, 19, 8, 1);
         TextField reproductionEnergyThresholdInput= new TextField();
         grid.add(reproductionEnergyThresholdInput, 11, 19, 2, 1);
+        numOfAnimalsInput.setPromptText("0 - x*y");
+        startEnergyInput.setPromptText("1 - ");
+        reproductionEnergyLossInput.setPromptText("1 - ");
+        reproductionEnergyThresholdInput.setPromptText("2 - ");
         customLabels.add(numOfAnimalsText);
         customLabels.add(startEnergyText);
         customLabels.add(reproductionEnergyLossText);
@@ -400,6 +407,7 @@ public class App  extends Application
         grid.add(dashText, 13, 21, 1, 1);
         TextField scopeToInput= new TextField();
         grid.add(scopeToInput, 14, 21, 2, 1);
+        numOfGenesInput.setPromptText("1 - 1k");
         scopeFromInput.setPromptText("min");
         scopeToInput.setPromptText("max");
         customLabels.add(numOfGenesText);
@@ -411,8 +419,9 @@ public class App  extends Application
 
         Label moveDelayText= new Label("Dlugosc dnia [ms]:");
         grid.add(moveDelayText, 1, 23, 5, 1);
-        TextField moveDelayInput= new TextField("200");
+        TextField moveDelayInput= new TextField();
         grid.add(moveDelayInput, 6, 23, 3, 1);
+        moveDelayInput.setPromptText("50 - 10k");
 
         CheckBox saveToFileCB= new CheckBox("Zapis statystyk");
         grid.add(saveToFileCB, 1, 24, 5, 1);
