@@ -110,11 +110,11 @@ public class SimulationEngine implements  Runnable
         if (!this.exportFilePath.isEmpty()) {
             try {
                 myWriter= new FileWriter(exportFilePath);
-                myWriter.write("Dzień,Liczba zwierząt,Liczba roślin,Liczba wolnych pól,Najpopularniejszy genotyp,Średni poziom energii żyjących zwierząt,Średnia długość życia zwierząt\n");
+                myWriter.write("Dzien,Liczba zwierzat,Liczba roslin,Liczba wolnych pól,Najpopularniejszy genotyp,Sredni poziom energii zyjacych zwierzat,Srednia długosc zycia zwierzat\n");
             }
             catch (IOException ex) {
                 // TODO: co zrobić gdy błąd zapisu
-                System.out.println("Błąd przy tworzeniu FileWriter");
+                System.out.println("Blad przy tworzeniu FileWriter");
             }
         }
 
@@ -397,7 +397,7 @@ public class SimulationEngine implements  Runnable
     {
 
         return "Dzien: " + dzien +
-                ", Zwierząt: " + zwierzetaPosortowane.size() +
+                ", Zwierzat: " + zwierzetaPosortowane.size() +
                 ", Roslin: " + mapa.iloscRosllin() +
                 ", Wolnych pol: " + mapa.iloscWolnychPol() +
                 ", Dominujacy genotyp: " + (najpopularniejszyGenotyp != null ? ("[" + Utils.arrayToOneString(najpopularniejszyGenotyp) + "]") : "brak") + "\n" +

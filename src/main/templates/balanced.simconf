@@ -1,5 +1,5 @@
-mapWidth: 48
-mapHeight: 48
+mapWidth: 70
+mapHeight: 33
 numOfAnimals: 100
 numOfGrass: 100
 startEnergy: 100

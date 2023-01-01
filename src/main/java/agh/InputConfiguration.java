@@ -21,45 +21,45 @@ public class InputConfiguration {
                                int numOfGenes, int dailyGrass, int[] scopeOfMutations, boolean earthGlobe,
                                boolean equatorialForests, boolean fullRandom, boolean craziness, int moveDelay)
     {
-        if (mapWidth < 3 || mapWidth > 70 || mapHeight < 3 || mapHeight > 50)
-            throw new InvalidConfigurationException("Błędne wymiary!");
+        if (mapWidth < 3 || mapWidth > 70 || mapHeight < 3 || mapHeight > 33)
+            throw new InvalidConfigurationException("Bledne wymiary!");
 
         if (numOfAnimals < 0 || numOfAnimals > mapHeight * mapWidth)
-            throw new InvalidConfigurationException("Błędna liczba zwierząt!");
+            throw new InvalidConfigurationException("Bledna liczba zwierzat!");
 
         if (numOfGrass < 0 || numOfGrass > mapHeight * mapWidth)
-            throw new InvalidConfigurationException("Błędna początkowa liczba roślin!");
+            throw new InvalidConfigurationException("Bledna poczatkowa liczba roslin!");
 
-        if (startEnergy < 1 || startEnergy > 2000000000)
-            throw new InvalidConfigurationException("Błędna początkowa energia zwierząt!");
+        if (startEnergy < 1 || startEnergy > 1000000000)
+            throw new InvalidConfigurationException("Bledna poczatkowa energia zwierzat!");
 
-        if (grassEnergy < 0 || grassEnergy > 2000000000)
-            throw new InvalidConfigurationException("Błędna wartość kaloryczna roślin!");
+        if (grassEnergy < 0 || grassEnergy > 1000)
+            throw new InvalidConfigurationException("Bledna wartosc kaloryczna roslin!");
 
         if (reproductionEnergyLoss < 1)
-            throw new InvalidConfigurationException("Błędny koszt energetyczny rozmnażania!");
+            throw new InvalidConfigurationException("Bledny koszt energetyczny rozmnazania!");
 
         if (reproductionEnergyThreshold < 0)
-            throw new InvalidConfigurationException("Błędny próg energetyczny rozmnażania!");
+            throw new InvalidConfigurationException("Bledny prog energetyczny rozmnazania!");
 
         if (reproductionEnergyLoss >= reproductionEnergyThreshold)
-            throw new InvalidConfigurationException("Koszt energii rozmnażania jest większy od progu!");
+            throw new InvalidConfigurationException("Koszt energii rozmnazania jest wiekszy od progu!");
 
         if (numOfGenes < 1 || numOfGenes > 1000)
-            throw new InvalidConfigurationException("Błędna długość genotypu!");
+            throw new InvalidConfigurationException("Bledna dlugosc genotypu!");
 
         if (dailyGrass < 0 || dailyGrass > mapHeight * mapWidth)
-            throw new InvalidConfigurationException("Błędna wartość przyrostu trawy!");
+            throw new InvalidConfigurationException("Bledna wartosc przyrostu trawy!");
 
         if (scopeOfMutations.length != 2 || scopeOfMutations[0] < 0 || scopeOfMutations[1] < 0 ||
             scopeOfMutations[0] > numOfGenes || scopeOfMutations[1] > numOfGenes ||
                 scopeOfMutations[0] > scopeOfMutations[1])
         {
-            throw new InvalidConfigurationException("Błędny zakres ilości mutacji w genotypie!");
+            throw new InvalidConfigurationException("Bledny zakres ilosci mutacji w genotypie!");
         }
 
-        if (moveDelay < 50 || moveDelay > 2000000000)
-            throw new InvalidConfigurationException("Błędna długość dnia!");
+        if (moveDelay < 50 || moveDelay > 10000)
+            throw new InvalidConfigurationException("Bledna dlugosc dnia!");
 
 
         this.mapWidth= mapWidth;
@@ -104,9 +104,9 @@ public class InputConfiguration {
                     reproductionEnergyLoss, reproductionEnergyThreshold, numOfGenes, dailyGrass, scopeOfMutations, earthGlobe,
                     equatorialForests, fullRandom, craziness, moveDelay);
         } catch (NumberFormatException ex) {
-            throw new InvalidConfigurationException("Nieprawidłowa wartość!");
+            throw new InvalidConfigurationException("Nieprawidlowa wartosc!");
         } catch (NoSuchElementException ex) {
-            throw new InvalidConfigurationException("Brak wartości dla " + ex.getMessage() + "!");
+            throw new InvalidConfigurationException("Brak wartosci dla " + ex.getMessage() + "!");
         }
     }
 

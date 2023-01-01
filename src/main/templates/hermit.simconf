@@ -1,0 +1,16 @@
+mapWidth: 7
+mapHeight: 7
+numOfAnimals: 1
+numOfGrass: 1
+startEnergy: 77
+grassEnergy: 5
+reproductionEnergyLoss: 2
+reproductionEnergyThreshold: 8
+numOfGenes: 16
+dailyGrass: 1
+scopeOfMutations[0]: 4
+scopeOfMutations[1]: 4
+earthGlobe: true
+equatorialForests: false
+fullRandom: true
+craziness: false

@@ -222,10 +222,10 @@ public class App  extends Application
 
         for (int i = 0; i <= 22; i++)
             grid.getColumnConstraints().add(new ColumnConstraints(width));
-        for (int i = 0; i <= 31; i++)
+        for (int i = 0; i <= 29; i++)
             grid.getRowConstraints().add(new RowConstraints(height));
 
-        Scene scene = new Scene(grid, 22 * width, 32 * height);
+        Scene scene = new Scene(grid, 22 * width, 30 * height);
 
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
@@ -236,7 +236,7 @@ public class App  extends Application
 
         final ToggleGroup settingsType= new ToggleGroup();
         RadioButton settingsRB1= new RadioButton("Gotowy template");
-        RadioButton settingsRB2= new RadioButton("Własne ustawienia");
+        RadioButton settingsRB2= new RadioButton("Wlasne ustawienia");
         grid.add(settingsRB1, 1, 1, 7, 1);
         grid.add(settingsRB2, 1, 3, 7, 1);
         settingsRB1.setToggleGroup(settingsType);
@@ -248,7 +248,7 @@ public class App  extends Application
 
         // # Wybór preseta
         final ComboBox presetsCB = new ComboBox<>(FXCollections.observableArrayList(
-                "Ogród Eden", "13x13 Nether Forest", "Soviet Union", "Balanced"));
+                "Ogrod Eden", "Piekielny Las", "ZSRR", "Duza Polana", "Pustelnik"));
         presetsCB.setPromptText("<wybierz wariant>");
         grid.add(presetsCB, 8, 1, 10, 1);
         presetsCB.setEditable(false);
@@ -259,7 +259,7 @@ public class App  extends Application
         Collection<ToggleButton> customToggleButtons= new LinkedList<ToggleButton>();
 
         final ToggleGroup worldType= new ToggleGroup();
-        Label worldTypeText= new Label("Typ świata");
+        Label worldTypeText= new Label("Typ swiata");
         grid.add(worldTypeText, 2, 5, 6, 1);
         ToggleButton earthGlobeRB= new ToggleButton("Kula ziemska");
         ToggleButton netherPortalRB= new ToggleButton("Piekielny portal");
@@ -274,9 +274,9 @@ public class App  extends Application
         customToggleButtons.add(netherPortalRB);
 
         final ToggleGroup growthType= new ToggleGroup();
-        Label growthTypeText= new Label("Preferencje wzrostu roślin");
+        Label growthTypeText= new Label("Preferencje wzrostu roslin");
         grid.add(growthTypeText, 2, 7, 6, 1);
-        ToggleButton equatorialForestRB= new ToggleButton("Zalesione równiki");
+        ToggleButton equatorialForestRB= new ToggleButton("Zalesione rowniki");
         ToggleButton toxicCorpsesRB= new ToggleButton("Toksyczne trupy");
         grid.add(equatorialForestRB, 9, 7, 5, 1);
         grid.add(toxicCorpsesRB, 14, 7, 5, 1);
@@ -291,7 +291,7 @@ public class App  extends Application
         final ToggleGroup mutationType= new ToggleGroup();
         Label mutationTypeText= new Label("Przebieg mutacji");
         grid.add(mutationTypeText, 2, 9, 6, 1);
-        ToggleButton fullRandomRB= new ToggleButton("Pełna losowość");
+        ToggleButton fullRandomRB= new ToggleButton("Pelna losowosc");
         ToggleButton smallCorrectionRB= new ToggleButton("Lekka korekta");
         grid.add(fullRandomRB, 9, 9, 5, 1);
         grid.add(smallCorrectionRB, 14, 9, 5, 1);
@@ -304,10 +304,10 @@ public class App  extends Application
         customToggleButtons.add(smallCorrectionRB);
 
         final ToggleGroup behaviorType= new ToggleGroup();
-        Label behaviorTypeText= new Label("Zachowanie zwierząt");
+        Label behaviorTypeText= new Label("Zachowanie zwierzat");
         grid.add(behaviorTypeText, 2, 11, 6, 1);
-        ToggleButton fullDestinyRB= new ToggleButton("Pełna predestynacja");
-        ToggleButton littleCrazinessRB= new ToggleButton("Nieco szaleństwa");
+        ToggleButton fullDestinyRB= new ToggleButton("Pelna predestynacja");
+        ToggleButton littleCrazinessRB= new ToggleButton("Nieco szalenstwa");
         grid.add(fullDestinyRB, 9, 11, 6, 1);
         grid.add(littleCrazinessRB, 15, 11, 6, 1);
         fullDestinyRB.setToggleGroup(behaviorType);
@@ -333,11 +333,11 @@ public class App  extends Application
         customTextFields.add(widthInput);
         customTextFields.add(heightInput);
 
-        Label grassText= new Label("ROŚLINY");
+        Label grassText= new Label("ROSLINY");
         grid.add(grassText, 16, 15, 5, 1);
         customLabels.add(grassText);
 
-        Label numOfGrassText= new Label("Początkowa ilość:");
+        Label numOfGrassText= new Label("Poczatkowa ilosc:");
         grid.add(numOfGrassText, 14, 16, 5, 1);
         TextField numOfGrassInput= new TextField();
         grid.add(numOfGrassInput, 19, 16, 2, 1);
@@ -345,7 +345,7 @@ public class App  extends Application
         grid.add(dailyGrowthText, 14, 17, 5, 1);
         TextField dailyGrowthInput= new TextField();
         grid.add(dailyGrowthInput, 19, 17, 2, 1);
-        Label energyValueText= new Label("Wartość odżywcza:");
+        Label energyValueText= new Label("Wartosc odzywcza:");
         grid.add(energyValueText, 14, 18, 5, 1);
         TextField energyValueInput= new TextField();
         grid.add(energyValueInput, 19, 18, 2, 1);
@@ -356,23 +356,23 @@ public class App  extends Application
         customTextFields.add(dailyGrowthInput);
         customTextFields.add(energyValueInput);
 
-        Label animalText= new Label("ZWIERZĘTA");
+        Label animalText= new Label("ZWIERZETA");
         grid.add(animalText, 6, 15, 5, 1);
         customLabels.add(animalText);
 
-        Label numOfAnimalsText= new Label("Początkowa ilość:");
+        Label numOfAnimalsText= new Label("Poczatkowa ilosc:");
         grid.add(numOfAnimalsText, 3, 16, 6, 1);
         TextField numOfAnimalsInput= new TextField();
         grid.add(numOfAnimalsInput, 11, 16, 2, 1);
-        Label startEnergyText= new Label("Początkowa energia:");
+        Label startEnergyText= new Label("Poczatkowa energia:");
         grid.add(startEnergyText, 3, 17, 6, 1);
         TextField startEnergyInput= new TextField();
         grid.add(startEnergyInput, 11, 17, 2, 1);
-        Label reproductionEnergyLossText= new Label("Energia zużyta przy rozmnażaniu:");
+        Label reproductionEnergyLossText= new Label("Energia zuzyta przy rozmnazaniu:");
         grid.add(reproductionEnergyLossText, 3, 18, 8, 1);
         TextField reproductionEnergyLossInput= new TextField();
         grid.add(reproductionEnergyLossInput, 11, 18, 2, 1);
-        Label reproductionEnergyThresholdText= new Label("Minimalna energia do rozmnażania:");
+        Label reproductionEnergyThresholdText= new Label("Minimalna energia do rozmnazania:");
         grid.add(reproductionEnergyThresholdText, 3, 19, 8, 1);
         TextField reproductionEnergyThresholdInput= new TextField();
         grid.add(reproductionEnergyThresholdInput, 11, 19, 2, 1);
@@ -385,7 +385,7 @@ public class App  extends Application
         customTextFields.add(reproductionEnergyLossInput);
         customTextFields.add(reproductionEnergyThresholdInput);
 
-        Label numOfGenesText= new Label("Długość genomu:");
+        Label numOfGenesText= new Label("Dlugosc genomu:");
         grid.add(numOfGenesText, 3, 20, 6, 1);
         TextField numOfGenesInput= new TextField();
         grid.add(numOfGenesInput, 11, 20, 2, 1);
@@ -406,9 +406,9 @@ public class App  extends Application
         customTextFields.add(scopeFromInput);
         customTextFields.add(scopeToInput);
 
-        Label moveDelayText= new Label("Długość dnia [ms]:");
+        Label moveDelayText= new Label("Dlugosc dnia [ms]:");
         grid.add(moveDelayText, 1, 23, 5, 1);
-        TextField moveDelayInput= new TextField("500");
+        TextField moveDelayInput= new TextField("200");
         grid.add(moveDelayInput, 6, 23, 3, 1);
 
         CheckBox saveToFileCB= new CheckBox("Zapis statystyk");
@@ -422,11 +422,11 @@ public class App  extends Application
         fileNameInput.setAlignment(Pos.CENTER_RIGHT);
         fileNameInput.setPromptText("file_name");
 
-        Button chooseDirectButton= new Button("📂");
-        chooseDirectButton.setFont(Font.font(15));
+        Button chooseDirectButton= new Button("FOLDER");
+        chooseDirectButton.setFont(Font.font(10));
         grid.add(chooseDirectButton, 11, 24, 4, 1);
         chooseDirectButton.disableProperty().bind(saveToFileCB.selectedProperty().not());
-        Tooltip outputTooltip= new Tooltip("Wybór katalogu docelowego zapisu");
+        Tooltip outputTooltip= new Tooltip("Wybor katalogu docelowego zapisu");
         chooseDirectButton.setTooltip(outputTooltip);
 
         chooseDirectButton.setOnAction(actionEvent -> {
@@ -465,8 +465,8 @@ public class App  extends Application
                         growthType.getSelectedToggle()==null || mutationType.getSelectedToggle()==null ||
                         behaviorType.getSelectedToggle()==null || !Utils.isInputInteger(widthInput.getText()) ||
                         !Utils.isInputInteger(heightInput.getText()) || !Utils.isInputInteger(numOfGrassInput.getText()) || !Utils.isInputInteger(dailyGrowthInput.getText()) || !Utils.isInputInteger(energyValueInput.getText()) ||
-                                !Utils.isInputInteger(numOfAnimalsInput.getText()) || !Utils.isInputInteger(startEnergyInput.getText()) || !Utils.isInputInteger(reproductionEnergyLossInput.getText()) ||
-                                !Utils.isInputInteger(reproductionEnergyThresholdInput.getText()) || !Utils.isInputInteger(numOfGenesInput.getText()) ||
+                        !Utils.isInputInteger(numOfAnimalsInput.getText()) || !Utils.isInputInteger(startEnergyInput.getText()) || !Utils.isInputInteger(reproductionEnergyLossInput.getText()) ||
+                        !Utils.isInputInteger(reproductionEnergyThresholdInput.getText()) || !Utils.isInputInteger(numOfGenesInput.getText()) ||
                         !Utils.isInputInteger(scopeFromInput.getText()) || !Utils.isInputInteger(scopeToInput.getText()) ) ) ||
                         (settingsType.getSelectedToggle()==settingsRB1 && presetsCB.getValue()==null) || !Utils.isInputInteger(moveDelayInput.getText()) ||
                         (saveToFileCB.isSelected() && fileNameInput.getText().isEmpty());
@@ -513,10 +513,11 @@ public class App  extends Application
             else {
 
                 String filePath = switch (presetsCB.getValue().toString()) {
-                    case "Ogród Eden" -> "src/main/templates/eden_garden.simconf";
-                    case "13x13 Nether Forest" -> "src/main/templates/13_nether_forest.simconf";
-                    case "Soviet Union" -> "src/main/templates/soviet.simconf";
-                    case "Balanced" -> "src/main/templates/balanced.simconf";
+                    case "Ogrod Eden" -> "src/main/templates/eden_garden.simconf";
+                    case "Piekielny Las" -> "src/main/templates/13_nether_forest.simconf";
+                    case "ZSRR" -> "src/main/templates/soviet.simconf";
+                    case "Duza Polana" -> "src/main/templates/balanced.simconf";
+                    case "Pustelnik" -> "src/main/templates/hermit.simconf";
                     default -> "";
                 };
 
@@ -531,7 +532,7 @@ public class App  extends Application
                     }
                 }
                 catch (IOException ex) {
-                    new Alert(Alert.AlertType.ERROR, "Błąd wczytywania pliku!", ButtonType.CLOSE).showAndWait();
+                    new Alert(Alert.AlertType.ERROR, "Blad wczytywania pliku!", ButtonType.CLOSE).showAndWait();
                     return;
                 }
 
@@ -539,11 +540,11 @@ public class App  extends Application
                     data= InputConfiguration.makeFromMap(inp, Integer.parseInt(moveDelayInput.getText()));
                 }
                 catch (InputConfiguration.InvalidConfigurationException ex) {
-                    new Alert(Alert.AlertType.ERROR, "Błąd w pliku -> " + ex.getMessage(), ButtonType.CLOSE).showAndWait();
+                    new Alert(Alert.AlertType.ERROR, "Blad w pliku -> " + ex.getMessage(), ButtonType.CLOSE).showAndWait();
                     return;
                 }
                 catch (IllegalArgumentException ex) {
-                    new Alert(Alert.AlertType.ERROR, "Niepoprawne wartość długości dnia!", ButtonType.CLOSE).showAndWait();
+                    new Alert(Alert.AlertType.ERROR, "Niepoprawna wartosc dlugosci dnia!", ButtonType.CLOSE).showAndWait();
                     return;
                 }
 
@@ -557,22 +558,22 @@ public class App  extends Application
                     statsFile= new File(exportFilePath);
 
 
-                  statsFile.createNewFile();
-                        //System.out.println("Utworzono plik: " + statsFile.getName());
-                   // else
-                        //System.out.println("Plik istnieje.");
+                    statsFile.createNewFile();
+                    //System.out.println("Utworzono plik: " + statsFile.getName());
+                    // else
+                    //System.out.println("Plik istnieje.");
                 }
                 catch (IOException ex) {
-                    new Alert(Alert.AlertType.ERROR, "Błąd przy tworzeniu pliku!", ButtonType.CLOSE).showAndWait();
+                    new Alert(Alert.AlertType.ERROR, "Blad przy tworzeniu pliku!", ButtonType.CLOSE).showAndWait();
                     return;
                 }
             }
 
 
             //System.out.println("Czy kula ziemska: " + data.earthGlobe);
-           // System.out.println("Czy równik: " + data.equatorialForests);
+            // System.out.println("Czy równik: " + data.equatorialForests);
             //System.out.println("Czy losowa mutacja: " + data.fullRandom);
-           // System.out.println("Szaleństwo: " + data.craziness);
+            // System.out.println("Szaleństwo: " + data.craziness);
 
             try {
                 startSimulation(data, exportFilePath);
@@ -585,7 +586,7 @@ public class App  extends Application
         Label lineText= new Label("        " + new String(new char[74]).replace("\0", "_"));
         grid.add(lineText, 0, 25, 23, 1);
 
-        Label colorText= new Label("Kolor zwierzęcia określać będzie posiadaną przez niego energię:");
+        Label colorText= new Label("Kolor zwierzecia okreslac bedzie posiadana przez niego energie:");
         grid.add(colorText, 1, 26, 15, 1);
 
         Image colors;
@@ -596,7 +597,8 @@ public class App  extends Application
         }
         ImageView imgView= new ImageView(colors);
         imgView.setFitWidth(500);
-        grid.add(imgView, 1, 29, 1, 1);
+        imgView.setFitHeight(75);
+        grid.add(imgView, 1, 28, 1, 1);
 
         primaryStage.show();
     }
@@ -607,7 +609,7 @@ public class App  extends Application
         if (x.earthGlobe)
             map= new KulaZiemska(x.mapWidth, x.mapHeight,  x.numOfGrass, x.grassEnergy, x.equatorialForests);
         else
-            map= new PiekielnyPortal(x.mapWidth, x.mapHeight,  x.numOfGrass, x.grassEnergy, x.equatorialForests, x.reproductionEnergyLoss);
+            map= new PiekielnyPortal(x.mapWidth, x.mapHeight,  x.numOfGrass, x.grassEnergy, x.equatorialForests, -x.reproductionEnergyLoss);
 
         Runnable engine = new SimulationEngine(map, this, x.moveDelay, x.numOfAnimals, x.startEnergy,
                 -x.reproductionEnergyLoss, x.reproductionEnergyThreshold, x.numOfGenes, x.scopeOfMutations,

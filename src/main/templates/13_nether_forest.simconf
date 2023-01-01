@@ -7,7 +7,7 @@ grassEnergy: 0
 reproductionEnergyLoss: 10
 reproductionEnergyThreshold: 20
 numOfGenes: 10
-dailyGrass: 17
+dailyGrass: 2
 scopeOfMutations[0]: 3
 scopeOfMutations[1]: 6
 earthGlobe: false
