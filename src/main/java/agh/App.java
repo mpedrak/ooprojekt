@@ -426,7 +426,8 @@ public class App  extends Application
         chooseDirectButton.setFont(Font.font(15));
         grid.add(chooseDirectButton, 11, 24, 4, 1);
         chooseDirectButton.disableProperty().bind(saveToFileCB.selectedProperty().not());
-
+        Tooltip outputTooltip= new Tooltip("Wybór katalogu docelowego zapisu");
+        chooseDirectButton.setTooltip(outputTooltip);
 
         chooseDirectButton.setOnAction(actionEvent -> {
             try {
