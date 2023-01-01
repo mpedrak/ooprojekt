@@ -210,7 +210,7 @@ public class App  extends Application
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
-        // stage.setResizable(false);
+
 
         stage.addEventFilter(WindowEvent.WINDOW_CLOSE_REQUEST, event -> engine.stopSimulation());
 

@@ -83,7 +83,7 @@ public class Animal extends AbstractWorldMapElement
             orientation= orientation.turnBy(geny[aktualnyGen]);
 
             Random generator = new Random();
-            if (this.szalenstwo && generator.nextInt(5) == 0)   // jeśli jest szalony i akurat mu odwaliło
+            if (this.szalenstwo && generator.nextInt(5) == 0)
                 step= 1 + generator.nextInt(N - 1);
 
             aktualnyGen= (aktualnyGen + step) % N;

@@ -104,7 +104,6 @@ public class SimulationEngine implements  Runnable
             }
         });
 
-        // TODO: Tworzenie pliku .csv
         FileWriter myWriter= null;
         if (!this.exportFilePath.isEmpty()) {
             try {
@@ -112,14 +111,13 @@ public class SimulationEngine implements  Runnable
                 myWriter.write("Dzien,Liczba zwierzat,Liczba roslin,Liczba wolnych pól,Najpopularniejszy genotyp,Sredni poziom energii zyjacych zwierzat,Srednia długosc zycia zwierzat\n");
             }
             catch (IOException ex) {
-                // TODO: co zrobić gdy błąd zapisu
                 System.out.println("Blad przy tworzeniu FileWriter");
             }
         }
 
         while (zwierzetaPosortowane.size() > 0 && !ifClosed)  {
 
-            //if (czyDziala) {
+                 //if (czyDziala) {
                 //Scanner scan = new Scanner(System.in);
                 // scan.nextLine();
 
@@ -144,8 +142,6 @@ public class SimulationEngine implements  Runnable
                     // System.out.println("-> Po ruchu: " + x.toString());
                 }
 
-
-                /// debug do usuniecia
 
                 // System.out.println("- zwierzetaPosortowane.size() = " + zwierzetaPosortowane.size());
                 zwierzetaPosortowane.clear();
@@ -263,7 +259,6 @@ public class SimulationEngine implements  Runnable
                 App.removeOutputName(temp[temp.length - 1]);
             }
             catch (IOException ex) {
-                // TODO: co zrobić gdy błąd zapisu linijki
                 System.out.println("Błąd przy zamykaniu myWriter");
             }
         }
@@ -306,7 +301,7 @@ public class SimulationEngine implements  Runnable
             for (int i=0; i < udzialMatki; i++)
                 genyDziecka[i]= genyMatki[i];
             for (int i=udzialMatki; i < N; i++)
-                genyDziecka[i]= genyOjca[i];
+                genyDziecka[i]= genyOjca[i]; 
         }
         else {
             // matka z prawej, ojciec z lewej
@@ -316,7 +311,7 @@ public class SimulationEngine implements  Runnable
                 genyDziecka[i]= genyMatki[i];
         }
 
-        // mutacje //
+        // mutacje
 
         int liczbaMutacji= zakresIlosciMutacji[0] + generator.nextInt(zakresIlosciMutacji[1] - zakresIlosciMutacji[0] + 1);
         boolean[] mutowalneGeny= new boolean[N];
